@@ -1,26 +1,120 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProgramService {
-  create(createProgramDto: CreateProgramDto) {
-    return 'This action adds a new program';
+  constructor(private readonly prisma: PrismaService) {}
+  async create(dto: CreateProgramDto) {
+    const songData = dto.songs.map((songId, i) => ({
+      songId,
+      order: i + 1,
+    }));
+
+    try {
+      return await this.prisma.program.create({
+        data: {
+          leader: dto.leader,
+          name: dto.name,
+          songs: {
+            create: songData,
+          },
+        },
+        include: {
+          songs: {
+            include: {
+              song: {
+                select: { name: true, id: true },
+              },
+            },
+            orderBy: {
+              order: 'asc',
+            },
+          },
+        },
+      });
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new BadRequestException('Такая песня уже есть в программе');
+      }
+      throw e;
+    }
   }
 
-  findAll() {
-    return `This action returns all program`;
+  async findAll() {
+    return this.prisma.program.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} program`;
+  async findOne(id: number) {
+    const program = await this.prisma.program.findUnique({
+      where: { id },
+      include: {
+        songs: {
+          include: {
+            song: { select: { id: true, name: true } },
+          },
+          orderBy: { order: 'asc' },
+        },
+      },
+    });
+
+    if (!program) throw new NotFoundException('Программа не найдена');
+    return program;
   }
 
-  update(id: number, updateProgramDto: UpdateProgramDto) {
-    return `This action updates a #${id} program`;
+  async update(id: number, dto: UpdateProgramDto) {
+    const program = await this.prisma.program.findUnique({
+      where: { id },
+      include: { songs: true },
+    });
+    if (!program) throw new NotFoundException('Программа не найдена');
+
+    const data: any = {};
+    if (dto.leader) data.leader = dto.leader;
+    if (dto.name) data.name = dto.name;
+
+    if (dto.songs) {
+      await this.prisma.programSong.deleteMany({
+        where: { programId: id },
+      });
+
+      data.songs = {
+        create: dto.songs.map((songId, index) => ({
+          songId,
+          order: index + 1,
+        })),
+      };
+    }
+
+    return this.prisma.program.update({
+      where: { id },
+      data,
+      include: {
+        songs: {
+          include: {
+            song: { select: { id: true, name: true } },
+          },
+          orderBy: { order: 'asc' },
+        },
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} program`;
+  async remove(id: number) {
+    const program = await this.prisma.program.findUnique({ where: { id } });
+    if (!program) throw new NotFoundException('Программа не найдена');
+
+    await this.prisma.programSong.deleteMany({
+      where: { programId: id },
+    });
+
+    return await this.prisma.program.delete({ where: { id } });
   }
 }
