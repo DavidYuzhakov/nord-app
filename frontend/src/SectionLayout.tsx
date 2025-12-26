@@ -1,4 +1,4 @@
-import { ChevronLeft, MusicIcon } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { BottomBar } from './components/BottomBar'
 import { useGoBack } from './hook/useGoBack'
 
@@ -17,7 +17,7 @@ export function SectionLayout({
         <button
           onClick={() => goBack()}
           type="button"
-          className="bg-secondary w-fit text-background p-2 flex items-center justify-center rounded-full text-2xl"
+          className="bg-border/70 w-fit text-background p-2 flex items-center justify-center rounded-md text-2xl"
         >
           <ChevronLeft className="stroke-foreground" />
         </button>

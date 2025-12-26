@@ -41,13 +41,20 @@ export function ProgramItem({
             <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
               {song.bpm}
             </span>
-            <div className="text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+            <span className="text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
               {song.key}
-            </div>
+            </span>
           </>
         ) : (
           <>
-            <Trash2Icon />
+            <span className="flex-1 text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+              {song.key}
+            </span>
+            <Trash2Icon
+              onClick={() =>
+                window.confirm('Вы действительно хотите удалить хвалу?')
+              }
+            />
             <button {...attributes} {...listeners} className="ml-3 space-y-1">
               <span className="block w-4 rounded-full h-0.5 bg-foreground" />
               <span className="block w-4 rounded-full h-0.5 bg-foreground" />
