@@ -5,7 +5,10 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss],
+  plugins: [react(), tailwindcss()],
+  server: {
+    allowedHosts: ['normally-chief-fennec.cloudpub.ru'],
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
