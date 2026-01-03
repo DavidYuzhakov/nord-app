@@ -15,12 +15,12 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import { useState } from 'react'
 
 export default function NewProgramPage() {
-  const [items, setItems] = useState([...programs[0].songs])
+  const [items, setItems] = useState([...programs[1].songs])
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
       delay: 250,
-      tolerance: 500,
+      tolerance: 5,
     },
   })
 
@@ -48,22 +48,25 @@ export default function NewProgramPage() {
         placeholder="Воскресное 27.12.2025"
       />
       <Label className="text-xl font-semibold">Хвалы:</Label>
-      <ul className="space-y-3 px-2 mb-7">
-        <DndContext
-          modifiers={[restrictToVerticalAxis]}
-          sensors={sensors}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={programs}>
-            {items.map((program) => (
-              <ProgramItem key={program.id} {...program} isEdit={true} />
-            ))}
-          </SortableContext>
-        </DndContext>
-        <li className="text-center pt-1 px-3">
-          <AddSong />
-        </li>
-      </ul>
+
+      <div className="px-4 pb-4 space-y-3">
+        <ul className="space-y-3 px-2 mb-7">
+          <DndContext
+            modifiers={[restrictToVerticalAxis]}
+            sensors={sensors}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={items}>
+              {items.map((program) => (
+                <ProgramItem key={program.id} {...program} isEdit={true} />
+              ))}
+            </SortableContext>
+          </DndContext>
+          <li className="text-center pt-1 pb-3 border-b border-primary">
+            <AddSong />
+          </li>
+        </ul>
+      </div>
     </form>
   )
 }

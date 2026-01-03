@@ -43,7 +43,7 @@ export function AddSong() {
             id="song"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="pl-8 pr-7"
+            className="pl-8 pr-7 focus-visible:ring-0"
             placeholder="Введите название хвалы"
           />
           {name.length > 0 && (

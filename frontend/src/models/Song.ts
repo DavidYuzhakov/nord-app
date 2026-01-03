@@ -5,4 +5,18 @@ export interface Song {
   bpm: number
 }
 
-export type KeyType = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'H'
+export type KeyType =
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'A'
+  | 'H'
+  | 'Cm'
+  | 'Dm'
+  | 'Em'
+  | 'Fm'
+  | 'Gm'
+  | 'Am'
+  | 'Bm'

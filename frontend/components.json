@@ -18,5 +18,7 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@glass-ui": "https://glass-ui.crenspire.com/r/{name}.json"
+  }
 }

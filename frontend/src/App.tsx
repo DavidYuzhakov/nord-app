@@ -3,6 +3,8 @@ import HomePage from './pages/HomePage'
 import { Layout } from './Layout'
 import { SectionLayout } from './SectionLayout'
 import NewProgramPage from './pages/NewProgramPage'
+import { SongsPage } from './pages/SongsPage'
+import LiveModePage from './pages/LiveModePage'
 
 function App() {
   return (
@@ -23,8 +25,22 @@ function App() {
           </SectionLayout>
         }
       />
-      <Route path="/live-mode" element={<Layout>Live Mode</Layout>} />
-      <Route path="/songs" element={<Layout>Songs</Layout>} />
+      <Route
+        path="/live-mode"
+        element={
+          <Layout>
+            <LiveModePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/songs"
+        element={
+          <Layout>
+            <SongsPage />
+          </Layout>
+        }
+      />
     </Routes>
   )
 }
