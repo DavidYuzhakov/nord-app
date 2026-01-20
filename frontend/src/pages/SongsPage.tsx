@@ -40,14 +40,14 @@ export function SongsPage() {
           <SearchIcon />
         </button>
       </div>
-      <div className="space-y-3">
+      <div className="">
         {mockSongs.map((song) => (
           <div
             className="border-b py-3 px-3 flex items-center justify-between gap-2"
             key={song.id}
           >
             <div className="flex items-center gap-2">
-              <h4 className="text-lg font-semibold truncate">{song.name}</h4>
+              <h4 className="font-semibold truncate">{song.name}</h4>
               <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
                 {song.key}
               </span>
@@ -57,8 +57,8 @@ export function SongsPage() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size={'icon-lg'}>
-                  <Plus className="size-7" />
+                <Button size={'icon-sm'}>
+                  <Plus className="size-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent

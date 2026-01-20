@@ -13,23 +13,28 @@ const songs = [
   { name: 'Пою я аллилуйя', key: 'D', bpm: 140 },
   { name: 'Достоин Ты', key: 'C', bpm: 88 },
   { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
+  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
+  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
+  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
+  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
 ]
 
 export function AddSong() {
   const [name, setName] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+
   return (
     <>
-      <span
-        onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 justify-center text-primary font-bold"
-      >
-        Новая хвала <PlusCircleIcon />
-      </span>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        <span className="flex items-center gap-2 justify-center text-primary font-bold">
+          Новая хвала <PlusCircleIcon />
+        </span>
+      </button>
+
       <div
-        className={`
-          duration-200 fixed right-2 left-2 z-3 border border-muted shadow text-start space-y-3 bg-white pt-3 pb-5 px-4 rounded-xl 
-          ${isOpen ? 'top-2' : 'opacity-0 invisible top-0'}`}
+        className={`fixed left-2 right-2 z-11 rounded-xl bg-white px-4 py-3 space-y-2 duration-200 ${
+          isOpen ? 'opacity-100 visible top-2' : 'opacity-0 invisible -top-2'
+        } `}
       >
         <Label htmlFor="song">
           <h4 className="text-xl font-semibold">Хвала:</h4>
@@ -54,7 +59,7 @@ export function AddSong() {
             />
           )}
         </div>
-        <ul className="border rounded-md px-3 max-h-[200px] overflow-y-auto">
+        <ul className="border max-h-80 rounded-md overflow-y-auto px-3 py-2">
           {songs.map((song) => (
             <li
               className="flex items-center gap-1.5 border-b font-medium border-accent py-2"
@@ -82,9 +87,9 @@ export function AddSong() {
       </div>
       <div
         onClick={() => setIsOpen(false)}
-        className={`fixed top-0 left-0 bottom-0 right-0 backdrop-blur-sm z-2 duration-300 ${
+        className={`fixed w-full h-full top-0 left-0 bg-black/50 z-10 ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
+        } duration-200`}
       />
     </>
   )

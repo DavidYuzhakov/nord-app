@@ -3,20 +3,13 @@ export interface Song {
   name: string
   key: KeyType
   bpm: number
+  text?: string
+  structure?: SongStructureItem[]
 }
 
-export type KeyType =
-  | 'C'
-  | 'D'
-  | 'E'
-  | 'F'
-  | 'G'
-  | 'A'
-  | 'H'
-  | 'Cm'
-  | 'Dm'
-  | 'Em'
-  | 'Fm'
-  | 'Gm'
-  | 'Am'
-  | 'Bm'
+type SongStructureItem = {
+  text: string
+  amount: number
+}
+
+export type KeyType = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'H'

@@ -9,6 +9,5 @@ export interface ProgramSong {
 export interface Program {
   id: number
   name: string
-  leader: string
   songs: ProgramSong[]
 }

@@ -1,5 +1,6 @@
 import { AddSong } from '@/components/AddSong'
 import { ProgramItem } from '@/components/ProgramItem'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { programs } from '@/mocks/programs'
@@ -15,7 +16,7 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import { useState } from 'react'
 
 export default function NewProgramPage() {
-  const [items, setItems] = useState([...programs[1].songs])
+  const [items, setItems] = useState([...programs[0].songs])
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
@@ -38,7 +39,7 @@ export default function NewProgramPage() {
   }
 
   return (
-    <form className="py-4 space-y-3">
+    <form className="py-4 space-y-3 flex flex-col">
       <Label className="text-xl font-semibold" htmlFor="name">
         Название:
       </Label>
@@ -50,7 +51,7 @@ export default function NewProgramPage() {
       <Label className="text-xl font-semibold">Хвалы:</Label>
 
       <div className="px-4 pb-4 space-y-3">
-        <ul className="space-y-3 px-2 mb-7">
+        <ul className="space-y-3 px-2">
           <DndContext
             modifiers={[restrictToVerticalAxis]}
             sensors={sensors}
@@ -67,6 +68,10 @@ export default function NewProgramPage() {
           </li>
         </ul>
       </div>
+
+      <Button className="ml-auto" type="submit">
+        Сохранить
+      </Button>
     </form>
   )
 }
