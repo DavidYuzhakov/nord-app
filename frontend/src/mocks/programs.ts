@@ -52,13 +52,12 @@ C#m
         song: {
           id: 2,
           name: 'Ты ждешь когда я приду',
-          key: 'G',
+          key: 'C#m',
           bpm: 140,
           structure: [
             { text: 'и', amount: 1 },
             { text: 'к', amount: 1 },
             { text: 'п', amount: 2 },
-            { text: 'п', amount: 1 },
             { text: 'к2', amount: 1 },
             { text: 'п-п', amount: 1 },
             { text: 'п', amount: 1 },

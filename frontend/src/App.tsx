@@ -3,8 +3,9 @@ import HomePage from './pages/HomePage'
 import { Layout } from './Layout'
 import { SectionLayout } from './SectionLayout'
 import NewProgramPage from './pages/NewProgramPage'
-import { SongsPage } from './pages/SongsPage'
+import SongsPage from './pages/SongsPage'
 import LiveModePage from './pages/LiveModePage'
+import SongDetailPage from './pages/SongDetailPage'
 
 function App() {
   return (
@@ -38,6 +39,14 @@ function App() {
         element={
           <Layout>
             <SongsPage />
+          </Layout>
+        }
+      />
+       <Route
+        path="/song/:id"
+        element={
+          <Layout>
+            <SongDetailPage />
           </Layout>
         }
       />

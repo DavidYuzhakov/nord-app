@@ -12,7 +12,7 @@ import { Plus, PlusCircleIcon, SearchIcon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export function SongsPage() {
+export default function SongsPage() {
   const [value, setValue] = useState('')
   const navigate = useNavigate()
 
@@ -40,9 +40,10 @@ export function SongsPage() {
           <SearchIcon />
         </button>
       </div>
-      <div className="">
+      <div>
         {mockSongs.map((song) => (
           <div
+            onClick={() => navigate(`/song/${1}`)}
             className="border-b py-3 px-3 flex items-center justify-between gap-2"
             key={song.id}
           >

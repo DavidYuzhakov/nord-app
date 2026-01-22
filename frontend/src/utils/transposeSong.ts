@@ -1,5 +1,6 @@
 import { Chord } from "tonal";
 import type { SongSection } from './parseSongSections'
+import { normalizeChordFromTonal } from './normalizeKeyForTonal'
 
 export function transposeSections(
   sections: SongSection[],
@@ -13,7 +14,9 @@ export function transposeSections(
         token.type === 'chord'
           ? {
               type: 'chord',
-              value: Chord.transpose(token.value, interval) ?? token.value,
+              value: normalizeChordFromTonal(
+                Chord.transpose(token.value, interval) ?? token.value
+              ),
             }
           : token,
       ),

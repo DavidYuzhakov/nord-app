@@ -24,7 +24,7 @@ export default function LiveModePage() {
 
   return (
     <>
-      <div className="-mx-3 relative space-y-3">
+      <div className="-mx-3 relative space-y-3 pb-23">
         <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
           <div className="flex justify-between items-center gap-1">
             <h2 className="text-[22px] font-semibold truncate">
@@ -44,8 +44,8 @@ export default function LiveModePage() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
-            {programs[0].songs[activeIndex].song.structure!.map((el, i) => (
+          {programs[0].songs[activeIndex].song.structure && <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
+            {programs[0].songs[activeIndex].song.structure.map((el, i) => (
               <div
                 key={i}
                 className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
@@ -62,7 +62,7 @@ export default function LiveModePage() {
                 )}
               </div>
             ))}
-          </div>
+          </div>}
         </div>
 
         <Swiper
