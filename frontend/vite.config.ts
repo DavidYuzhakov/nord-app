@@ -7,7 +7,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    allowedHosts: ['normally-chief-fennec.cloudpub.ru'],
+    port: 5174,
+    allowedHosts: ['surprisingly-successful-flea.cloudpub.ru'],
   },
   resolve: {
     alias: {

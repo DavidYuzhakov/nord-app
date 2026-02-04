@@ -72,10 +72,11 @@
   --ring: oklch(0.708 0 0);
   --chart-1: #ff6160; /* chorues */
   --chart-2: #5086c4; /* verse */
-  --chart-3: #fab005; /* intro */
+  --chart-3: #fcde5a; /* intro */
   --chart-4: #a5e664; /* bridge */
   --chart-5: #ff9e74; /* pre-chorus */
   --chart-6: #b34fff; /* instrumental */
+  --chart-7: #cacaca; /* instrumental */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);

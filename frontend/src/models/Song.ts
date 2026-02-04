@@ -7,7 +7,7 @@ export interface Song {
   structure?: SongStructureItem[]
 }
 
-type SongStructureItem = {
+export type SongStructureItem = {
   text: string
   amount: number
 }

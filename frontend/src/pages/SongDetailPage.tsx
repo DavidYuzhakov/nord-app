@@ -1,12 +1,15 @@
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
+import { useGoBack } from '@/hook/useGoBack'
 import { programs } from '@/mocks/programs'
 import { getStructureBg } from '@/utils/getStructureBg'
-import { EditIcon, Headphones, PersonStanding } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { ChevronLeft, EditIcon, Headphones, PersonStanding } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
   const { id } = useParams()
+  const goBack = useGoBack()
+  const navigate = useNavigate()
   const songData = id ? programs[0].songs[Number(id)].song : null
 
   if (!songData) return 'Нет песни'
@@ -15,10 +18,21 @@ export default function SongDetailPage() {
     <div className="-mx-3 space-y-3 pb-23">
       <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
         <div className="flex justify-between items-center gap-1">
-          <h2 className="text-[22px] font-semibold truncate">
-            {songData.name}
-          </h2>
-          <button type="button" className="bg-primary p-1.5 rounded-md">
+          <div className="flex items-center gap-1 truncate">
+            <button
+              onClick={() => goBack()}
+              className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
+              type="button"
+            >
+              <ChevronLeft />
+            </button>
+            <h2 className="text-[22px] font-semibold">{songData.name}</h2>
+          </div>
+          <button
+            onClick={() => navigate(`/song/${songData.id}/edit`)}
+            type="button"
+            className="bg-primary p-1.5 rounded-md"
+          >
             <EditIcon size={20} className="stroke-white" />
           </button>
         </div>

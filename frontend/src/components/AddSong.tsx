@@ -11,7 +11,7 @@ const songs = [
   { name: 'Радуйся мир', key: 'F', bpm: 150 },
   { name: 'Вся хвала', key: 'H', bpm: 100 },
   { name: 'Пою я аллилуйя', key: 'D', bpm: 140 },
-  { name: 'Достоин Ты', key: 'C', bpm: 88 },
+  { name: 'Достоин Ты', key: 'C#m', bpm: 88 },
   { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
   { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
   { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
@@ -66,7 +66,7 @@ export function AddSong() {
               key={song.name}
             >
               {song.name}
-              <span className=" text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+              <span className=" text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
                 {song.key}
               </span>
               <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">

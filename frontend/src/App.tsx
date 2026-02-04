@@ -6,6 +6,7 @@ import NewProgramPage from './pages/NewProgramPage'
 import SongsPage from './pages/SongsPage'
 import LiveModePage from './pages/LiveModePage'
 import SongDetailPage from './pages/SongDetailPage'
+import EditSongPage from './pages/EditSongPage'
 
 function App() {
   return (
@@ -42,11 +43,19 @@ function App() {
           </Layout>
         }
       />
-       <Route
+      <Route
         path="/song/:id"
         element={
           <Layout>
             <SongDetailPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/song/:id/edit"
+        element={
+          <Layout>
+            <EditSongPage />
           </Layout>
         }
       />

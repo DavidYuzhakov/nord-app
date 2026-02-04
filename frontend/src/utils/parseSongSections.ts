@@ -1,11 +1,22 @@
-export type SectionType =
-  | 'intro'
-  | 'verse'
-  | 'chorus'
-  | 'bridge'
-  | 'instrumental'
-  | 'prechorus'
+type SectionType =
+  | 'вступление'
+  | 'куплет'
+  | 'пред-припев'
+  | 'припев'
+  | 'бридж'
+  | 'проигрыш'
+  | 'тэг'
   | 'unknown'
+
+const validSectionTypes: Set<string> = new Set([
+  'вступление',
+  'куплет',
+  'пред-припев',
+  'припев',
+  'бридж',
+  'проигрыш',
+  'тэг',
+])
 
 export type LineToken =
   | { type: 'text'; value: string }
@@ -25,16 +36,6 @@ export interface SongSection {
 const SECTION_HEADER_REGEX =
   /^(\d+\s+)?([\p{L}-]+)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
 
-
-const SECTION_TYPE_MAP: Record<string, SectionType> = {
-  интро: 'intro',
-  куплет: 'verse',
-  припев: 'chorus',
-  бридж: 'bridge',
-  проигрыш: 'instrumental',
-  'пред-припев': 'prechorus',
-}
-
 export function parseSongSections(text: string): SongSection[] {
   const lines = text.split('\n')
 
@@ -44,24 +45,29 @@ export function parseSongSections(text: string): SongSection[] {
   for (const rawLine of lines) {
     const line = rawLine.trimEnd()
     const headerMatch = line.match(SECTION_HEADER_REGEX)
+
     if (headerMatch) {
+      const key = (headerMatch[2] ?? headerMatch[1]).toLowerCase()
       if (currentSection) {
         sections.push(currentSection)
       }
 
       const title = headerMatch[0].trim()
-      const key = (headerMatch[2] ?? headerMatch[1]).toLowerCase()
-
       currentSection = {
-        type: SECTION_TYPE_MAP[key] ?? 'unknown',
+        type: validSectionTypes.has(key) ? (key as SectionType) : 'unknown',
         title,
         lines: [],
       }
-
       continue
     }
 
-    if (!currentSection) continue
+    if (!currentSection) {
+      currentSection = {
+        type: 'unknown',
+        title: '',
+        lines: [],
+      }
+    }
     currentSection.lines.push({ raw: line, tokens: [] })
   }
 

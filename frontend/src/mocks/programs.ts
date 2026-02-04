@@ -14,15 +14,17 @@ export const programs: Program[] = [
           key: 'E',
           bpm: 120,
           structure: [
-            { text: 'и', amount: 1 },
+            { text: 'в', amount: 1 },
             { text: 'п', amount: 2 },
             { text: 'к', amount: 2 },
-            { text: 'п', amount: 1 },
-            { text: 'п', amount: 1 },
-            { text: 'к2', amount: 1 },
-            { text: 'прг', amount: 2 },
+            { text: 'пп', amount: 1 },
+            { text: '2п', amount: 1 },
+            { text: 'б', amount: 1 },
+            { text: 'т', amount: 2 },
+            { text: '2к', amount: 1 },
+            { text: '2прг', amount: 2 },
           ],
-          text: `Припев:  
+          text: `Припев:
                E 
 Будем петь, петь, петь с благодарными сердцами 
             C#m 
@@ -30,7 +32,7 @@ export const programs: Program[] = [
              H                         A                E 
 Воспевать хвалу и славить Иисуса! 
 
-Куплет:  
+Куплет:
 E 
 Великий и Прекрасный народы все и царства 
 C#m 
@@ -69,7 +71,7 @@ C#m                                     A             E               F#m
 C#m                                     A             E               F#m
 Ты ждешь когда я приду к Тебе такой как есть
 
-Куплет:  
+Купsлет:  
 C#m                            A                         E        F#m
 Печать Твоей любви в сердце моем навеки, навсегда
 C#m           A                   E     F#m 
@@ -129,7 +131,7 @@ G#m F# H/D# E
     G#m                F#                 E                   H                          
 Да я не побежденный, Победитель мой Отец.
 
-Припев:  
+2 Припев:  
    G#m   F#                       E          H
 Уу,                 груз сними с себя
      G#m   F#                             E        H

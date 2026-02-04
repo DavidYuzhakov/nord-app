@@ -44,25 +44,27 @@ export default function LiveModePage() {
               ))}
             </div>
           </div>
-          {programs[0].songs[activeIndex].song.structure && <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
-            {programs[0].songs[activeIndex].song.structure.map((el, i) => (
-              <div
-                key={i}
-                className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
-                  el.text.replace(/\d/g, '').toLowerCase()
-                )}`}
-              >
-                <span className="uppercase text-center text-lg font-semibold">
-                  {el.text}
-                </span>
-                {el.amount > 1 && (
-                  <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-secondary px-1 border rounded-full">
-                    {el.amount}
+          {programs[0].songs[activeIndex].song.structure && (
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
+              {programs[0].songs[activeIndex].song.structure.map((el, i) => (
+                <div
+                  key={i}
+                  className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+                    el.text.replace(/\d/g, '').toLowerCase(),
+                  )}`}
+                >
+                  <span className="uppercase text-center text-lg font-semibold">
+                    {el.text}
                   </span>
-                )}
-              </div>
-            ))}
-          </div>}
+                  {el.amount > 1 && (
+                    <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
+                      {el.amount}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <Swiper

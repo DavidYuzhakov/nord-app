@@ -21,7 +21,7 @@ export function SectionLayout({
         >
           <ChevronLeft />
         </button>
-        <h5 className="flex-1 text-xl font-semibold">{title}</h5>
+        <h5 className="flex-1 text-[22px] font-semibold">{title}</h5>
       </div>
       {children}
       <BottomBar />

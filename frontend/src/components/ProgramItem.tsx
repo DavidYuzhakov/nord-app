@@ -41,13 +41,13 @@ export function ProgramItem({
             <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
               {song.bpm}
             </span>
-            <span className="text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+            <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
               {song.key}
             </span>
           </>
         ) : (
           <>
-            <span className="flex-1 text-[14px] size-7 flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+            <span className="flex-1 text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
               {song.key}
             </span>
             <Trash2Icon

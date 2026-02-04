@@ -50,7 +50,7 @@ export default function NewProgramPage() {
       />
       <Label className="text-xl font-semibold">Хвалы:</Label>
 
-      <div className="px-4 pb-4 space-y-3">
+      <div className="px-2 pb-4 space-y-3">
         <ul className="space-y-3 px-2">
           <DndContext
             modifiers={[restrictToVerticalAxis]}

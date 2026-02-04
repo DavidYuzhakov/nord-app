@@ -35,7 +35,7 @@ export function BottomBar() {
     (to: string) => {
       if (pathname !== to) navigate(to)
     },
-    [navigate, pathname]
+    [navigate, pathname],
   )
 
   return (
@@ -45,7 +45,7 @@ export function BottomBar() {
         fixed bottom-3 left-2.5 right-2.5 z-1
         flex gap-2 justify-around items-center
         rounded-4xl py-2.5
-        bg-secondary/20 backdrop-blur-sm
+        bg-secondary/20 backdrop-blur-md
         border-2 border-white/50
         drop-shadow-xs
         shadow-[0_0_1px_rgba(0,0,0,0.07),0_0_2px_rgba(0,0,0,0.07),0_0_7px_rgba(0,0,0,0.04)]

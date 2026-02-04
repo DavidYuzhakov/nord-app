@@ -3,22 +3,12 @@ import { parseSongSections } from '@/utils/parseSongSections'
 import { tokenizeSection } from '@/utils/tokenize'
 import { transposeSections } from '@/utils/transposeSong'
 import { useMemo, useState } from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select'
-import { Button } from './ui/button'
 import { distance } from 'tonal'
 import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal'
+import { Tonality } from './Tonality'
 
 export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   const [currentKey, setCurrentKey] = useState<KeyType>(song.key as KeyType)
-  const keysType: KeyType[] = currentKey.includes('m')
-    ? ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Hm']
-    : ['C', 'D', 'E', 'F', 'G', 'A', 'H']
 
   const sections = useMemo(() => {
     const parsed = tokenizeSection(parseSongSections(song.text ?? ''))
@@ -46,67 +36,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
             Key: {song.key}
           </span>
         ) : (
-          <>
-            <Select
-              defaultValue={currentKey.replace('#', '').replace('b', '')}
-              onValueChange={(v) => setCurrentKey(v as KeyType)}
-            >
-              <SelectTrigger className="w-20">
-                <SelectValue placeholder="Key" />
-              </SelectTrigger>
-              <SelectContent className="">
-                {keysType.map((key) => (
-                  <SelectItem key={key} value={key}>
-                    {key}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              className={`${currentKey.includes('#') ? 'bg-primary text-white' : ''}`}
-              onClick={() => {
-                if (currentKey.includes('#')) {
-                  setCurrentKey(currentKey.replace('#', '') as KeyType)
-                } else {
-                  if (currentKey[1] === 'b') {
-                    setCurrentKey(currentKey.replace('b', '#') as KeyType)
-                  } else if (currentKey[1] === 'm') {
-                    setCurrentKey(currentKey.replace('m', '#m') as KeyType)
-                  } else {
-                    setCurrentKey(`${currentKey}#` as KeyType)
-                  }
-                }
-              }}
-              disabled={currentKey[0] === 'E' || currentKey[0] === 'H'}
-              type="button"
-              variant={'outline'}
-            >
-              #
-            </Button>
-            <Button
-              className={`${currentKey.includes('b') ? 'bg-primary text-white' : ''}`}
-              onClick={() => {
-                if (currentKey.includes('b')) {
-                  setCurrentKey(currentKey.replace('b', '') as KeyType)
-                } else {
-                  if (currentKey[1] === '#') {
-                    setCurrentKey(currentKey.replace('#', 'b') as KeyType)
-                  } else if (currentKey[1] === 'm') {
-                    setCurrentKey(currentKey.replace('m', 'bm') as KeyType)
-                  } else {
-                    setCurrentKey(`${currentKey}b` as KeyType)
-                  }
-                }
-              }}
-              disabled={
-                currentKey[0] === 'F' || currentKey[0] === 'C' ? true : false
-              }
-              type="button"
-              variant={'outline'}
-            >
-              b
-            </Button>
-          </>
+          <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
         )}
       </div>
       {sections.map((section, i) => (
@@ -116,10 +46,12 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
         >
           {section.title && (
             <h5 className="absolute top-0 left-4 bg-white -translate-y-1/2 px-1 rounded-md font-bold mb-2 uppercase">
-              {section.title}
+              {section.type === 'unknown'
+                ? 'Некорректный раздел'
+                : section.title}
             </h5>
           )}
-          <div className="">
+          <div>
             {section.lines.map((line, lineIdx) => (
               <pre
                 key={lineIdx}

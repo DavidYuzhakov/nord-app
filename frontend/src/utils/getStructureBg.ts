@@ -1,18 +1,20 @@
 export function getStructureBg(type: string) {
   // ?
   switch (type) {
-    case 'п':
-      return 'bg-chart-1'
+    case 'в':
+      return 'bg-green-500'
     case 'к':
-      return 'bg-chart-2'
-    case 'и':
-      return 'bg-chart-3'
+      return 'bg-blue-500'
+    case 'п':
+      return 'bg-red-500'
     case 'б':
-      return 'bg-chart-4'
-    case 'п-п':
-      return 'bg-chart-5'
+      return 'bg-cyan-500'
+    case 'пп':
+      return 'bg-yellow-400'
     case 'прг':
-      return 'bg-chart-6'
+      return 'bg-violet-500'
+    case 'т':
+      return 'bg-gray-500'
     default:
       return 'bg-chart-3'
   }
