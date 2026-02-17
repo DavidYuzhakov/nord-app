@@ -11,12 +11,12 @@ datasource db {
 model Song {
   id           Int           @id @default(autoincrement())
   name         String
-  key          KeyType
+  key          String
   bpm          Int
   text         String
   audio        String?
   danceVideo   String?
-  structure    String[]
+  structure    Json?
   programSongs ProgramSong[]
 
   createdAt DateTime @default(now())
@@ -37,19 +37,8 @@ model ProgramSong {
 
 model Program {
   id        Int           @id @default(autoincrement())
-  leader    String
   name      String
   songs     ProgramSong[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-}
-
-enum KeyType {
-  C
-  D
-  E
-  F
-  G
-  A
-  H
 }

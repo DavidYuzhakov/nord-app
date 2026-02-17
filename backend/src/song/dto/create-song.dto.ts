@@ -1,48 +1,93 @@
+import { Type } from 'class-transformer';
 import {
-  ArrayNotEmpty,
   IsArray,
-  IsEnum,
+  IsIn,
   IsInt,
   IsOptional,
   IsString,
   IsUrl,
+  Min,
+  MinLength,
+  ValidateNested,
 } from 'class-validator';
 
-export enum KeyType {
-  C = 'C',
-  D = 'D',
-  E = 'E',
-  F = 'F',
-  G = 'G',
-  A = 'A',
-  H = 'H',
+export class SongStructureItem {
+  @IsString()
+  text: string;
+
+  @IsInt()
+  @Min(1)
+  amount: number;
+
+  @IsString()
+  id: string;
+
+  @IsString()
+  title: string;
 }
 
 export class CreateSongDto {
   @IsString()
+  @MinLength(1)
   name: string;
 
-  @IsEnum(KeyType)
-  key: KeyType;
+  @IsString()
+  @IsIn([
+    'C',
+    'C#',
+    'Db',
+    'D',
+    'D#',
+    'Eb',
+    'E',
+    'F',
+    'F#',
+    'Gb',
+    'G',
+    'G#',
+    'Ab',
+    'A',
+    'A#',
+    'Hb',
+    'H',
+    'Cm',
+    'C#m',
+    'Dbm',
+    'Dm',
+    'D#m',
+    'Ebm',
+    'Em',
+    'Fm',
+    'F#m',
+    'Gbm',
+    'Gm',
+    'G#m',
+    'Abm',
+    'Am',
+    'A#m',
+    'Hbm',
+    'Hm',
+  ])
+  key: string;
 
   @IsInt()
   bpm: number;
 
   @IsString()
+  @MinLength(1)
   text: string;
 
-  @IsString()
   @IsUrl()
   @IsOptional()
   audio?: string;
 
-  @IsString()
   @IsUrl()
   @IsOptional()
   danceVideo?: string;
 
+  @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
-  structure: string[];
+  @ValidateNested({ each: true })
+  @Type(() => SongStructureItem)
+  structure?: string[];
 }

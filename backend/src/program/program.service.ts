@@ -6,12 +6,26 @@ import {
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { ProgramUpdateInput } from 'src/generated/prisma/models';
 
 @Injectable()
 export class ProgramService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private readonly programInclude = {
+    songs: {
+      include: {
+        song: true,
+      },
+      orderBy: {
+        order: 'asc' as const,
+      },
+    },
+  };
+
   async create(dto: CreateProgramDto) {
-    const songData = dto.songs.map((songId, i) => ({
+    const songData = dto.songsId.map((songId, i) => ({
       songId,
       order: i + 1,
     }));
@@ -19,27 +33,15 @@ export class ProgramService {
     try {
       return await this.prisma.program.create({
         data: {
-          leader: dto.leader,
           name: dto.name,
           songs: {
             create: songData,
           },
         },
-        include: {
-          songs: {
-            include: {
-              song: {
-                select: { name: true, id: true },
-              },
-            },
-            orderBy: {
-              order: 'asc',
-            },
-          },
-        },
+        include: this.programInclude,
       });
     } catch (e) {
-      if (e.code === 'P2002') {
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new BadRequestException('Такая песня уже есть в программе');
       }
       throw e;
@@ -49,20 +51,14 @@ export class ProgramService {
   async findAll() {
     return this.prisma.program.findMany({
       orderBy: { createdAt: 'desc' },
+      include: this.programInclude,
     });
   }
 
   async findOne(id: number) {
     const program = await this.prisma.program.findUnique({
       where: { id },
-      include: {
-        songs: {
-          include: {
-            song: { select: { id: true, name: true } },
-          },
-          orderBy: { order: 'asc' },
-        },
-      },
+      include: this.programInclude,
     });
 
     if (!program) throw new NotFoundException('Программа не найдена');
@@ -76,17 +72,16 @@ export class ProgramService {
     });
     if (!program) throw new NotFoundException('Программа не найдена');
 
-    const data: any = {};
-    if (dto.leader) data.leader = dto.leader;
+    const data: ProgramUpdateInput = {};
     if (dto.name) data.name = dto.name;
 
-    if (dto.songs) {
+    if (dto.songsId !== undefined) {
       await this.prisma.programSong.deleteMany({
         where: { programId: id },
       });
 
       data.songs = {
-        create: dto.songs.map((songId, index) => ({
+        create: dto.songsId.map((songId, index) => ({
           songId,
           order: index + 1,
         })),
@@ -99,7 +94,7 @@ export class ProgramService {
       include: {
         songs: {
           include: {
-            song: { select: { id: true, name: true } },
+            song: true,
           },
           orderBy: { order: 'asc' },
         },

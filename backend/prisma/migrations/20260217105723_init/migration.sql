@@ -1,16 +1,13 @@
--- CreateEnum
-CREATE TYPE "KeyType" AS ENUM ('C', 'D', 'E', 'F', 'G', 'A', 'H');
-
 -- CreateTable
 CREATE TABLE "Song" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "key" "KeyType" NOT NULL,
+    "key" TEXT NOT NULL,
     "bpm" INTEGER NOT NULL,
     "text" TEXT NOT NULL,
     "audio" TEXT,
     "danceVideo" TEXT,
-    "structure" TEXT[],
+    "structure" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -30,7 +27,6 @@ CREATE TABLE "ProgramSong" (
 -- CreateTable
 CREATE TABLE "Program" (
     "id" SERIAL NOT NULL,
-    "leader" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

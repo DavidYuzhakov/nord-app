@@ -8,18 +8,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SongService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createSongDto: CreateSongDto) {
-    const data: any = { ...createSongDto };
-
-    if (data.audio === undefined) {
-      delete data.audio;
-    }
-    if (data.danceVideo === undefined) {
-      delete data.danceVideo;
-    }
-
+  async create(dto: CreateSongDto) {
     return this.prisma.song.create({
-      data,
+      data: {
+        name: dto.name,
+        key: dto.key,
+        bpm: dto.bpm,
+        text: dto.text,
+        audio: dto.audio,
+        danceVideo: dto.danceVideo,
+        structure: dto.structure,
+      },
     });
   }
 
