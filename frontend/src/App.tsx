@@ -6,7 +6,7 @@ import NewProgramPage from './pages/NewProgramPage'
 import SongsPage from './pages/SongsPage'
 import LiveModePage from './pages/LiveModePage'
 import SongDetailPage from './pages/SongDetailPage'
-import EditSongPage from './pages/EditSongPage'
+import MutationSongPage from './pages/MutationSongPage'
 
 function App() {
   return (
@@ -54,9 +54,17 @@ function App() {
       <Route
         path="/song/:id/edit"
         element={
-          <Layout>
-            <EditSongPage />
-          </Layout>
+          <SectionLayout title="Редактирование">
+            <MutationSongPage />
+          </SectionLayout>
+        }
+      />
+      <Route
+        path="/song/create"
+        element={
+          <SectionLayout title="Создание хвалы">
+            <MutationSongPage />
+          </SectionLayout>
         }
       />
     </Routes>

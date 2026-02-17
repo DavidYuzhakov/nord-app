@@ -1,27 +1,32 @@
 import { PlusCircleIcon, SearchIcon, XIcon } from 'lucide-react'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Checkbox } from './ui/checkbox'
-import { Button } from './ui/button'
+import { fetchSongs } from '@/store/reducers/songSlice'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useDebounce } from '@/hook/useDebounce'
+import type { Song } from '@/models/Song'
 
-const songs = [
-  { name: 'Славьте Его', key: 'C', bpm: 143 },
-  { name: 'С днем рождения, Иисус!', key: 'Ab', bpm: 133 },
-  { name: 'Радуйся мир', key: 'F', bpm: 150 },
-  { name: 'Вся хвала', key: 'H', bpm: 100 },
-  { name: 'Пою я аллилуйя', key: 'D', bpm: 140 },
-  { name: 'Достоин Ты', key: 'C#m', bpm: 88 },
-  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
-  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
-  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
-  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
-  { name: 'Рядом с Тобой', key: 'E', bpm: 80 },
-]
+interface AddSongProps {
+  selectedIds: number[]
+  onToggleSong: (isChecked: boolean, checkedSong: Song) => void
+}
 
-export function AddSong() {
-  const [name, setName] = useState('')
+export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 500)
   const [isOpen, setIsOpen] = useState(false)
+  const dispatch = useAppDispatch()
+  const { items } = useAppSelector((state) => state.song)
+
+  useEffect(() => {
+    dispatch(
+      fetchSongs({
+        search: debouncedSearch.trim().length > 0 ? debouncedSearch : undefined,
+      }),
+    )
+  }, [debouncedSearch, dispatch])
 
   return (
     <>
@@ -46,44 +51,40 @@ export function AddSong() {
           />
           <Input
             id="song"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="pl-8 pr-7 focus-visible:ring-0"
             placeholder="Введите название хвалы"
           />
-          {name.length > 0 && (
+          {search.length > 0 && (
             <XIcon
-              onClick={() => setName('')}
+              onClick={() => setSearch('')}
               size={20}
               className="absolute top-1/2 -translate-1/2 -right-1 "
             />
           )}
         </div>
         <ul className="border max-h-80 rounded-md overflow-y-auto px-3 py-2">
-          {songs.map((song) => (
+          {items.map((song) => (
             <li
               className="flex items-center gap-1.5 border-b font-medium border-accent py-2"
-              key={song.name}
+              key={song.id}
             >
               {song.name}
-              <span className=" text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+              <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
                 {song.key}
               </span>
               <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
                 {song.bpm}
               </span>
-              <Checkbox className="ml-auto size-6" />
+              <Checkbox
+                className="ml-auto size-6"
+                checked={selectedIds.includes(song.id)}
+                onCheckedChange={(value) => onToggleSong(Boolean(value), song)}
+              />
             </li>
           ))}
         </ul>
-
-        <Button
-          className="ml-auto block"
-          onClick={() => setIsOpen(false)}
-          type="button"
-        >
-          Добавить
-        </Button>
       </div>
       <div
         onClick={() => setIsOpen(false)}

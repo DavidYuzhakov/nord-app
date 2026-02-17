@@ -1,16 +1,20 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useGoBack } from '@/hook/useGoBack'
-import type { KeyType } from '@/models/Song'
-import { programs } from '@/mocks/programs'
-import { ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import type { KeyType, SongStructureItem } from '@/models/Song'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Textarea } from '@/components/ui/textarea'
 import { Tonality } from '@/components/Tonality'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { Structure } from '@/components/Structure'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import {
+  createSongThunk,
+  deleteSongThunk,
+  fetchSong,
+  updateSongThunk,
+} from '@/store/reducers/songSlice'
 
 interface FormState {
   name: string
@@ -20,65 +24,124 @@ interface FormState {
   danceVideo: string
 }
 
-export default function EditSongPage() {
+export default function MutationSongPage() {
   const { id } = useParams()
-  const goBack = useGoBack()
-  const songData = id ? programs[0].songs[Number(id)].song : null
+  const isEdit = Boolean(id)
+  const dispatch = useAppDispatch()
+  const { current, loading } = useAppSelector((state) => state.song)
+  const navigate = useNavigate()
 
-  const [songKey, setSongKey] = useState(songData?.key || 'C')
-  const { register, handleSubmit } = useForm<FormState>({
+  const [droppedItems, setDroppedItems] = useState<SongStructureItem[]>(
+    current?.structure || [],
+  )
+  const [songKey, setSongKey] = useState(current?.key || 'C')
+  const { register, reset, handleSubmit } = useForm<FormState>({
     defaultValues: {
-      name: songData?.name ?? '',
-      bpm: songData?.bpm ?? 120,
-      text: songData?.text ?? '',
+      name: current?.name ?? '',
+      bpm: current?.bpm ?? 120,
+      text: current?.text ?? '',
     },
   })
 
-  if (!songData) {
-    return <div>Нет песни</div>
-  }
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSong(Number(id)))
+    }
+  }, [id])
 
-  const onSubmit: SubmitHandler<FormState> = (data) => {
-    console.log(data)
+  useEffect(() => {
+    if (current && isEdit) {
+      reset({
+        name: current.name,
+        bpm: current.bpm,
+        text: current.text,
+        audio: current.audio ?? '',
+        danceVideo: current.danceVideo ?? '',
+      })
+
+      setDroppedItems(current.structure ?? [])
+      setSongKey(current.key)
+    }
+  }, [current])
+
+  if (isEdit && loading) return <p>Загрузка...</p>
+
+  if (isEdit && !current) return <div>Нет песни</div>
+
+  const onSubmit: SubmitHandler<FormState> = async (data) => {
+    if (!isEdit) {
+      try {
+        await dispatch(
+          createSongThunk({
+            ...data,
+            key: songKey,
+            bpm: Number(data.bpm),
+            structure: droppedItems,
+            danceVideo:
+              data.danceVideo.trim().length > 0 ? data.danceVideo : undefined,
+            audio: data.audio.trim().length > 0 ? data.audio : undefined,
+          }),
+        ).unwrap()
+        navigate('/songs')
+      } catch (error) {
+        console.log(error)
+        alert('Не удалось создать хвалу. Попробуйте позже')
+      }
+    } else {
+      try {
+        await dispatch(
+          updateSongThunk({
+            id: Number(id),
+            data: {
+              ...data,
+              key: songKey,
+              bpm: Number(data.bpm),
+              structure: droppedItems,
+              danceVideo:
+                data.danceVideo.trim().length > 0 ? data.danceVideo : undefined,
+              audio: data.audio.trim().length > 0 ? data.audio : undefined,
+            },
+          }),
+        ).unwrap()
+        navigate('/songs')
+      } catch (error) {
+        console.log(error)
+        alert('Не удалось обновить хвалу. Попробуйте позже')
+      }
+    }
   }
 
   const handleDelete = () => {
     if (window.confirm('Вы действительно хотите удалить хвалу?')) {
-      console.log('delete')
+      if (id) {
+        dispatch(deleteSongThunk(Number(id)))
+      }
+      navigate('/songs')
     }
   }
 
   return (
     <div className="space-y-4 pb-22 pt-2">
-      <div className="flex items-center gap-2 -mx-1">
-        <button
-          onClick={goBack}
-          className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
-          type="button"
-        >
-          <ChevronLeft />
-        </button>
-        <h1 className="text-[22px] font-semibold">Редактирование</h1>
-      </div>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1">
           <Label className="text-lg font-medium" htmlFor="name">
             Название:
           </Label>
           <Input
-            {...register('name')}
+            {...register('name', { required: true })}
             id="name"
             placeholder="Введите название"
           />
         </div>
 
         <div className="space-y-3">
-          <Label className="text-lg font-medium leading-none">Структура:</Label>
-          <Structure />
+          <Label className="text-lg bg-white font-medium leading-none">
+            Структура:
+          </Label>
+          <Structure
+            droppedItems={droppedItems}
+            setDroppedItems={setDroppedItems}
+          />
         </div>
 
         <div className="space-y-2">
@@ -118,7 +181,7 @@ export default function EditSongPage() {
           </Label>
           <Textarea
             id="text"
-            {...register('text')}
+            {...register('text', { required: true })}
             placeholder="Введите текст песни с аккордами"
             className="resize-y max-h-100 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty"
           />
@@ -153,14 +216,16 @@ export default function EditSongPage() {
         </div>
 
         <div className="flex gap-3 pt-4 justify-end">
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleDelete}
-            className="capitalize text-base py-5"
-          >
-            удалить
-          </Button>
+          {isEdit && (
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              className="capitalize text-base py-5"
+            >
+              удалить
+            </Button>
+          )}
           <Button
             type="submit"
             className="bg-primary capitalize text-base py-5"

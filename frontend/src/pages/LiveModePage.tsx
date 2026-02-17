@@ -4,7 +4,6 @@ import { Song } from '@/components/Song'
 import { useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
 import { getStructureBg } from '@/utils/getStructureBg'
-import { programs } from '@/mocks/programs'
 import {
   Drawer,
   DrawerContent,
@@ -12,11 +11,23 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
+import { useAppSelector } from '@/store/hooks'
+import { Navigate } from 'react-router-dom'
+import type { Program } from '@/models/Program'
 
 export default function LiveModePage() {
+  const { items, loading } = useAppSelector((state) => state.program)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(true)
-  const totalSlides = programs[0].songs.length
+  const [currentProgram, setCurrentProgram] = useState<Program>(items[0])
+
+  if (loading) return <p className="text-center">Загрузка...</p>
+
+  if (items.length === 0 || !currentProgram) {
+    return <Navigate to={'/'} />
+  }
+
+  const totalSlides = currentProgram.songs.length
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex)
@@ -28,7 +39,7 @@ export default function LiveModePage() {
         <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
           <div className="flex justify-between items-center gap-1">
             <h2 className="text-[22px] font-semibold truncate">
-              {programs[0].songs[activeIndex].song.name}
+              {currentProgram.songs[activeIndex].song.name}
             </h2>
             <div className="flex gap-1 z-10">
               {Array.from({ length: totalSlides }).map((_, index) => (
@@ -44,9 +55,9 @@ export default function LiveModePage() {
               ))}
             </div>
           </div>
-          {programs[0].songs[activeIndex].song.structure && (
+          {currentProgram.songs[activeIndex].song.structure && (
             <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
-              {programs[0].songs[activeIndex].song.structure.map((el, i) => (
+              {currentProgram.songs[activeIndex].song.structure.map((el, i) => (
                 <div
                   key={i}
                   className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
@@ -70,11 +81,10 @@ export default function LiveModePage() {
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
-          autoHeight={true}
           onSlideChange={handleSlideChange}
           onSwiper={(swiper) => console.log(swiper)}
         >
-          {programs[0].songs.map((song) => (
+          {currentProgram.songs.map((song) => (
             <SwiperSlide>
               <Song song={song.song} />
             </SwiperSlide>
@@ -89,9 +99,12 @@ export default function LiveModePage() {
             </DrawerTitle>
           </DrawerHeader>
           <div className="flex flex-wrap items-center gap-3 px-2 pb-5">
-            {programs.map((program) => (
+            {items.map((program) => (
               <Button
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setCurrentProgram(program)
+                  setIsOpen(false)
+                }}
                 className="w-full py-4 truncate text-lg font-medium"
                 key={program.id}
               >

@@ -14,19 +14,24 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from './ui/collapsible'
-import { ProgramItem } from './ProgramItem'
+import { SongItem } from './SongItem'
 import type { Program } from '@/models/Program'
 
 import { AddSong } from './AddSong'
+import type { Song } from '@/models/Song'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { updateProgramThunk } from '@/store/reducers/programSlice'
 
 export function ProgramCard({ id, name, songs }: Program) {
   const [activeId, setActiveId] = useState<number | null>(null)
-  const [programs, setPrograms] = useState(
-    [...songs].sort((a, b) => a.order - b.order)
+  const [selectedSongs, setSelectedSongs] = useState<Song[]>(
+    songs.map((s) => s.song),
   )
   const [isEdit, setIsEdit] = useState(false)
-
   const isOpen = activeId === id
+
+  const dispatch = useAppDispatch()
+  const loading = useAppSelector((state) => state.program.loading)
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
@@ -40,11 +45,40 @@ export function ProgramCard({ id, name, songs }: Program) {
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e
     if (over && active.id !== over.id) {
-      setPrograms((items) => {
+      setSelectedSongs((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id)
         const newIndex = items.findIndex((item) => item.id === over.id)
         return arrayMove(items, oldIndex, newIndex)
       })
+    }
+  }
+
+  const deleteHandler = (id: number) => {
+    if (window.confirm('Вы действительно хотите удалить хвалу?')) {
+      setSelectedSongs((prev) => prev.filter((s) => s.id !== id))
+    }
+  }
+
+  const onToggleSong = (isChecked: boolean, checkedSong: Song) => {
+    if (isChecked) {
+      setSelectedSongs((prev) => [...prev, checkedSong])
+    } else {
+      setSelectedSongs((prev) => prev.filter((s) => s.id !== checkedSong.id))
+    }
+  }
+
+  const saveHandler = async () => {
+    try {
+      await dispatch(
+        updateProgramThunk({
+          id,
+          data: { name, songsId: selectedSongs.map((s) => s.id) },
+        }),
+      )
+      setIsEdit(false)
+    } catch (e) {
+      console.log(e)
+      alert('Не удалось сохранить программу')
     }
   }
 
@@ -85,15 +119,23 @@ export function ProgramCard({ id, name, songs }: Program) {
               sensors={sensors}
               onDragEnd={handleDragEnd}
             >
-              <SortableContext items={programs}>
-                {programs.map((program) => (
-                  <ProgramItem key={program.id} {...program} isEdit={isEdit} />
+              <SortableContext items={selectedSongs}>
+                {selectedSongs.map((s) => (
+                  <SongItem
+                    key={s.id}
+                    item={s}
+                    onDelete={deleteHandler}
+                    isEdit={isEdit}
+                  />
                 ))}
               </SortableContext>
             </DndContext>
             {isEdit && (
               <li className="text-center pt-1 px-3">
-                <AddSong />
+                <AddSong
+                  selectedIds={selectedSongs.map((s) => s.id)}
+                  onToggleSong={onToggleSong}
+                />
               </li>
             )}
           </ul>
@@ -106,13 +148,23 @@ export function ProgramCard({ id, name, songs }: Program) {
               изменить <PenBoxIcon size={17} />
             </button>
           ) : (
-            <button
-              type="submit"
-              onClick={() => setIsEdit(false)}
-              className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-background"
-            >
-              сохранить
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => console.log('delete')}
+                className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-md bg-destructive text-background"
+              >
+                удалить
+              </button>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={saveHandler}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-background disabled:bg-primary/60"
+              >
+                сохранить
+              </button>
+            </div>
           )}
         </div>
       </CollapsibleContent>

@@ -4,6 +4,8 @@ export interface ProgramSong {
   id: number
   order: number
   song: Song
+  songId: number
+  programId: number
 }
 
 export interface Program {

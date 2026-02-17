@@ -19,8 +19,6 @@ export function Tonality({
   setCurrentKey: React.Dispatch<React.SetStateAction<KeyType>>
 }) {
   const keysType: KeyType[] = currentKey.includes('m') ? MINOR_KEYS : MAJOR_KEYS
-  console.log(keysType, currentKey)
-
   return (
     <>
       <Select

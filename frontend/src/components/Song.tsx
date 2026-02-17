@@ -5,10 +5,15 @@ import { transposeSections } from '@/utils/transposeSong'
 import { useMemo, useState } from 'react'
 import { distance } from 'tonal'
 import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal'
+import { stringifySongSections } from '@/utils/stringifySongSections'
 import { Tonality } from './Tonality'
+import { Button } from './ui/button'
+import { useAppDispatch } from '@/store/hooks'
+import { updateSongThunk } from '@/store/reducers/songSlice'
 
 export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   const [currentKey, setCurrentKey] = useState<KeyType>(song.key as KeyType)
+  const dispatch = useAppDispatch()
 
   const sections = useMemo(() => {
     const parsed = tokenizeSection(parseSongSections(song.text ?? ''))
@@ -25,6 +30,19 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
     return transposeSections(parsed, interval)
   }, [song.text, song.key, currentKey])
 
+  const changeKey = () => {
+    const newText = stringifySongSections(sections)
+    dispatch(
+      updateSongThunk({
+        id: song.id,
+        data: {
+          key: currentKey,
+          text: newText,
+        },
+      }),
+    )
+  }
+
   return (
     <div className="px-3 space-y-7 h-full">
       <div className="flex gap-3">
@@ -36,7 +54,16 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
             Key: {song.key}
           </span>
         ) : (
-          <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
+          <>
+            <div className="flex-1 flex gap-2">
+              <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
+            </div>
+            {currentKey !== song.key && (
+              <Button onClick={changeKey} type="button">
+                Сохранить
+              </Button>
+            )}
+          </>
         )}
       </div>
       {sections.map((section, i) => (

@@ -1,18 +1,28 @@
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hook/useGoBack'
-import { programs } from '@/mocks/programs'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
 import { ChevronLeft, EditIcon, Headphones, PersonStanding } from 'lucide-react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
   const { id } = useParams()
   const goBack = useGoBack()
   const navigate = useNavigate()
-  const songData = id ? programs[0].songs[Number(id)].song : null
+  const { current, loading } = useAppSelector((state) => state.song)
+  const dispatch = useAppDispatch()
 
-  if (!songData) return 'Нет песни'
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSong(Number(id)))
+    }
+  }, [id])
+
+  if (loading) return 'Загрузка'
+  if (!current) return 'Нет песни'
 
   return (
     <div className="-mx-3 space-y-3 pb-23">
@@ -26,19 +36,19 @@ export default function SongDetailPage() {
             >
               <ChevronLeft />
             </button>
-            <h2 className="text-[22px] font-semibold">{songData.name}</h2>
+            <h2 className="text-[22px] font-semibold">{current.name}</h2>
           </div>
           <button
-            onClick={() => navigate(`/song/${songData.id}/edit`)}
+            onClick={() => navigate(`/song/${current.id}/edit`)}
             type="button"
             className="bg-primary p-1.5 rounded-md"
           >
             <EditIcon size={20} className="stroke-white" />
           </button>
         </div>
-        {songData.structure && (
+        {current.structure && current.structure.length > 0 && (
           <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
-            {songData.structure.map((el, i) => (
+            {current.structure.map((el, i) => (
               <div
                 key={i}
                 className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
@@ -58,26 +68,30 @@ export default function SongDetailPage() {
           </div>
         )}
       </div>
-      <Song isEdit song={songData} />
+      <Song isEdit song={current} />
       <div className="px-3 flex gap-2 items-cetner flex-wrap">
-        <Button type="button" className="text-base">
-          <a
-            className="flex items-center gap-2"
-            href="https://t.me/c/3600117652/20"
-            target="_blank"
-          >
-            Слушать аудио <Headphones />
-          </a>
-        </Button>
-        <Button type="button" className="text-base bg-third">
-          <a
-            className="flex items-center gap-2"
-            href="https://www.youtube.com/watch?v=4eKk6dyTqgY&list=RD4eKk6dyTqgY&start_radio=1"
-            target="_blank"
-          >
-            Юльтон <PersonStanding className="size-5" />
-          </a>
-        </Button>
+        {current.audio && (
+          <Button type="button" className="text-base">
+            <a
+              className="flex items-center gap-2"
+              href={current.audio}
+              target="_blank"
+            >
+              Слушать аудио <Headphones />
+            </a>
+          </Button>
+        )}
+        {current.danceVideo && (
+          <Button type="button" className="text-base bg-third">
+            <a
+              className="flex items-center gap-2"
+              href={current.danceVideo}
+              target="_blank"
+            >
+              Юльтон <PersonStanding className="size-5" />
+            </a>
+          </Button>
+        )}
       </div>
     </div>
   )

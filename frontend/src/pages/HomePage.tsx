@@ -1,11 +1,19 @@
 import { MusicIcon, PlusCircleIcon } from 'lucide-react'
-import { programs } from '../mocks/programs'
 import { Button } from '@/components/ui/button'
 import { ProgramCard } from '@/components/ProgramCard'
 import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useEffect } from 'react'
+import { fetchPrograms } from '@/store/reducers/programSlice'
 
 export default function HomePage() {
+  const { items } = useAppSelector((state) => state.program)
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchPrograms())
+  }, [dispatch])
 
   return (
     <div className="space-y-2.5 pb-36">
@@ -14,14 +22,15 @@ export default function HomePage() {
           <MusicIcon />
         </span>
         <span className="flex-1 text-xl tracking-tighter font-bold flex gap-0.5 items-end">
-          Nord App{' '}
+          Nord App
           <div className="size-1.5 rounded-full bg-primary -translate-y-1" />
         </span>
       </div>
       <h3 className="text-xl font-semibold">Готовые программы</h3>
 
       <div className="space-y-3">
-        {programs.map((program) => (
+        {items.length === 0 && <p className="text-center">Список пуст</p>}
+        {items.map((program) => (
           <ProgramCard key={program.id} {...program} />
         ))}
       </div>

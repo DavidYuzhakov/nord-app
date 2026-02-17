@@ -3,11 +3,15 @@ export interface Song {
   name: string
   key: KeyType
   bpm: number
-  text?: string
+  text: string
   structure?: SongStructureItem[]
+  danceVideo?: string
+  audio?: string
 }
 
 export type SongStructureItem = {
+  id: string
+  title: string
   text: string
   amount: number
 }

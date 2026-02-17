@@ -17,17 +17,9 @@ import { MinusIcon, PlusIcon, XIcon } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { CSS } from '@dnd-kit/utilities'
 import { useRef, useState } from 'react'
-import type { SongStructureItem } from '@/models/Song'
 import { getStructureBg } from '@/utils/getStructureBg'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from './ui/dialog'
-
-type SongStructureWithId = SongStructureItem & { id: string; title: string }
+import { Dialog, DialogContent } from './ui/dialog'
+import type { SongStructureItem } from '@/models/Song'
 
 const sections = [
   { label: 'вступление', value: 'в' },
@@ -67,9 +59,9 @@ function SortableStructureItem({
   onRemove,
   onClick,
 }: {
-  item: SongStructureWithId
+  item: SongStructureItem
   onRemove: (id: string) => void
-  onClick: (item: SongStructureWithId) => void
+  onClick: (item: SongStructureItem) => void
 }) {
   const {
     attributes,
@@ -128,9 +120,9 @@ export function Droppable({
   onRemove,
   onItemClick,
 }: {
-  items: SongStructureWithId[]
+  items: SongStructureItem[]
   onRemove: (id: string) => void
-  onItemClick: (item: SongStructureWithId) => void
+  onItemClick: (item: SongStructureItem) => void
 }) {
   const { isOver, setNodeRef } = useDroppable({ id: 'droppable' })
 
@@ -169,10 +161,15 @@ export function Droppable({
   )
 }
 
-export function Structure() {
-  const [droppedItems, setDroppedItems] = useState<SongStructureWithId[]>([])
+export function Structure({
+  droppedItems,
+  setDroppedItems,
+}: {
+  droppedItems: SongStructureItem[]
+  setDroppedItems: React.Dispatch<React.SetStateAction<SongStructureItem[]>>
+}) {
   const idCounter = useRef(0)
-  const [selectedItem, setSelectedItem] = useState<SongStructureWithId | null>(
+  const [selectedItem, setSelectedItem] = useState<SongStructureItem | null>(
     null,
   )
 
@@ -217,7 +214,7 @@ export function Structure() {
 
       setDroppedItems((prev) => {
         const nextId = `structure-${idCounter.current++}`
-        const newItem: SongStructureWithId = {
+        const newItem: SongStructureItem = {
           id: nextId,
           text: section.value,
           title: section.label,
@@ -233,11 +230,11 @@ export function Structure() {
     setDroppedItems((prev) => prev.filter((item) => item.id !== id))
   }
 
-  const handleItemClick = (item: SongStructureWithId) => {
+  const handleItemClick = (item: SongStructureItem) => {
     setSelectedItem(item)
   }
 
-  const handleChangeItem = (item: SongStructureWithId) => {
+  const handleChangeItem = (item: SongStructureItem) => {
     setSelectedItem(() => {
       setDroppedItems((prev) =>
         prev.map((el) => (el.id === item.id ? item : el)),
