@@ -33,6 +33,8 @@ export default function LiveModePage() {
     setActiveIndex(swiper.activeIndex)
   }
 
+  console.log(currentProgram)
+
   return (
     <>
       <div className="-mx-3 relative space-y-3 pb-23">
@@ -56,7 +58,9 @@ export default function LiveModePage() {
             </div>
           </div>
           {currentProgram.songs[activeIndex].song.structure && (
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
+            <div
+              className={`grid ${currentProgram.songs[activeIndex].song.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
+            >
               {currentProgram.songs[activeIndex].song.structure.map((el, i) => (
                 <div
                   key={i}

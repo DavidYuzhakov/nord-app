@@ -19,7 +19,7 @@ export default function SongDetailPage() {
     if (id) {
       dispatch(fetchSong(Number(id)))
     }
-  }, [id])
+  }, [id, dispatch])
 
   if (loading) return 'Загрузка'
   if (!current) return 'Нет песни'
@@ -47,7 +47,9 @@ export default function SongDetailPage() {
           </button>
         </div>
         {current.structure && current.structure.length > 0 && (
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(45px,1fr))] gap-px">
+          <div
+            className={`grid ${current.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
+          >
             {current.structure.map((el, i) => (
               <div
                 key={i}

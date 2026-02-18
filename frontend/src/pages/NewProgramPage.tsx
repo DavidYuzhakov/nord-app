@@ -45,7 +45,13 @@ export default function NewProgramPage() {
     }
   }
 
-  const submitHandler = async () => {
+  const submitHandler = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (songs.length === 0) {
+      alert('Добавьте хотя бы 1 хвалу')
+      return
+    }
+
     try {
       await dispatch(
         createProgramThunk({
@@ -73,8 +79,6 @@ export default function NewProgramPage() {
       setSongs((prev) => prev.filter((s) => s.id !== checkedSong.id))
     }
   }
-
-  console.log(songs)
 
   return (
     <form onSubmit={submitHandler} className="py-4 space-y-3 flex flex-col">

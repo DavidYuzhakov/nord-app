@@ -315,7 +315,7 @@ export function Structure({
                     onClick={() =>
                       handleChangeItem({
                         ...selectedItem,
-                        amount: --selectedItem.amount,
+                        amount: Number(selectedItem.amount) - 1,
                       })
                     }
                     className="bg-foreground text-white rounded-full p-1 disabled:opacity-60"
@@ -328,7 +328,7 @@ export function Structure({
                     onClick={() =>
                       handleChangeItem({
                         ...selectedItem,
-                        amount: ++selectedItem.amount,
+                        amount: Number(selectedItem.amount) + 1,
                       })
                     }
                     className="bg-foreground text-white rounded-full p-1"

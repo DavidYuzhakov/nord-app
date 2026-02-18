@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { fetchPrograms } from '@/store/reducers/programSlice'
 
 export default function HomePage() {
-  const { items } = useAppSelector((state) => state.program)
+  const programs = useAppSelector((state) => state.program.items)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -29,8 +29,8 @@ export default function HomePage() {
       <h3 className="text-xl font-semibold">Готовые программы</h3>
 
       <div className="space-y-3">
-        {items.length === 0 && <p className="text-center">Список пуст</p>}
-        {items.map((program) => (
+        {programs.length === 0 && <p className="text-center">Список пуст</p>}
+        {programs.map((program) => (
           <ProgramCard key={program.id} {...program} />
         ))}
       </div>

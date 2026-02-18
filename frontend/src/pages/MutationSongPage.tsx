@@ -44,25 +44,25 @@ export default function MutationSongPage() {
   })
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchSong(Number(id)))
-    }
-  }, [id])
+    if (!id) return
 
-  useEffect(() => {
-    if (current && isEdit) {
+    const load = async () => {
+      const song = await dispatch(fetchSong(Number(id))).unwrap()
+
       reset({
-        name: current.name,
-        bpm: current.bpm,
-        text: current.text,
-        audio: current.audio ?? '',
-        danceVideo: current.danceVideo ?? '',
+        name: song.name,
+        bpm: song.bpm,
+        text: song.text,
+        audio: song.audio ?? '',
+        danceVideo: song.danceVideo ?? '',
       })
 
-      setDroppedItems(current.structure ?? [])
-      setSongKey(current.key)
+      setSongKey(song.key)
+      setDroppedItems(song.structure ?? [])
     }
-  }, [current])
+
+    load()
+  }, [id, dispatch, reset])
 
   if (isEdit && loading) return <p>Загрузка...</p>
 
@@ -103,7 +103,7 @@ export default function MutationSongPage() {
             },
           }),
         ).unwrap()
-        navigate('/songs')
+        navigate(`/song/${id}`)
       } catch (error) {
         console.log(error)
         alert('Не удалось обновить хвалу. Попробуйте позже')
