@@ -16,12 +16,8 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    try {
-      await this.$connect();
-      await this.$queryRaw`SELECT 1`;
-    } catch (error) {
-      throw error;
-    }
+    await this.$connect();
+    await this.$queryRaw`SELECT 1`;
   }
 
   async onModuleDestroy() {
