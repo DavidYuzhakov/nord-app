@@ -2,16 +2,58 @@ services:
   postgres:
     container_name: postgres
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
       POSTGRES_DB: mydb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - nord-app
     expose:
       - 5432
+  backend:
+    build: './backend'
+    container_name: backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nord-app
+    expose:
+      - 3000
+  frontend:
+    build: './frontend'
+    container_name: frontend
+    restart: unless-stopped
+    networks:
+      - nord-app
+    expose:
+      - 80
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './nginx:/etc/nginx/conf.d'
+      - './certbot:/etc/letsencrypt'
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - nord-app
 
 networks:
   nord-app:
