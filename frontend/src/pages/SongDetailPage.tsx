@@ -1,6 +1,5 @@
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
-import { useGoBack } from '@/hook/useGoBack'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
@@ -10,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
   const { id } = useParams()
-  const goBack = useGoBack()
   const navigate = useNavigate()
   const { current, loading } = useAppSelector((state) => state.song)
   const dispatch = useAppDispatch()
@@ -30,7 +28,7 @@ export default function SongDetailPage() {
         <div className="flex justify-between items-center gap-1">
           <div className="flex items-center gap-1 truncate">
             <button
-              onClick={() => goBack()}
+              onClick={() => navigate('/songs')}
               className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
               type="button"
             >

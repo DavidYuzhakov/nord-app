@@ -18,7 +18,7 @@ import type { Program } from '@/models/Program'
 export default function LiveModePage() {
   const { items, loading } = useAppSelector((state) => state.program)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(items.length === 1 ? false : true)
   const [currentProgram, setCurrentProgram] = useState<Program>(items[0])
 
   if (loading) return <p className="text-center">Загрузка...</p>
@@ -33,67 +33,73 @@ export default function LiveModePage() {
     setActiveIndex(swiper.activeIndex)
   }
 
-  console.log(currentProgram)
-
   return (
     <>
       <div className="-mx-3 relative space-y-3 pb-23">
-        <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
-          <div className="flex justify-between items-center gap-1">
-            <h2 className="text-[22px] font-semibold truncate">
-              {currentProgram.songs[activeIndex].song.name}
-            </h2>
-            <div className="flex gap-1 z-10">
-              {Array.from({ length: totalSlides }).map((_, index) => (
-                <button
-                  key={index}
-                  className={`size-3 rounded-full transition-all ${
-                    index === activeIndex
-                      ? 'bg-primary'
-                      : 'bg-background border border-gray-400'
-                  }`}
-                  aria-label={`Перейти к слайду ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-          {currentProgram.songs[activeIndex].song.structure && (
-            <div
-              className={`grid ${currentProgram.songs[activeIndex].song.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
-            >
-              {currentProgram.songs[activeIndex].song.structure.map((el, i) => (
+        {totalSlides > 0 ? (
+          <>
+            <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
+              <div className="flex justify-between items-center gap-1">
+                <h2 className="text-[22px] font-semibold truncate">
+                  {currentProgram.songs[activeIndex].song.name}
+                </h2>
+                <div className="flex gap-1 z-10">
+                  {Array.from({ length: totalSlides }).map((_, index) => (
+                    <button
+                      key={index}
+                      className={`size-3 rounded-full transition-all ${
+                        index === activeIndex
+                          ? 'bg-primary'
+                          : 'bg-background border border-gray-400'
+                      }`}
+                      aria-label={`Перейти к слайду ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              {currentProgram.songs[activeIndex].song.structure && (
                 <div
-                  key={i}
-                  className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
-                    el.text.replace(/\d/g, '').toLowerCase(),
-                  )}`}
+                  className={`grid ${currentProgram.songs[activeIndex].song.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
                 >
-                  <span className="uppercase text-center text-lg font-semibold">
-                    {el.text}
-                  </span>
-                  {el.amount > 1 && (
-                    <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
-                      {el.amount}
-                    </span>
+                  {currentProgram.songs[activeIndex].song.structure.map(
+                    (el, i) => (
+                      <div
+                        key={i}
+                        className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+                          el.text.replace(/\d/g, '').toLowerCase(),
+                        )}`}
+                      >
+                        <span className="uppercase text-center text-lg font-semibold">
+                          {el.text}
+                        </span>
+                        {el.amount > 1 && (
+                          <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
+                            {el.amount}
+                          </span>
+                        )}
+                      </div>
+                    ),
                   )}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
 
-        <Swiper
-          spaceBetween={50}
-          slidesPerView={1}
-          onSlideChange={handleSlideChange}
-          onSwiper={(swiper) => console.log(swiper)}
-        >
-          {currentProgram.songs.map((song) => (
-            <SwiperSlide>
-              <Song song={song.song} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+            <Swiper
+              spaceBetween={50}
+              slidesPerView={1}
+              onSlideChange={handleSlideChange}
+              onSwiper={(swiper) => console.log(swiper)}
+            >
+              {currentProgram.songs.map((song) => (
+                <SwiperSlide>
+                  <Song song={song.song} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </>
+        ) : (
+          <p>Нет хвал</p>
+        )}
       </div>
       <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
         <DrawerContent>
