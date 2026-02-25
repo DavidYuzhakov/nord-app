@@ -13,13 +13,15 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from '@dnd-kit/sortable'
+import { v4 as uuid } from 'uuid'
 import { MinusIcon, PlusIcon, XIcon } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { CSS } from '@dnd-kit/utilities'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { getStructureBg } from '@/utils/getStructureBg'
 import { Dialog, DialogContent } from './ui/dialog'
 import type { SongStructureItem } from '@/models/Song'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 const sections = [
   { label: 'вступление', value: 'в' },
@@ -79,9 +81,10 @@ function SortableStructureItem({
     transition,
   }
 
+  console.log('mount')
+
   return (
     <div
-      onClick={() => onClick(item)}
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -90,27 +93,33 @@ function SortableStructureItem({
         item.text.replace(/\d/g, '').toLowerCase(),
       )} ${isDragging ? 'opacity-60' : ''}`}
     >
-      <span className="uppercase text-center text-lg font-semibold">
-        {item.text}
-      </span>
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          onRemove(item.id)
+      <div
+        onClick={() => {
+          onClick(item)
         }}
-        onPointerDown={(e) => {
-          e.stopPropagation()
-        }}
-        className="absolute -top-1 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
       >
-        <XIcon size={15} />
-      </button>
-      {item.amount > 1 && (
-        <span className="absolute font-semibold top-1 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
-          {item.amount}
+        <span className="uppercase text-center text-lg font-semibold">
+          {item.text}
         </span>
-      )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onRemove(item.id)
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation()
+          }}
+          className="absolute -top-1 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
+        >
+          <XIcon size={15} />
+        </button>
+        {item.amount > 1 && (
+          <span className="absolute font-semibold top-1 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
+            {item.amount}
+          </span>
+        )}
+      </div>
     </div>
   )
 }
@@ -133,12 +142,8 @@ export function Droppable({
     >
       {items.length === 0 && (
         <div
-          className={`flex items-center justify-center h-20 text-muted-foreground text-sm`}
-        >
-          <div className="bg-secondary p-1 rounded-full border border-dashed">
-            <PlusIcon />
-          </div>
-        </div>
+          className={`flex items-center justify-center h-16 text-muted-foreground text-sm`}
+        />
       )}
       <div
         className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
@@ -168,7 +173,6 @@ export function Structure({
   droppedItems: SongStructureItem[]
   setDroppedItems: React.Dispatch<React.SetStateAction<SongStructureItem[]>>
 }) {
-  const idCounter = useRef(0)
   const [selectedItem, setSelectedItem] = useState<SongStructureItem | null>(
     null,
   )
@@ -213,7 +217,7 @@ export function Structure({
       if (!section) return
 
       setDroppedItems((prev) => {
-        const nextId = `structure-${idCounter.current++}`
+        const nextId = uuid()
         const newItem: SongStructureItem = {
           id: nextId,
           text: section.value,
@@ -261,11 +265,12 @@ export function Structure({
       >
         <DialogContent className="py-4 px-3" showCloseButton={false}>
           {selectedItem ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
+              <DialogTitle className="font-semibold text-xl uppercase">
+                {selectedItem.title}
+              </DialogTitle>
               <div className="flex items-center justify-between">
-                <div className="font-medium ">
-                  Номер раздела "{selectedItem.title}":
-                </div>
+                <div className="font-medium ">Номер:</div>
                 <div className="flex items-center gap-2">
                   <button
                     disabled={isNaN(parseInt(selectedItem.text[0]))}
@@ -308,7 +313,7 @@ export function Structure({
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <div className="font-medium ">Количество повторений:</div>
+                <div className="font-medium ">Количество:</div>
                 <div className="flex items-center gap-2">
                   <button
                     disabled={selectedItem.amount < 2}

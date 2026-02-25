@@ -1,5 +1,6 @@
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
+import { useGoBack } from '@/hook/useGoBack'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
@@ -10,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 export default function SongDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const goBack = useGoBack()
   const { current, loading } = useAppSelector((state) => state.song)
   const dispatch = useAppDispatch()
 
@@ -28,13 +30,15 @@ export default function SongDetailPage() {
         <div className="flex justify-between items-center gap-1">
           <div className="flex items-center gap-1 truncate">
             <button
-              onClick={() => navigate('/songs')}
+              onClick={() => goBack()}
               className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
               type="button"
             >
               <ChevronLeft />
             </button>
-            <h2 className="text-[22px] font-semibold">{current.name}</h2>
+            <h2 className="text-[22px] font-semibold truncate">
+              {current.name}
+            </h2>
           </div>
           <button
             onClick={() => navigate(`/song/${current.id}/edit`)}

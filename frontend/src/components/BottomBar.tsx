@@ -41,6 +41,8 @@ export function BottomBar() {
   return (
     <ul
       className="
+        max-w-md
+        mx-auto
         test
         fixed bottom-3 left-2.5 right-2.5 z-1
         flex gap-2 justify-around items-center

@@ -48,7 +48,7 @@ export default function SongsPage() {
 
   return (
     <div className="pt-19 pb-25 space-y-4">
-      <div className="flex items-center gap-1 fixed top-4 right-3 left-3 z-60">
+      <div className="flex items-center gap-1 fixed top-4 right-3 left-3 max-w-md mx-auto z-60">
         <div className="relative w-full">
           <Input
             value={value}
@@ -87,7 +87,7 @@ export default function SongsPage() {
             className="border-b border-slate-100 py-3 px-3 flex items-center justify-between gap-2"
             key={song.id}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 truncate">
               <h4 className="font-semibold truncate">{song.name}</h4>
               <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
                 {song.key}
@@ -126,7 +126,7 @@ export default function SongsPage() {
                   }}
                   className="text-base focus:text-primary text-primary text-center focus:bg-transparent font-semibold border-b rounded-none py-3"
                 >
-                  Новая программа{' '}
+                  Новая программа
                   <PlusCircleIcon className="size-6 stroke-primary" />
                 </DropdownMenuItem>
               </DropdownMenuContent>

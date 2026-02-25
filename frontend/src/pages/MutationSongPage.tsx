@@ -15,6 +15,7 @@ import {
   fetchSong,
   updateSongThunk,
 } from '@/store/reducers/songSlice'
+import { useGoBack } from '@/hook/useGoBack'
 
 interface FormState {
   name: string
@@ -26,6 +27,7 @@ interface FormState {
 
 export default function MutationSongPage() {
   const { id } = useParams()
+  const goBack = useGoBack()
   const isEdit = Boolean(id)
   const dispatch = useAppDispatch()
   const { current, loading } = useAppSelector((state) => state.song)
@@ -103,7 +105,7 @@ export default function MutationSongPage() {
             },
           }),
         ).unwrap()
-        navigate(`/song/${id}`)
+        goBack()
       } catch (error) {
         console.log(error)
         alert('Не удалось обновить хвалу. Попробуйте позже')
@@ -135,9 +137,20 @@ export default function MutationSongPage() {
         </div>
 
         <div className="space-y-3">
-          <Label className="text-lg bg-white font-medium leading-none">
-            Структура:
-          </Label>
+          <div className="flex gap-2 justify-between items-center">
+            <Label className="text-lg bg-white font-medium leading-none">
+              Структура:
+            </Label>
+            {droppedItems.length > 3 && (
+              <Button
+                onClick={() => setDroppedItems([])}
+                type="button"
+                variant={'outline'}
+              >
+                Очистить
+              </Button>
+            )}
+          </div>
           <Structure
             droppedItems={droppedItems}
             setDroppedItems={setDroppedItems}

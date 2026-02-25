@@ -37,7 +37,7 @@ export default function HomePage() {
 
       <Button
         onClick={() => navigate('/new-program')}
-        className="flex items-center fixed bottom-24 left-7 right-7 text-xl font-semibold py-6 px-2 shadow-md "
+        className="flex items-center max-w-md mx-auto fixed bottom-24 left-7 right-7 text-xl font-semibold py-6 px-2 shadow-md "
       >
         Новая программа <PlusCircleIcon className="size-6" />
       </Button>

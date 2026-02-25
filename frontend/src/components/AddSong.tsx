@@ -67,10 +67,10 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
         <ul className="border max-h-80 rounded-md overflow-y-auto px-3 py-2">
           {items.map((song) => (
             <li
-              className="flex items-center gap-1.5 border-b font-medium border-accent py-2"
+              className="flex items-center gap-1.5 border-b border-accent py-2"
               key={song.id}
             >
-              {song.name}
+              <span className="truncate font-medium">{song.name}</span>
               <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
                 {song.key}
               </span>

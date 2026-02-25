@@ -45,8 +45,8 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
 
   return (
     <div className="px-3 space-y-7 h-full">
-      <div className="flex gap-3">
-        <span className="font-semibold flex items-center justify-center px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
+      <div className="flex gap-3 flex-wrap">
+        <span className="font-semibold flex items-center justify-center px-2 py-0.5 rounded-md border-[1.5px] border-third text-third text-nowrap">
           BPM: {song.bpm}
         </span>
         {!isEdit ? (
