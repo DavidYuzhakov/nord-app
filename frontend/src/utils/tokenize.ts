@@ -1,4 +1,4 @@
-import type { LineToken, SongSection } from "./parseSongSections"
+import type { LineToken, SongSection } from './parseSongSections'
 
 const CHORD_REGEX =
   /(^|\s)([A-GH](?:#|b)?(?:maj|min|m|dim|aug|sus|add)?\d*(?:\/[A-GH](?:#|b)?)?)(?=$|\s)/g
@@ -37,11 +37,11 @@ function tokenizeLine(line: string): LineToken[] {
 }
 
 export function tokenizeSection(sections: SongSection[]): SongSection[] {
-  return sections.map(section => ({
+  return sections.map((section) => ({
     ...section,
-    lines: section.lines.map(line => ({
+    lines: section.lines.map((line) => ({
       ...line,
-      tokens: tokenizeLine(line.raw)
-    }))
+      tokens: tokenizeLine(line.raw),
+    })),
   }))
 }

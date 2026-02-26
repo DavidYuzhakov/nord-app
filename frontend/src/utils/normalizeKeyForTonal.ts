@@ -1,4 +1,4 @@
-import type { KeyType } from "@/models/Song"
+import type { KeyType } from '@/models/Song'
 
 export const normalizeKeyForTonal = (key: KeyType): string => {
   let normalized = key.replace(/m$/, '')
@@ -10,12 +10,10 @@ export const normalizeKeyForTonal = (key: KeyType): string => {
   return normalized
 }
 
+export const changeChordHtoB = (chord: string): string => {
+  return chord.replace(/\bHb/g, 'Bb').replace(/\bH/g, 'B')
+}
+
 export const normalizeChordFromTonal = (chord: string): string => {
-  if (chord.startsWith('Bb')) {
-    return 'Hb' + chord.slice(2)
-  }
-  if (chord.match(/^B($|[m0-9#b/A-Z])/)) {
-    return 'H' + chord.slice(1)
-  }
-  return chord
+  return chord.replace(/\bHb/g, 'Hb').replace(/\bB/g, 'H')
 }
