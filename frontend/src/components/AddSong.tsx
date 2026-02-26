@@ -37,7 +37,7 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
       </button>
 
       <div
-        className={`fixed left-2 right-2 z-11 rounded-xl bg-white px-4 py-3 space-y-2 duration-200 ${
+        className={`fixed max-w-md mx-auto left-2 right-2 z-11 rounded-xl bg-white px-4 py-3 space-y-2 duration-200 ${
           isOpen ? 'opacity-100 visible top-2' : 'opacity-0 invisible -top-2'
         } `}
       >

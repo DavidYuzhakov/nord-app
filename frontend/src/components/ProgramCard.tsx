@@ -20,7 +20,10 @@ import type { Program } from '@/models/Program'
 import { AddSong } from './AddSong'
 import type { Song } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { updateProgramThunk } from '@/store/reducers/programSlice'
+import {
+  deleteProgramThunk,
+  updateProgramThunk,
+} from '@/store/reducers/programSlice'
 
 export function ProgramCard({ id, name, songs }: Program) {
   const [activeId, setActiveId] = useState<number | null>(null)
@@ -56,6 +59,12 @@ export function ProgramCard({ id, name, songs }: Program) {
   const deleteHandler = (id: number) => {
     if (window.confirm('Вы действительно хотите удалить хвалу?')) {
       setSelectedSongs((prev) => prev.filter((s) => s.id !== id))
+    }
+  }
+
+  const deleteProgram = () => {
+    if (window.confirm('Вы действительно хотите удалить программу?')) {
+      dispatch(deleteProgramThunk(id))
     }
   }
 
@@ -151,7 +160,7 @@ export function ProgramCard({ id, name, songs }: Program) {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => console.log('delete')}
+                onClick={deleteProgram}
                 className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-md bg-destructive text-background"
               >
                 удалить
