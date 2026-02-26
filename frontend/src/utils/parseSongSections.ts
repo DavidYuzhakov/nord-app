@@ -15,7 +15,7 @@ const validSectionTypes: Set<string> = new Set([
   'припев',
   'бридж',
   'проигрыш',
-  'тэг',
+  'тег',
 ])
 
 export type LineToken =

@@ -31,6 +31,7 @@ export default function LiveModePage() {
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex)
+    window.scrollTo({ top: 0 })
   }
 
   return (
@@ -87,8 +88,8 @@ export default function LiveModePage() {
             <Swiper
               spaceBetween={50}
               slidesPerView={1}
+              autoHeight={true}
               onSlideChange={handleSlideChange}
-              onSwiper={(swiper) => console.log(swiper)}
             >
               {currentProgram.songs.map((song) => (
                 <SwiperSlide>
