@@ -65,6 +65,7 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
           )}
         </div>
         <ul className="border max-h-80 rounded-md overflow-y-auto px-3 py-2">
+          {items.length === 0 && <p className="text-gray-400">Не найдено</p>}
           {items.map((song) => (
             <li
               className="flex items-center gap-1.5 border-b border-accent py-2"
