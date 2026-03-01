@@ -1,5 +1,5 @@
 import type { KeyType, Song as SongModel } from '@/models/Song'
-import { parseSongSections } from '@/utils/parseSongSections'
+import { parseSongSections, type SongSection } from '@/utils/parseSongSections'
 import { tokenizeSection } from '@/utils/tokenize'
 import { transposeSections } from '@/utils/transposeSong'
 import { useMemo, useState } from 'react'
@@ -43,6 +43,13 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
     )
   }
 
+  const getIdSection = (section: SongSection) => {
+    const numSection = section.title.match(/\d+/g)
+    if (!numSection) return `${song.id}-${section.type}`
+
+    return `${song.id}-${numSection[0]}${section.type}`
+  }
+
   return (
     <div className="px-3 space-y-7 h-full">
       <div className="flex gap-3 flex-wrap">
@@ -69,7 +76,8 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
       {sections.map((section, i) => (
         <div
           key={i}
-          className="relative border rounded-md py-3.5 px-2 space-y-7"
+          id={getIdSection(section)}
+          className="relative border rounded-md py-3.5 px-2 space-y-7 scroll-mt-[135px]"
         >
           {section.title && (
             <h5 className="absolute top-0 left-4 bg-white -translate-y-1/2 px-1 rounded-md font-bold mb-2 uppercase">

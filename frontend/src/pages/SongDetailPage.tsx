@@ -1,6 +1,7 @@
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hook/useGoBack'
+import type { SongStructureItem } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
@@ -23,6 +24,19 @@ export default function SongDetailPage() {
 
   if (loading) return 'Загрузка'
   if (!current) return 'Нет песни'
+
+  const scrollToSection = (el: SongStructureItem) => {
+    const hasNumber = /^\d/.test(el.text)
+    const id = `${current.id}-${hasNumber ? el.text[0] + el.title : el.title}`
+
+    const target = document.getElementById(id)
+    if (!target) return
+
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   return (
     <div className="-mx-3 space-y-3 pb-23">
@@ -55,6 +69,7 @@ export default function SongDetailPage() {
             {current.structure.map((el, i) => (
               <div
                 key={i}
+                onClick={() => scrollToSection(el)}
                 className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
                   el.text.replace(/\d/g, '').toLowerCase(),
                 )}`}

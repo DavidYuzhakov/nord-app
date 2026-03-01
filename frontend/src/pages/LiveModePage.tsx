@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { useAppSelector } from '@/store/hooks'
 import { Navigate } from 'react-router-dom'
 import type { Program } from '@/models/Program'
+import type { SongStructureItem } from '@/models/Song'
 
 export default function LiveModePage() {
   const { items, loading } = useAppSelector((state) => state.program)
@@ -32,6 +33,20 @@ export default function LiveModePage() {
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex)
     window.scrollTo({ top: 0 })
+  }
+
+  const scrollToSection = (el: SongStructureItem, songId: number) => {
+    const hasNumber = /^\d/.test(el.text)
+    const id = `${songId}-${hasNumber ? el.text[0] + el.title : el.title}`
+
+    console.log(id)
+    const target = document.getElementById(id)
+    if (!target) return
+
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
   }
 
   return (
@@ -66,6 +81,12 @@ export default function LiveModePage() {
                     (el, i) => (
                       <div
                         key={i}
+                        onClick={() =>
+                          scrollToSection(
+                            el,
+                            currentProgram.songs[activeIndex].songId,
+                          )
+                        }
                         className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
                           el.text.replace(/\d/g, '').toLowerCase(),
                         )}`}

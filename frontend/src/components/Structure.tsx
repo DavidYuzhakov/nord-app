@@ -30,7 +30,7 @@ const sections = [
   { label: 'припев', value: 'п' },
   { label: 'проигрыш', value: 'прг' },
   { label: 'бридж', value: 'б' },
-  { label: 'тэг', value: 'т' },
+  { label: 'тег', value: 'т' },
 ]
 
 function DraggableItem({ item }: { item: { label: string; value: string } }) {

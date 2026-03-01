@@ -5,7 +5,7 @@ type SectionType =
   | 'припев'
   | 'бридж'
   | 'проигрыш'
-  | 'тэг'
+  | 'тег'
   | 'unknown'
 
 const validSectionTypes: Set<string> = new Set([
