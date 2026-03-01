@@ -10,66 +10,64 @@ import MutationSongPage from './pages/MutationSongPage'
 
 function App() {
   return (
-    <div className="overflow-hidden">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <HomePage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/new-program"
-          element={
-            <SectionLayout title="Новая программа">
-              <NewProgramPage />
-            </SectionLayout>
-          }
-        />
-        <Route
-          path="/live-mode"
-          element={
-            <Layout>
-              <LiveModePage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/songs"
-          element={
-            <Layout>
-              <SongsPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/song/:id"
-          element={
-            <Layout>
-              <SongDetailPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/song/:id/edit"
-          element={
-            <SectionLayout title="Редактирование">
-              <MutationSongPage />
-            </SectionLayout>
-          }
-        />
-        <Route
-          path="/song/create"
-          element={
-            <SectionLayout title="Создание хвалы">
-              <MutationSongPage />
-            </SectionLayout>
-          }
-        />
-      </Routes>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/new-program"
+        element={
+          <SectionLayout title="Новая программа">
+            <NewProgramPage />
+          </SectionLayout>
+        }
+      />
+      <Route
+        path="/live-mode"
+        element={
+          <Layout>
+            <LiveModePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/songs"
+        element={
+          <Layout>
+            <SongsPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/song/:id"
+        element={
+          <Layout>
+            <SongDetailPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/song/:id/edit"
+        element={
+          <SectionLayout title="Редактирование">
+            <MutationSongPage />
+          </SectionLayout>
+        }
+      />
+      <Route
+        path="/song/create"
+        element={
+          <SectionLayout title="Создание хвалы">
+            <MutationSongPage />
+          </SectionLayout>
+        }
+      />
+    </Routes>
   )
 }
 

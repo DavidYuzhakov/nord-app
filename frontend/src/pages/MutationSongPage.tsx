@@ -123,7 +123,7 @@ export default function MutationSongPage() {
   }
 
   return (
-    <div className="space-y-4 pb-22 pt-2">
+    <div className="space-y-4 pb-22 pt-2 overflow-hidden">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1">
           <Label className="text-lg font-medium" htmlFor="name">
@@ -135,7 +135,6 @@ export default function MutationSongPage() {
             placeholder="Введите название"
           />
         </div>
-
         <div className="space-y-3">
           <div className="flex gap-2 justify-between items-center">
             <Label className="text-lg bg-white font-medium leading-none">
