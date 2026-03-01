@@ -6,10 +6,11 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
 import { ChevronLeft, EditIcon, Headphones, PersonStanding } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
+  const headerRef = useRef<HTMLDivElement | null>(null)
   const { id } = useParams()
   const navigate = useNavigate()
   const goBack = useGoBack()
@@ -32,15 +33,25 @@ export default function SongDetailPage() {
     const target = document.getElementById(id)
     if (!target) return
 
-    target.scrollIntoView({
+    const headerHeight = headerRef.current?.offsetHeight || 0
+    const y =
+      target.getBoundingClientRect().top +
+      window.pageYOffset -
+      headerHeight -
+      13
+
+    window.scrollTo({
+      top: y,
       behavior: 'smooth',
-      block: 'start',
     })
   }
 
   return (
     <div className="-mx-3 space-y-3 pb-23">
-      <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
+      <div
+        ref={headerRef}
+        className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+      >
         <div className="flex justify-between items-center gap-1">
           <div className="flex items-center gap-1 truncate">
             <button

@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Song } from '@/components/Song'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
 import { getStructureBg } from '@/utils/getStructureBg'
 import {
@@ -17,6 +17,7 @@ import type { Program } from '@/models/Program'
 import type { SongStructureItem } from '@/models/Song'
 
 export default function LiveModePage() {
+  const headerRef = useRef<HTMLDivElement | null>(null)
   const { items, loading } = useAppSelector((state) => state.program)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(items.length === 1 ? false : true)
@@ -43,9 +44,16 @@ export default function LiveModePage() {
     const target = document.getElementById(id)
     if (!target) return
 
-    target.scrollIntoView({
+    const headerHeight = headerRef.current?.offsetHeight || 0
+    const y =
+      target.getBoundingClientRect().top +
+      window.pageYOffset -
+      headerHeight -
+      13
+
+    window.scrollTo({
+      top: y,
       behavior: 'smooth',
-      block: 'start',
     })
   }
 
@@ -54,7 +62,10 @@ export default function LiveModePage() {
       <div className="-mx-3 relative space-y-3 pb-23">
         {totalSlides > 0 ? (
           <>
-            <div className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background">
+            <div
+              ref={headerRef}
+              className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+            >
               <div className="flex justify-between items-center gap-1">
                 <h2 className="text-[22px] font-semibold truncate">
                   {currentProgram.songs[activeIndex].song.name}
