@@ -85,15 +85,17 @@ function SortableStructureItem({
     <div
       ref={setNodeRef}
       style={style}
-      onClick={() => {
-        onClick(item)
-      }}
+      {...listeners}
       {...attributes}
-      className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+      className={`relative select-none aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
         item.text.replace(/\d/g, '').toLowerCase(),
       )} ${isDragging ? 'opacity-60' : ''}`}
     >
-      <div {...listeners}>
+      <div
+        onClick={() => {
+          onClick(item)
+        }}
+      >
         <span className="uppercase text-center text-lg font-semibold">
           {item.text}
         </span>
@@ -175,8 +177,8 @@ export function Structure({
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 250,
-      tolerance: 5,
+      delay: 200,
+      tolerance: 7,
     },
   })
 
