@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hook/useGoBack'
 import type { SongStructureItem } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { fetchSong } from '@/store/reducers/songSlice'
+import { clearCurrent, fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
 import {
   ChevronLeft,
@@ -29,6 +29,8 @@ export default function SongDetailPage() {
       dispatch(fetchSong(Number(id)))
     }
   }, [id, dispatch])
+
+  console.log(current)
 
   if (loading && !current) return <Loading />
   if (!current)
@@ -67,7 +69,10 @@ export default function SongDetailPage() {
         <div className="flex justify-between items-center gap-1">
           <div className="flex items-center gap-1 truncate">
             <button
-              onClick={() => goBack()}
+              onClick={() => {
+                goBack()
+                dispatch(clearCurrent())
+              }}
               className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
               type="button"
             >

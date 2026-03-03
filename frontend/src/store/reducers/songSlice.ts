@@ -58,7 +58,11 @@ export const deleteSongThunk = createAsyncThunk<number, number>(
 export const songSlice = createSlice({
   name: 'song',
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrent: (state) => {
+      state.current = null
+    },
+  },
   extraReducers: (builder) => {
     builder
       // fetchSongs
@@ -111,3 +115,5 @@ export const songSlice = createSlice({
       })
   },
 })
+
+export const { clearCurrent } = songSlice.actions
