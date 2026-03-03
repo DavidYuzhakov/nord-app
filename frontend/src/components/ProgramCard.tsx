@@ -160,8 +160,9 @@ export function ProgramCard({ id, name, songs }: Program) {
             <div className="flex items-center gap-3">
               <button
                 type="button"
+                disabled={loading}
                 onClick={deleteProgram}
-                className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-md bg-destructive text-background"
+                className="ml-auto flex items-center gap-1 px-3 py-1.5 rounded-md bg-destructive text-background disabled:bg-destructive/60"
               >
                 удалить
               </button>

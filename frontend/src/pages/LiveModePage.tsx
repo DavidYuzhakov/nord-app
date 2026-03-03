@@ -15,6 +15,7 @@ import { useAppSelector } from '@/store/hooks'
 import { Navigate } from 'react-router-dom'
 import type { Program } from '@/models/Program'
 import type { SongStructureItem } from '@/models/Song'
+import { Loading } from '@/components/Loading'
 
 export default function LiveModePage() {
   const headerRef = useRef<HTMLDivElement | null>(null)
@@ -23,7 +24,7 @@ export default function LiveModePage() {
   const [isOpen, setIsOpen] = useState(items.length === 1 ? false : true)
   const [currentProgram, setCurrentProgram] = useState<Program>(items[0])
 
-  if (loading) return <p className="text-center">Загрузка...</p>
+  if (loading) return <Loading />
 
   if (items.length === 0 || !currentProgram) {
     return <Navigate to={'/'} />

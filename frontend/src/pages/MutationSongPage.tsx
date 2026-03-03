@@ -16,6 +16,8 @@ import {
   updateSongThunk,
 } from '@/store/reducers/songSlice'
 import { useGoBack } from '@/hook/useGoBack'
+import { Loading } from '@/components/Loading'
+import { InfoIcon } from 'lucide-react'
 
 interface FormState {
   name: string
@@ -66,9 +68,14 @@ export default function MutationSongPage() {
     load()
   }, [id, dispatch, reset])
 
-  if (isEdit && loading) return <p>Загрузка...</p>
+  if (isEdit && !current && loading) return <Loading />
 
-  if (isEdit && !current) return <div>Нет песни</div>
+  if (isEdit && !loading && !current)
+    return (
+      <p className="text-center text-slate-500 text-lg py-2 flex gap-2 items-center justify-center">
+        <InfoIcon /> Песня не найдена
+      </p>
+    )
 
   const onSubmit: SubmitHandler<FormState> = async (data) => {
     if (!isEdit) {
@@ -231,6 +238,7 @@ export default function MutationSongPage() {
           {isEdit && (
             <Button
               type="button"
+              disabled={loading}
               variant="destructive"
               onClick={handleDelete}
               className="capitalize text-base py-5"
@@ -240,6 +248,7 @@ export default function MutationSongPage() {
           )}
           <Button
             type="submit"
+            disabled={loading}
             className="bg-primary capitalize text-base py-5"
           >
             сохранить

@@ -78,6 +78,9 @@ export const songSlice = createSlice({
         state.loading = false
         state.current = action.payload
       })
+      .addCase(fetchSong.rejected, (state) => {
+        state.loading = false
+      })
       // createSongThunk
       .addCase(createSongThunk.pending, (state) => {
         state.loading = true

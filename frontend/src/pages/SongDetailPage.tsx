@@ -1,3 +1,4 @@
+import { Loading } from '@/components/Loading'
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hook/useGoBack'
@@ -5,7 +6,13 @@ import type { SongStructureItem } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchSong } from '@/store/reducers/songSlice'
 import { getStructureBg } from '@/utils/getStructureBg'
-import { ChevronLeft, EditIcon, Headphones, PersonStanding } from 'lucide-react'
+import {
+  ChevronLeft,
+  EditIcon,
+  Headphones,
+  InfoIcon,
+  PersonStanding,
+} from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -23,8 +30,13 @@ export default function SongDetailPage() {
     }
   }, [id, dispatch])
 
-  if (loading) return 'Загрузка'
-  if (!current) return 'Нет песни'
+  if (loading && !current) return <Loading />
+  if (!current)
+    return (
+      <p className="text-center text-slate-500 text-lg py-2 flex gap-2 items-center justify-center">
+        <InfoIcon /> Песня не найдена
+      </p>
+    )
 
   const scrollToSection = (el: SongStructureItem) => {
     const hasNumber = /^\d/.test(el.text)

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { Song } from '@/models/Song'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { createProgramThunk } from '@/store/reducers/programSlice'
 import {
   DndContext,
@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 export default function NewProgramPage() {
   const [name, setName] = useState('')
   const [songs, setSongs] = useState<Song[]>([])
+  const loading = useAppSelector((state) => state.program.loading)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -122,7 +123,7 @@ export default function NewProgramPage() {
         </ul>
       </div>
 
-      <Button className="ml-auto" type="submit">
+      <Button disabled={loading} className="ml-auto" type="submit">
         Сохранить
       </Button>
     </form>

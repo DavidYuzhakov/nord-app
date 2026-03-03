@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { Program } from '@/models/Program'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { updateProgramThunk } from '@/store/reducers/programSlice'
@@ -15,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function SongsPage() {
-  const { items } = useAppSelector((state) => state.song)
+  const { items, loading } = useAppSelector((state) => state.song)
   const programs = useAppSelector((state) => state.program.items)
   const dispatch = useAppDispatch()
 
@@ -78,9 +79,20 @@ export default function SongsPage() {
         </button>
       </div>
       <div>
-        {items.length === 0 && (
+        {!loading && items.length === 0 && (
           <p className="text-center text-slate-500">Список пуст</p>
         )}
+        {loading &&
+          items.length === 0 &&
+          [...new Array(10)].map((_, i) => (
+            <div
+              className="p-3 border-b border-slate-100 flex justify-between items-center gap-2"
+              key={i}
+            >
+              <Skeleton className="w-2/3 h-7" />
+              <Skeleton className="size-8 rounded-full" />
+            </div>
+          ))}
         {items.map((song) => (
           <div
             onClick={() => navigate(`/song/${song.id}`)}
