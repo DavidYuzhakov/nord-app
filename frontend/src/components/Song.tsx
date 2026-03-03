@@ -2,7 +2,7 @@ import type { KeyType, Song as SongModel } from '@/models/Song'
 import { parseSongSections, type SongSection } from '@/utils/parseSongSections'
 import { tokenizeSection } from '@/utils/tokenize'
 import { transposeSections } from '@/utils/transposeSong'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { distance } from 'tonal'
 import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal'
 import { stringifySongSections } from '@/utils/stringifySongSections'
@@ -17,15 +17,18 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
 
   const sections = useMemo(() => {
     const parsed = tokenizeSection(parseSongSections(song.text ?? ''))
-    if (currentKey === song.key) return parsed
 
     const fromKey = normalizeKeyForTonal(song.key)
     const toKey = normalizeKeyForTonal(currentKey)
+
+    if (currentKey === song.key) return parsed
 
     const interval = distance(fromKey, toKey)
     if (!interval || interval === '') {
       return parsed
     }
+
+    console.log(currentKey)
 
     return transposeSections(parsed, interval)
   }, [song.text, song.key, currentKey])
@@ -49,6 +52,11 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
 
     return `${song.id}-${numSection[0]}${section.type}`
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentKey(song.key as KeyType)
+  }, [song.key])
 
   return (
     <div className="px-3 space-y-7 h-full">
