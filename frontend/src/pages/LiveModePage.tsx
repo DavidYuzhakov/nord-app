@@ -31,6 +31,7 @@ export default function LiveModePage() {
   }
 
   const totalSlides = currentProgram.songs.length
+  const programStructure = currentProgram.songs[activeIndex].song.structure
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex)
@@ -65,7 +66,7 @@ export default function LiveModePage() {
           <>
             <div
               ref={headerRef}
-              className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+              className="space-y-1 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
             >
               <div className="flex justify-between items-center gap-1">
                 <h2 className="text-[22px] font-semibold truncate">
@@ -85,35 +86,33 @@ export default function LiveModePage() {
                   ))}
                 </div>
               </div>
-              {currentProgram.songs[activeIndex].song.structure && (
+              {programStructure && programStructure.length > 0 && (
                 <div
-                  className={`grid ${currentProgram.songs[activeIndex].song.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
+                  className={`grid ${programStructure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
                 >
-                  {currentProgram.songs[activeIndex].song.structure.map(
-                    (el, i) => (
-                      <div
-                        key={i}
-                        onClick={() =>
-                          scrollToSection(
-                            el,
-                            currentProgram.songs[activeIndex].songId,
-                          )
-                        }
-                        className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
-                          el.text.replace(/\d/g, '').toLowerCase(),
-                        )}`}
-                      >
-                        <span className="uppercase text-center text-lg font-semibold">
-                          {el.text}
+                  {programStructure.map((el, i) => (
+                    <div
+                      key={i}
+                      onClick={() =>
+                        scrollToSection(
+                          el,
+                          currentProgram.songs[activeIndex].songId,
+                        )
+                      }
+                      className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+                        el.text.replace(/\d/g, '').toLowerCase(),
+                      )}`}
+                    >
+                      <span className="uppercase text-center text-lg font-semibold">
+                        {el.text}
+                      </span>
+                      {el.amount > 1 && (
+                        <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
+                          {el.amount}
                         </span>
-                        {el.amount > 1 && (
-                          <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
-                            {el.amount}
-                          </span>
-                        )}
-                      </div>
-                    ),
-                  )}
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

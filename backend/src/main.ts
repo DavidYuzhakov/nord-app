@@ -14,7 +14,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'https://nord-app.ru',
+    origin: '*',
   });
 
   await app.listen(process.env.PORT ?? 3000);

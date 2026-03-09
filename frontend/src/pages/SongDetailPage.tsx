@@ -30,8 +30,6 @@ export default function SongDetailPage() {
     }
   }, [id, dispatch])
 
-  console.log(current)
-
   if (loading && !current) return <Loading />
   if (!current)
     return (
@@ -64,7 +62,7 @@ export default function SongDetailPage() {
     <div className="-mx-3 space-y-3 pb-23">
       <div
         ref={headerRef}
-        className="space-y-3 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+        className="space-y-1 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
       >
         <div className="flex justify-between items-center gap-1">
           <div className="flex items-center gap-1 truncate">

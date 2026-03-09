@@ -72,13 +72,13 @@ export function BottomBar() {
             >
               {nav.icon}
             </div>
-            <span
+            {/* <span
               className={`${
                 isActive ? 'text-primary' : 'text-secondary-foreground'
               } font-semibold`}
             >
               {nav.title}
-            </span>
+            </span> */}
           </li>
         )
       })}
