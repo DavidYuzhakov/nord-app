@@ -59,7 +59,7 @@ export default function SongDetailPage() {
   }
 
   return (
-    <div className="-mx-3 space-y-3 pb-23">
+    <div className="-mx-3 space-y-3 pb-16">
       <div
         ref={headerRef}
         className="space-y-1 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
@@ -90,13 +90,13 @@ export default function SongDetailPage() {
         </div>
         {current.structure && current.structure.length > 0 && (
           <div
-            className={`grid ${current.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
+            className={`grid ${current.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
           >
             {current.structure.map((el, i) => (
               <div
                 key={i}
                 onClick={() => scrollToSection(el)}
-                className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+                className={`relative py-2 flex items-center justify-center text-white rounded-sm ${getStructureBg(
                   el.text.replace(/\d/g, '').toLowerCase(),
                 )}`}
               >

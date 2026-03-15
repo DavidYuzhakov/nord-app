@@ -61,7 +61,7 @@ export default function LiveModePage() {
 
   return (
     <>
-      <div className="-mx-3 relative space-y-3 pb-23">
+      <div className="-mx-3 relative space-y-3 pb-16">
         {totalSlides > 0 ? (
           <>
             <div

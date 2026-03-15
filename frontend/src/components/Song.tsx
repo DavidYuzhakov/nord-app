@@ -99,7 +99,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
               <pre
                 key={lineIdx}
                 style={{ fontFamily: 'Open Sans Variable' }}
-                className="text-[14px] font-medium whitespace-pre-wrap text-pretty"
+                className="text-[13px] font-medium whitespace-pre-wrap text-pretty"
               >
                 {line.tokens.map((t, i) =>
                   t.type === 'chord' ? (
