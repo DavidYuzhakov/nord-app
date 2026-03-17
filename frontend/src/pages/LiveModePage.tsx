@@ -61,12 +61,12 @@ export default function LiveModePage() {
 
   return (
     <>
-      <div className="-mx-3 relative space-y-3 pb-16">
+      <div className="-mx-3 relative flex flex-col space-y-3 pb-16 h-screen">
         {totalSlides > 0 ? (
           <>
             <div
               ref={headerRef}
-              className="space-y-1 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+              className="space-y-1 p-2 shrink-0 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
             >
               <div className="flex justify-between items-center gap-1">
                 <h2 className="text-[22px] font-semibold truncate">
@@ -118,13 +118,13 @@ export default function LiveModePage() {
             </div>
 
             <Swiper
+              className="max-w-full flex-1 min-h-0"
               spaceBetween={50}
               slidesPerView={1}
-              autoHeight={true}
               onSlideChange={handleSlideChange}
             >
               {currentProgram.songs.map((song) => (
-                <SwiperSlide>
+                <SwiperSlide className="h-full overflow-auto">
                   <Song song={song.song} />
                 </SwiperSlide>
               ))}

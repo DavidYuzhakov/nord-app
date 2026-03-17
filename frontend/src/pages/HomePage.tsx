@@ -1,7 +1,7 @@
 import { PlusCircleIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProgramCard } from '@/components/ProgramCard'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { useEffect } from 'react'
 import { fetchPrograms } from '@/store/reducers/programSlice'
@@ -11,6 +11,8 @@ export default function HomePage() {
   const { loading, items: programs } = useAppSelector((state) => state.program)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const [params, setParams] = useSearchParams()
+  const openId = Number(params.get('open'))
 
   useEffect(() => {
     dispatch(fetchPrograms())
@@ -37,7 +39,14 @@ export default function HomePage() {
             <Skeleton key={i} className="w-full rounded-xl h-[60px]" />
           ))}
         {programs.map((program) => (
-          <ProgramCard key={program.id} {...program} />
+          <ProgramCard
+            key={program.id}
+            {...program}
+            isOpenExternal={openId === program.id}
+            setOpenExternal={(id) => {
+              setParams(id ? { open: String(id) } : {})
+            }}
+          />
         ))}
       </div>
 

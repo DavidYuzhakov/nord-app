@@ -25,13 +25,20 @@ import {
   updateProgramThunk,
 } from '@/store/reducers/programSlice'
 
-export function ProgramCard({ id, name, songs }: Program) {
-  const [activeId, setActiveId] = useState<number | null>(null)
+export function ProgramCard({
+  id,
+  name,
+  songs,
+  isOpenExternal,
+  setOpenExternal,
+}: Program & {
+  isOpenExternal: boolean
+  setOpenExternal: (id: number | null) => void
+}) {
   const [selectedSongs, setSelectedSongs] = useState<Song[]>(
     songs.map((s) => s.song),
   )
   const [isEdit, setIsEdit] = useState(false)
-  const isOpen = activeId === id
 
   const dispatch = useAppDispatch()
   const loading = useAppSelector((state) => state.program.loading)
@@ -94,22 +101,22 @@ export function ProgramCard({ id, name, songs }: Program) {
   return (
     <Collapsible
       key={id}
-      open={isOpen}
-      onOpenChange={(open) => setActiveId(open ? id : null)}
+      open={isOpenExternal}
+      onOpenChange={(open) => setOpenExternal(open ? id : null)}
       className="rounded-xl border border-border/40 bg-secondary"
     >
       <CollapsibleTrigger asChild>
         <button className="w-full flex items-center justify-between p-4">
           <span
             className={`text-lg font-semibold truncate duration-200 ${
-              isOpen ? '' : 'text-muted-foreground'
+              isOpenExternal ? '' : 'text-muted-foreground'
             }`}
           >
             {name}
           </span>
           <ChevronDownIcon
             className={`transition-transform duration-200 ${
-              isOpen ? 'rotate-180' : 'stroke-muted-foreground'
+              isOpenExternal ? 'rotate-180' : 'stroke-muted-foreground'
             }`}
           />
         </button>
