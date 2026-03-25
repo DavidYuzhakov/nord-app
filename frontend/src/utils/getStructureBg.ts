@@ -1,5 +1,4 @@
-export function getStructureBg(type: string) {
-  // ?
+export function getStructureBg(type: string): string {
   switch (type) {
     case 'в':
       return 'bg-green-400'
@@ -17,5 +16,26 @@ export function getStructureBg(type: string) {
       return 'bg-gray-400'
     default:
       return 'bg-green-400'
+  }
+}
+
+export function getTextBg(type: string): string {
+  switch (type) {
+    case 'вступление':
+      return 'text-green-400'
+    case 'куплет':
+      return 'text-blue-400'
+    case 'припев':
+      return 'text-red-400'
+    case 'бридж':
+      return 'text-orange-400'
+    case 'пред-припев':
+      return 'text-yellow-500 '
+    case 'проигрыш':
+      return 'text-violet-400'
+    case 'тег':
+      return 'text-gray-500 dark:text-gray-300'
+    default:
+      return 'text-foreground'
   }
 }

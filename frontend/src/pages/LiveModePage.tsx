@@ -1,9 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Song } from '@/components/Song'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
-import { getStructureBg } from '@/utils/getStructureBg'
 import {
   Drawer,
   DrawerContent,
@@ -14,11 +13,18 @@ import { Button } from '@/components/ui/button'
 import { useAppSelector } from '@/store/hooks'
 import { Navigate } from 'react-router-dom'
 import type { Program } from '@/models/Program'
-import type { SongStructureItem } from '@/models/Song'
 import { Loading } from '@/components/Loading'
+import { Header } from '@/components/Header'
+
+const styles = [
+  'text-primary bg-primary/25',
+  'text-red-400 bg-red-400/25',
+  'text-green-400 bg-green-400/25',
+  'text-gray-400 bg-gray-400/25',
+  'text-orange-400 bg-orange-400/25',
+]
 
 export default function LiveModePage() {
-  const headerRef = useRef<HTMLDivElement | null>(null)
   const { items, loading } = useAppSelector((state) => state.program)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(items.length === 1 ? false : true)
@@ -38,100 +44,48 @@ export default function LiveModePage() {
     window.scrollTo({ top: 0 })
   }
 
-  const scrollToSection = (el: SongStructureItem, songId: number) => {
-    const hasNumber = /^\d/.test(el.text)
-    const id = `${songId}-${hasNumber ? el.text[0] + el.title : el.title}`
-
-    console.log(id)
-    const target = document.getElementById(id)
-    if (!target) return
-
-    const headerHeight = headerRef.current?.offsetHeight || 0
-    const y =
-      target.getBoundingClientRect().top +
-      window.pageYOffset -
-      headerHeight -
-      13
-
-    window.scrollTo({
-      top: y,
-      behavior: 'smooth',
-    })
-  }
-
   return (
     <>
-      <div className="-mx-3 relative flex flex-col space-y-3 pb-16 h-screen">
+      <div className="-mx-3 relative flex flex-col pb-0 h-screen">
         {totalSlides > 0 ? (
           <>
-            <div
-              ref={headerRef}
-              className="space-y-1 p-2 shrink-0 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
+            <Header
+              songId={currentProgram.songs[activeIndex].songId}
+              structure={programStructure}
             >
-              <div className="flex justify-between items-center gap-1">
-                <h2 className="text-[22px] font-semibold truncate">
-                  {currentProgram.songs[activeIndex].song.name}
-                </h2>
-                <div className="flex gap-1 z-10">
-                  {Array.from({ length: totalSlides }).map((_, index) => (
-                    <button
-                      key={index}
-                      className={`size-3 rounded-full transition-all ${
-                        index === activeIndex
-                          ? 'bg-primary'
-                          : 'bg-background border border-gray-400'
-                      }`}
-                      aria-label={`Перейти к слайду ${index + 1}`}
-                    />
-                  ))}
-                </div>
+              <h2 className="text-[22px] font-semibold truncate">
+                {currentProgram.songs[activeIndex].song.name}
+              </h2>
+              <div className="flex gap-1 z-10">
+                {Array.from({ length: totalSlides }).map((_, index) => (
+                  <button
+                    key={index}
+                    className={`size-3 rounded-full transition-all ${
+                      index === activeIndex
+                        ? 'bg-primary'
+                        : 'bg-background dark:bg-secondary border border-gray-400'
+                    }`}
+                    aria-label={`Перейти к слайду ${index + 1}`}
+                  />
+                ))}
               </div>
-              {programStructure && programStructure.length > 0 && (
-                <div
-                  className={`grid ${programStructure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
-                >
-                  {programStructure.map((el, i) => (
-                    <div
-                      key={i}
-                      onClick={() =>
-                        scrollToSection(
-                          el,
-                          currentProgram.songs[activeIndex].songId,
-                        )
-                      }
-                      className={`relative aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
-                        el.text.replace(/\d/g, '').toLowerCase(),
-                      )}`}
-                    >
-                      <span className="uppercase text-center text-lg font-semibold">
-                        {el.text}
-                      </span>
-                      {el.amount > 1 && (
-                        <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
-                          {el.amount}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            </Header>
 
             <Swiper
-              className="max-w-full flex-1 min-h-0"
+              className="max-w-full flex-1 min-h-0 pb-16"
               spaceBetween={50}
               slidesPerView={1}
               onSlideChange={handleSlideChange}
             >
               {currentProgram.songs.map((song) => (
-                <SwiperSlide className="h-full overflow-auto">
+                <SwiperSlide className="h-full overflow-auto pb-[74px] pt-3">
                   <Song song={song.song} />
                 </SwiperSlide>
               ))}
             </Swiper>
           </>
         ) : (
-          <p>Нет хвал</p>
+          <p className="text-muted-foreground text-center mt-5">Нет хвал</p>
         )}
       </div>
       <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
@@ -141,14 +95,16 @@ export default function LiveModePage() {
               Выберите программу для Live режима
             </DrawerTitle>
           </DrawerHeader>
-          <div className="flex flex-wrap items-center gap-3 px-2 pb-5">
-            {items.map((program) => (
+          <div
+            className={`${items.length > 0 ? 'grid grid-cols-2' : ''} items-center gap-3 px-2 pb-5`}
+          >
+            {items.map((program, i) => (
               <Button
                 onClick={() => {
                   setCurrentProgram(program)
                   setIsOpen(false)
                 }}
-                className="w-full py-4 truncate text-lg font-medium"
+                className={`w-full ${styles[i] ?? 'bg-primary/25 text-primary'} py-7 truncate text-lg font-medium`}
                 key={program.id}
               >
                 {program.name}

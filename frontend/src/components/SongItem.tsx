@@ -35,7 +35,7 @@ export function SongItem({ item, isEdit, onDelete }: SongItemProps) {
       style={style}
       onClick={() => navigate(`/song/${item.id}`)}
       ref={setNodeRef}
-      className={`flex items-center gap-1 justify-between border-b border-border h-10 pb-3 ${
+      className={`flex items-center gap-1 justify-between border-b border-border/50 h-10 pb-3 ${
         isDragging ? 'opacity-50' : ''
       }`}
     >
@@ -44,27 +44,28 @@ export function SongItem({ item, isEdit, onDelete }: SongItemProps) {
       <div className="flex gap-2 items-center">
         {!isEdit ? (
           <>
-            <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
+            <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md text-third bg-third/10">
               {item.bpm}
             </span>
-            <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+            <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md text-primary bg-primary/10">
               {item.key}
             </span>
           </>
         ) : (
           <>
-            <span className="flex-1 text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+            <span className="flex-1 text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md text-primary bg-primary/10">
               {item.key}
             </span>
             <Trash2Icon
+              className="stroke-[1.75px] dark:stroke-muted-foreground"
               onClick={(e) => {
                 e.stopPropagation()
                 onDelete(item.id)
               }}
             />
             <button {...attributes} {...listeners} className="ml-3 space-y-1">
-              <span className="block w-4 rounded-full h-0.5 bg-foreground" />
-              <span className="block w-4 rounded-full h-0.5 bg-foreground" />
+              <span className="block w-4 rounded-full h-0.5 bg-foreground dark:bg-muted-foreground" />
+              <span className="block w-4 rounded-full h-0.5 bg-foreground dark:bg-muted-foreground" />
             </button>
           </>
         )}

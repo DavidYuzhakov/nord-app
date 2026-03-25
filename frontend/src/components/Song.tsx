@@ -8,12 +8,16 @@ import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal'
 import { stringifySongSections } from '@/utils/stringifySongSections'
 import { Tonality } from './Tonality'
 import { Button } from './ui/button'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { updateSongThunk } from '@/store/reducers/songSlice'
+import { GaugeIcon, Music2Icon, TypeIcon } from 'lucide-react'
+import { updateHideChords } from '@/store/reducers/settingsSlice'
+import { getTextBg } from '@/utils/getStructureBg'
 
 export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   const [currentKey, setCurrentKey] = useState<KeyType>(song.key as KeyType)
   const dispatch = useAppDispatch()
+  const hideChords = useAppSelector((state) => state.settings.hideChords)
 
   const sections = useMemo(() => {
     const parsed = tokenizeSection(parseSongSections(song.text ?? ''))
@@ -54,19 +58,18 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentKey(song.key as KeyType)
   }, [song.key])
 
   return (
-    <div className="px-3 space-y-7 h-full">
+    <div className="px-3 space-y-6">
       <div className="flex gap-3 flex-wrap">
-        <span className="font-semibold flex items-center justify-center px-2 py-0.5 rounded-md border-[1.5px] border-third text-third text-nowrap">
-          BPM: {song.bpm}
+        <span className="font-semibold flex items-center gap-2 justify-center px-2 py-0.5 rounded-md text-third text-nowrap bg-third/10">
+          <GaugeIcon size={20} /> {song.bpm}
         </span>
         {!isEdit ? (
-          <span className="flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
-            Key: {song.key}
+          <span className="flex items-center gap-1 justify-center font-semibold px-2 pr-3 py-0.5 rounded-md text-primary bg-primary/10">
+            <Music2Icon size={20} /> {song.key}
           </span>
         ) : (
           <>
@@ -74,21 +77,37 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
               <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
             </div>
             {currentKey !== song.key && (
-              <Button onClick={changeKey} type="button">
+              <Button className="order-1" onClick={changeKey} type="button">
                 Сохранить
               </Button>
             )}
           </>
         )}
+        <button
+          onClick={() =>
+            hideChords === 'on'
+              ? dispatch(updateHideChords('off'))
+              : dispatch(updateHideChords('on'))
+          }
+          className={`ml-auto py-1 px-2.5 rounded duration-200 ${hideChords === 'on' ? 'bg-primary' : 'bg-muted'}`}
+          type="button"
+        >
+          <TypeIcon
+            size={17}
+            className={`duration-200 ${hideChords === 'on' ? 'stroke-background' : ''}`}
+          />
+        </button>
       </div>
       {sections.map((section, i) => (
         <div
           key={i}
           id={getIdSection(section)}
-          className="relative border rounded-md py-3.5 px-2 space-y-7 scroll-mt-[135px]"
+          className="relative border dark:bg-card rounded-md py-3.5 px-2 space-y-7 scroll-mt-[135px]"
         >
           {section.title && (
-            <h5 className="absolute top-0 left-4 bg-white -translate-y-1/2 px-1 rounded-md font-bold mb-2 uppercase">
+            <h5
+              className={`absolute top-0 left-4 bg-background -translate-y-1/2 px-1 rounded-md font-bold mb-2 uppercase dark:font-semibold ${getTextBg(section.type)}`}
+            >
               {section.type === 'unknown'
                 ? 'Некорректный раздел'
                 : section.title}
@@ -99,15 +118,20 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
               <pre
                 key={lineIdx}
                 style={{ fontFamily: 'Open Sans Variable' }}
-                className="text-[13px] font-medium whitespace-pre-wrap text-pretty"
+                className={`text-[13px] font-medium whitespace-pre-wrap text-pretty ${hideChords ? 'leading-6' : ''}`}
               >
-                {line.tokens.map((t, i) =>
+                {(hideChords === 'on'
+                  ? line.tokens.filter((t) => t.type !== 'chord')
+                  : line.tokens
+                ).map((t, i) =>
                   t.type === 'chord' ? (
                     <span key={i} className="font-semibold text-primary">
                       {t.value}
                     </span>
                   ) : (
-                    <span key={i}>{t.value}</span>
+                    <span key={i}>
+                      {hideChords === 'on' ? t.value.trim() : t.value}
+                    </span>
                   ),
                 )}
               </pre>

@@ -7,8 +7,20 @@ import SongsPage from './pages/SongsPage'
 import LiveModePage from './pages/LiveModePage'
 import SongDetailPage from './pages/SongDetailPage'
 import MutationSongPage from './pages/MutationSongPage'
+import { useAppSelector } from './store/hooks'
+import { useEffect } from 'react'
 
 function App() {
+  const mode = useAppSelector((state) => state.settings.mode)
+
+  useEffect(() => {
+    if (mode === 'night') {
+      document.body.classList.add('dark')
+    } else {
+      document.body.classList.remove('dark')
+    }
+  }, [mode])
+
   return (
     <Routes>
       <Route

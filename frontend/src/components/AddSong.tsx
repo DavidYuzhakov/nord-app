@@ -1,4 +1,4 @@
-import { PlusCircleIcon, SearchIcon, XIcon } from 'lucide-react'
+import { PlusIcon, SearchIcon, XIcon } from 'lucide-react'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { useEffect, useState } from 'react'
@@ -31,51 +31,53 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
   return (
     <>
       <button type="button" onClick={() => setIsOpen(true)}>
-        <span className="flex items-center gap-2 justify-center text-primary font-bold">
-          Новая хвала <PlusCircleIcon />
+        <span className="flex items-center gap-1 justify-center text-primary font-semibold">
+          <PlusIcon size={17} className="stroke-3" /> Новая хвала
         </span>
       </button>
 
       <div
-        className={`fixed max-w-md mx-auto left-2 right-2 z-11 rounded-xl bg-white px-4 py-3 space-y-2 duration-200 ${
+        className={`fixed max-w-md mx-auto left-2 right-2 z-11 rounded-xl bg-background dark:bg-secondary px-4 py-3 space-y-2 duration-200 ${
           isOpen ? 'opacity-100 visible top-2' : 'opacity-0 invisible -top-2'
         } `}
       >
         <Label htmlFor="song">
-          <h4 className="text-xl font-semibold">Хвала:</h4>
+          <h4 className="text-xl font-semibold">Выберите хвалы</h4>
         </Label>
         <div className="relative">
           <SearchIcon
             size={20}
-            className="absolute top-1/2 -translate-y-1/2 left-2 stroke-muted-foreground"
+            className="absolute top-1/2 -translate-y-1/2 left-3 stroke-muted-foreground"
           />
           <Input
             id="song"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-8 pr-7 focus-visible:ring-0"
+            className="pl-10 pr-8 py-4 focus-visible:ring-0 border-none rounded-full focus:border-primary focus:border h-10 bg-secondary dark:bg-input/30"
             placeholder="Введите название хвалы"
           />
           {search.length > 0 && (
             <XIcon
               onClick={() => setSearch('')}
               size={20}
-              className="absolute top-1/2 -translate-1/2 -right-1 "
+              className="absolute top-1/2 right-0 -translate-1/2"
             />
           )}
         </div>
-        <ul className="border max-h-80 rounded-md overflow-y-auto px-3 py-2">
-          {items.length === 0 && <p className="text-gray-400">Не найдено</p>}
+        <ul className="relative max-h-80 rounded-md overflow-y-auto px-2 pb-2 mask-[linear-gradient(to_bottom,black_90%,transparent_100%)]">
+          {items.length === 0 && (
+            <p className="text-muted-foreground">Не найдено</p>
+          )}
           {items.map((song) => (
             <li
               className="flex items-center gap-1.5 border-b border-accent py-2"
               key={song.id}
             >
               <span className="truncate font-medium">{song.name}</span>
-              <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-primary text-primary">
+              <span className="text-[14px] flex items-center justify-center font-semibold px-2 py-0.5 bg-primary/10 rounded-md text-primary">
                 {song.key}
               </span>
-              <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md border-[1.5px] border-third text-third">
+              <span className="text-[14px] font-semibold px-2 py-0.5 rounded-md bg-third/10 text-third">
                 {song.bpm}
               </span>
               <Checkbox
@@ -89,7 +91,7 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
       </div>
       <div
         onClick={() => setIsOpen(false)}
-        className={`fixed w-full h-full top-0 left-0 bg-black/50 z-10 ${
+        className={`fixed w-full h-full top-0 left-0 bg-black/15 backdrop-blur-xs z-10 ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         } duration-200`}
       />

@@ -18,6 +18,11 @@ const validSectionTypes: Set<string> = new Set([
   'тег',
 ])
 
+const sectionAliases: Record<string, SectionType> = {
+  'пред-припев': 'пред-припев',
+  'пред припев': 'пред-припев',
+}
+
 export type LineToken =
   | { type: 'text'; value: string }
   | { type: 'chord'; value: string }
@@ -34,7 +39,7 @@ export interface SongSection {
 }
 
 const SECTION_HEADER_REGEX =
-  /^(\d+\s+)?([\p{L}-]+)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
+  /^(\d+\s+)?([\p{L}]+(?:[ -][\p{L}]+)*)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
 
 export function parseSongSections(text: string): SongSection[] {
   const lines = text.split('\n')
@@ -47,17 +52,23 @@ export function parseSongSections(text: string): SongSection[] {
     const headerMatch = line.match(SECTION_HEADER_REGEX)
 
     if (headerMatch) {
-      const key = (headerMatch[2] ?? headerMatch[1]).toLowerCase()
+      const key = (headerMatch[2] ?? headerMatch[1])
+        .toLowerCase()
+        .replace(/\s+/g, '-')
       if (currentSection) {
         sections.push(currentSection)
       }
 
       const title = headerMatch[0].trim()
+
+      console.log(sectionAliases[key])
       currentSection = {
         type: validSectionTypes.has(key) ? (key as SectionType) : 'unknown',
         title,
         lines: [],
       }
+
+      console.log(currentSection)
       continue
     }
 

@@ -1,4 +1,4 @@
-import { Chord } from 'tonal'
+import { Chord, Note } from 'tonal'
 import type { SongSection } from './parseSongSections'
 import {
   changeChordHtoB,
@@ -18,8 +18,10 @@ export function transposeSections(
           ? {
               type: 'chord',
               value: normalizeChordFromTonal(
-                Chord.transpose(changeChordHtoB(token.value), interval) ??
-                  token.value,
+                Note.simplify(
+                  Chord.transpose(changeChordHtoB(token.value), interval) ??
+                    token.value,
+                ),
               ),
             }
           : token,

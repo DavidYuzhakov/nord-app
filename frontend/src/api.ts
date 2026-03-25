@@ -1,4 +1,6 @@
 import axios from 'axios'
 export const apiInstance = axios.create({
-  baseURL: 'https://api.nord-app.ru',
+  baseURL: import.meta.env.DEV
+    ? 'http://localhost:3000'
+    : 'https://api.nord-app.ru',
 })

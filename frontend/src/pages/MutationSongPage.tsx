@@ -17,7 +17,6 @@ import {
 } from '@/store/reducers/songSlice'
 import { useGoBack } from '@/hook/useGoBack'
 import { Loading } from '@/components/Loading'
-import { InfoIcon } from 'lucide-react'
 
 interface FormState {
   name: string
@@ -42,7 +41,7 @@ export default function MutationSongPage() {
   const { register, reset, handleSubmit } = useForm<FormState>({
     defaultValues: {
       name: current?.name ?? '',
-      bpm: current?.bpm ?? 120,
+      bpm: current?.bpm ?? 0,
       text: current?.text ?? '',
     },
   })
@@ -72,8 +71,8 @@ export default function MutationSongPage() {
 
   if (isEdit && !loading && !current)
     return (
-      <p className="text-center text-slate-500 text-lg py-2 flex gap-2 items-center justify-center">
-        <InfoIcon /> Песня не найдена
+      <p className="text-center text-muted-foreground text-lg py-2">
+        Песня не найдена
       </p>
     )
 
@@ -134,23 +133,25 @@ export default function MutationSongPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1">
           <Label className="text-lg font-medium" htmlFor="name">
-            Название:
+            Название
           </Label>
           <Input
             {...register('name', { required: true })}
             id="name"
+            className="bg-muted border-none px-4 py-6"
             placeholder="Введите название"
           />
         </div>
         <div className="space-y-3">
           <div className="flex gap-2 justify-between items-center">
-            <Label className="text-lg bg-white font-medium leading-none">
-              Структура:
+            <Label className="text-lg font-medium leading-none">
+              Структура
             </Label>
-            {droppedItems.length > 3 && (
+            {droppedItems.length > 1 && (
               <Button
                 onClick={() => setDroppedItems([])}
                 type="button"
+                size={'sm'}
                 variant={'outline'}
               >
                 Очистить
@@ -166,7 +167,7 @@ export default function MutationSongPage() {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <Label className="text-primary text-lg font-semibold leading-none">
-              KEY:
+              KEY
             </Label>
             <div className="flex gap-2">
               <Tonality currentKey={songKey} setCurrentKey={setSongKey} />
@@ -178,7 +179,11 @@ export default function MutationSongPage() {
                     setSongKey(`${songKey}m` as KeyType)
                   }
                 }}
-                className={songKey.includes('m') ? 'bg-primary text-white' : ''}
+                className={`${
+                  songKey.includes('m')
+                    ? 'bg-primary text-white border-primary'
+                    : ''
+                }`}
                 type="button"
                 variant={'outline'}
               >
@@ -188,7 +193,7 @@ export default function MutationSongPage() {
           </div>
           <div className="flex items-center gap-2">
             <Label className="text-third text-lg font-semibold leading-none">
-              BPM:
+              BPM
             </Label>
             <Input {...register('bpm')} type="number" className="w-15" />
           </div>
@@ -196,38 +201,38 @@ export default function MutationSongPage() {
 
         <div className="space-y-2">
           <Label className="text-lg font-medium" htmlFor="text">
-            Текст:
+            Текст
           </Label>
           <Textarea
             id="text"
             {...register('text', { required: true })}
             placeholder="Введите текст песни с аккордами"
-            className="resize-none h-100 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty"
+            className="resize-none h-100 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty border-none bg-muted"
           />
         </div>
 
         <div className="space-y-2">
           <div className="flex justify-between items-center gap-2">
             <Label className="font-medium text-base" htmlFor="youtube">
-              Юльтон:
+              Юльтон
             </Label>
             <Input
               {...register('danceVideo')}
               id="youtube"
-              className="max-w-75 h-auto"
+              className="max-w-75 h-auto bg-muted border-none px-4 py-2"
               placeholder="Введите ссылку"
             />
           </div>
           <div className="flex justify-between items-center gap-2">
             <Label
-              className="font-medium text-base leading-none"
+              className="font-medium text-base leading-none mr-4"
               htmlFor="audio"
             >
-              Аудио:
+              Аудио
             </Label>
             <Input
               id="audio"
-              className="max-w-75 h-auto"
+              className="max-w-75 h-auto bg-muted border-none px-4 py-2"
               {...register('audio')}
               placeholder="Введите ссылку"
             />
@@ -241,7 +246,7 @@ export default function MutationSongPage() {
               disabled={loading}
               variant="destructive"
               onClick={handleDelete}
-              className="capitalize text-base py-5"
+              className="capitalize bg-destructive/10! text-destructive text-base py-5"
             >
               удалить
             </Button>
@@ -249,7 +254,7 @@ export default function MutationSongPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="bg-primary capitalize text-base py-5"
+            className="bg-primary/15 text-primary capitalize text-base py-5"
           >
             сохранить
           </Button>

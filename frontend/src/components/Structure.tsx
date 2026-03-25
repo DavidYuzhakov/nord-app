@@ -34,9 +34,10 @@ const sections = [
 ]
 
 function DraggableItem({ item }: { item: { label: string; value: string } }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: item.value,
-  })
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: item.value,
+    })
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -49,7 +50,7 @@ function DraggableItem({ item }: { item: { label: string; value: string } }) {
       style={style}
       {...listeners}
       {...attributes}
-      className="py-1 px-4 text-base select-none"
+      className={`py-1 px-4 text-base select-none ${isDragging ? 'opacity-60' : ''}`}
     >
       {item.label}
     </Badge>
@@ -87,7 +88,7 @@ function SortableStructureItem({
       style={style}
       {...listeners}
       {...attributes}
-      className={`relative select-none aspect-square flex items-center justify-center text-white rounded-md ${getStructureBg(
+      className={`relative select-none py-1.5 flex items-center justify-center text-white dark:text-background/70 rounded-md ${getStructureBg(
         item.text.replace(/\d/g, '').toLowerCase(),
       )} ${isDragging ? 'opacity-60' : ''}`}
     >
@@ -108,12 +109,12 @@ function SortableStructureItem({
           onPointerDown={(e) => {
             e.stopPropagation()
           }}
-          className="absolute -top-1 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
+          className="absolute -top-1.5 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
         >
           <XIcon size={15} />
         </button>
         {item.amount > 1 && (
-          <span className="absolute font-semibold top-1 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 border rounded-full">
+          <span className="absolute font-semibold top-0.5 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 dark:bg-muted border rounded-full">
             {item.amount}
           </span>
         )}
@@ -140,11 +141,11 @@ export function Droppable({
     >
       {items.length === 0 && (
         <div
-          className={`flex items-center justify-center h-16 text-muted-foreground text-sm`}
+          className={`flex items-center justify-center h-10 text-muted-foreground text-sm`}
         />
       )}
       <div
-        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-px`}
+        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
       >
         <SortableContext
           items={items.map((item) => item.id)}
@@ -261,15 +262,54 @@ export function Structure({
         open={Boolean(selectedItem)}
         onOpenChange={() => setSelectedItem(null)}
       >
-        <DialogContent className="py-4 px-3" showCloseButton={false}>
+        <DialogContent className="py-4 px-3 max-w-xs" showCloseButton={false}>
           {selectedItem ? (
-            <div className="space-y-2">
-              <DialogTitle className="font-semibold text-xl uppercase">
+            <div className="space-y-5">
+              <DialogTitle
+                className={`font-semibold text-xl uppercase text-center rounded-full text-white dark:text-background/70 ${getStructureBg(selectedItem.text.replace(/\d/g, '').toLowerCase())} `}
+              >
                 {selectedItem.title}
               </DialogTitle>
-              <div className="flex items-center justify-between">
-                <div className="font-medium ">Номер:</div>
-                <div className="flex items-center gap-2">
+              <div>
+                <div className="font-medium text-sm text-muted-foreground mb-2">
+                  Количество
+                </div>
+                <div className="flex items-center justify-between gap-3 bg-muted/70 w-full p-2 rounded-lg">
+                  <button
+                    disabled={selectedItem.amount < 2}
+                    onClick={() =>
+                      handleChangeItem({
+                        ...selectedItem,
+                        amount: Number(selectedItem.amount) - 1,
+                      })
+                    }
+                    className="bg-border rounded-md p-2 disabled:opacity-60"
+                    type="button"
+                  >
+                    <MinusIcon size={30} />
+                  </button>
+                  <span className="text-3xl font-semibold">
+                    {selectedItem.amount}
+                  </span>
+                  <button
+                    onClick={() =>
+                      handleChangeItem({
+                        ...selectedItem,
+                        amount: Number(selectedItem.amount) + 1,
+                      })
+                    }
+                    className="bg-border rounded-md p-2 disabled:opacity-60"
+                    type="button"
+                  >
+                    <PlusIcon size={30} />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <div className="font-medium text-sm text-muted-foreground mb-2">
+                  Номер
+                </div>
+                <div className="flex items-center justify-between gap-3 bg-muted/70 w-full p-2 rounded-lg">
                   <button
                     disabled={isNaN(parseInt(selectedItem.text[0]))}
                     onClick={() =>
@@ -283,12 +323,12 @@ export function Structure({
                               selectedItem.text.slice(1),
                       })
                     }
-                    className="bg-foreground text-white rounded-full p-1 disabled:opacity-60"
+                    className="bg-border rounded-md p-2 disabled:opacity-60"
                     type="button"
                   >
-                    <MinusIcon size={19} />
+                    <MinusIcon size={30} />
                   </button>
-                  <span>
+                  <span className="text-3xl font-semibold">
                     {isNaN(parseInt(selectedItem.text[0]))
                       ? '0'
                       : selectedItem.text[0]}
@@ -303,41 +343,10 @@ export function Structure({
                             selectedItem.text.slice(1),
                       })
                     }
-                    className="bg-foreground text-white rounded-full p-1"
+                    className="bg-border rounded-md p-2 disabled:opacity-60"
                     type="button"
                   >
-                    <PlusIcon size={19} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="font-medium ">Количество:</div>
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={selectedItem.amount < 2}
-                    onClick={() =>
-                      handleChangeItem({
-                        ...selectedItem,
-                        amount: Number(selectedItem.amount) - 1,
-                      })
-                    }
-                    className="bg-foreground text-white rounded-full p-1 disabled:opacity-60"
-                    type="button"
-                  >
-                    <MinusIcon size={19} />
-                  </button>
-                  <span>{selectedItem.amount}</span>
-                  <button
-                    onClick={() =>
-                      handleChangeItem({
-                        ...selectedItem,
-                        amount: Number(selectedItem.amount) + 1,
-                      })
-                    }
-                    className="bg-foreground text-white rounded-full p-1"
-                    type="button"
-                  >
-                    <PlusIcon size={19} />
+                    <PlusIcon size={30} />
                   </button>
                 </div>
               </div>

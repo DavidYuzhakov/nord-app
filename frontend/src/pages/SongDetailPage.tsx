@@ -1,23 +1,20 @@
+import { Header } from '@/components/Header'
 import { Loading } from '@/components/Loading'
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hook/useGoBack'
-import type { SongStructureItem } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { clearCurrent, fetchSong } from '@/store/reducers/songSlice'
-import { getStructureBg } from '@/utils/getStructureBg'
 import {
   ChevronLeft,
-  EditIcon,
   Headphones,
-  InfoIcon,
+  PencilIcon,
   PersonStanding,
 } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
-  const headerRef = useRef<HTMLDivElement | null>(null)
   const { id } = useParams()
   const navigate = useNavigate()
   const goBack = useGoBack()
@@ -33,86 +30,35 @@ export default function SongDetailPage() {
   if (loading && !current) return <Loading />
   if (!current)
     return (
-      <p className="text-center text-slate-500 text-lg py-2 flex gap-2 items-center justify-center">
-        <InfoIcon /> Песня не найдена
+      <p className="text-center text-muted-foreground text-lg py-2">
+        Песня не найдена
       </p>
     )
 
-  const scrollToSection = (el: SongStructureItem) => {
-    const hasNumber = /^\d/.test(el.text)
-    const id = `${current.id}-${hasNumber ? el.text[0] + el.title : el.title}`
-
-    const target = document.getElementById(id)
-    if (!target) return
-
-    const headerHeight = headerRef.current?.offsetHeight || 0
-    const y =
-      target.getBoundingClientRect().top +
-      window.pageYOffset -
-      headerHeight -
-      13
-
-    window.scrollTo({
-      top: y,
-      behavior: 'smooth',
-    })
-  }
-
   return (
     <div className="-mx-3 space-y-3 pb-16">
-      <div
-        ref={headerRef}
-        className="space-y-1 p-2 rounded-b-xl shadow-xs sticky top-0 z-10 bg-background"
-      >
-        <div className="flex justify-between items-center gap-1">
-          <div className="flex items-center gap-1 truncate">
-            <button
-              onClick={() => {
-                goBack()
-                dispatch(clearCurrent())
-              }}
-              className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs border drop-shadow-xs"
-              type="button"
-            >
-              <ChevronLeft />
-            </button>
-            <h2 className="text-[22px] font-semibold truncate">
-              {current.name}
-            </h2>
-          </div>
+      <Header structure={current.structure} songId={current.id}>
+        <div className="flex items-center gap-1 truncate">
           <button
-            onClick={() => navigate(`/song/${current.id}/edit`)}
+            onClick={() => {
+              goBack()
+              dispatch(clearCurrent())
+            }}
+            className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs drop-shadow-xs border"
             type="button"
-            className="bg-primary p-1.5 rounded-md"
           >
-            <EditIcon size={20} className="stroke-white" />
+            <ChevronLeft />
           </button>
+          <h2 className="text-[22px] font-semibold truncate">{current.name}</h2>
         </div>
-        {current.structure && current.structure.length > 0 && (
-          <div
-            className={`grid ${current.structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
-          >
-            {current.structure.map((el, i) => (
-              <div
-                key={i}
-                onClick={() => scrollToSection(el)}
-                className={`relative py-2 flex items-center justify-center text-white rounded-sm ${getStructureBg(
-                  el.text.replace(/\d/g, '').toLowerCase(),
-                )}`}
-              >
-                <span className="uppercase text-center text-lg font-semibold">
-                  {el.text}
-                </span>
-                {el.amount > 1 && (
-                  <span className="absolute font-semibold top-1 right-1 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-secondary px-1 border rounded-full">
-                    {el.amount}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+        <button
+          onClick={() => navigate(`/song/${current.id}/edit`)}
+          type="button"
+          className="bg-muted p-1.5 rounded-md"
+        >
+          <PencilIcon size={20} className="" />
+        </button>
+      </Header>
       <Song isEdit song={current} />
       <div className="px-3 flex gap-2 items-cetner flex-wrap">
         {current.audio && (

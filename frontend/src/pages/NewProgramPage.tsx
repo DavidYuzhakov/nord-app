@@ -84,17 +84,17 @@ export default function NewProgramPage() {
   return (
     <form onSubmit={submitHandler} className="py-4 space-y-3 flex flex-col">
       <Label className="text-xl font-semibold" htmlFor="name">
-        Название:
+        Название
       </Label>
       <Input
         required
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="px-3 py-5 text-lg mb-6"
+        className="px-4 py-6 text-base mb-6 border-none bg-muted"
         id="name"
         placeholder="Воскресное 27.12.2025"
       />
-      <Label className="text-xl font-semibold">Хвалы:</Label>
+      <Label className="text-xl font-semibold">Хвалы</Label>
 
       <div className="px-2 pb-4 space-y-3">
         <ul className="space-y-3 px-2">
@@ -114,7 +114,7 @@ export default function NewProgramPage() {
               ))}
             </SortableContext>
           </DndContext>
-          <li className="text-center pt-1 pb-3 border-b border-primary">
+          <li className="text-center pt-1">
             <AddSong
               selectedIds={songs.map((s) => s.id)}
               onToggleSong={onToggleSong}
@@ -123,7 +123,11 @@ export default function NewProgramPage() {
         </ul>
       </div>
 
-      <Button disabled={loading} className="ml-auto" type="submit">
+      <Button
+        disabled={loading}
+        className="ml-auto bg-primary/15 text-primary"
+        type="submit"
+      >
         Сохранить
       </Button>
     </form>
