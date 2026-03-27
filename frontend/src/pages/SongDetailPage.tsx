@@ -60,9 +60,12 @@ export default function SongDetailPage() {
         </button>
       </Header>
       <Song isEdit song={current} />
-      <div className="px-3 flex gap-2 items-cetner flex-wrap">
+      <div className="px-3 pb-2 flex gap-2 items-cetner flex-wrap">
         {current.audio && (
-          <Button type="button" className="text-base">
+          <Button
+            type="button"
+            className="text-base bg-primary/15 text-primary border-none"
+          >
             <a
               className="flex items-center gap-2"
               href={current.audio}
@@ -73,7 +76,7 @@ export default function SongDetailPage() {
           </Button>
         )}
         {current.danceVideo && (
-          <Button type="button" className="text-base bg-third">
+          <Button type="button" className="text-base bg-third/15 text-third">
             <a
               className="flex items-center gap-2"
               href={current.danceVideo}

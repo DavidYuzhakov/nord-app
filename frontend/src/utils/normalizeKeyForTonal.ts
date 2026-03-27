@@ -13,7 +13,3 @@ export const normalizeKeyForTonal = (key: KeyType): string => {
 export const changeChordHtoB = (chord: string): string => {
   return chord.replace(/\bHb/g, 'Bb').replace(/\bH/g, 'B')
 }
-
-export const normalizeChordFromTonal = (chord: string): string => {
-  return chord.replace(/\bHb/g, 'Hb').replace(/\bB/g, 'H')
-}

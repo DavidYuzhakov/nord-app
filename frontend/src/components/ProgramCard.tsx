@@ -122,7 +122,7 @@ export function ProgramCard({
             disabled={!isEdit}
             onChange={(e) => setProgramName(e.target.value)}
             value={programName}
-            className={`text-lg font-semibold truncate shadow-none border-t-0 border-x-0 px-0 pt-0 rounded-none duration-200 transition-all focus-visible:border-border disabled:opacity-100 disabled:border-transparent dark:bg-transparent ${
+            className={`text-lg md:text-lg font-semibold truncate shadow-none border-t-0 border-x-0 px-0 pt-0 rounded-none duration-200 transition-all focus-visible:border-border disabled:opacity-100 disabled:border-transparent dark:bg-transparent ${
               isOpenExternal ? 'text-foreground' : 'text-muted-foreground'
             }`}
           />

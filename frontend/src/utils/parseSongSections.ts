@@ -18,11 +18,6 @@ const validSectionTypes: Set<string> = new Set([
   'тег',
 ])
 
-const sectionAliases: Record<string, SectionType> = {
-  'пред-припев': 'пред-припев',
-  'пред припев': 'пред-припев',
-}
-
 export type LineToken =
   | { type: 'text'; value: string }
   | { type: 'chord'; value: string }
@@ -61,14 +56,11 @@ export function parseSongSections(text: string): SongSection[] {
 
       const title = headerMatch[0].trim()
 
-      console.log(sectionAliases[key])
       currentSection = {
         type: validSectionTypes.has(key) ? (key as SectionType) : 'unknown',
         title,
         lines: [],
       }
-
-      console.log(currentSection)
       continue
     }
 

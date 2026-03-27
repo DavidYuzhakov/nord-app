@@ -31,9 +31,6 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
     if (!interval || interval === '') {
       return parsed
     }
-
-    console.log(currentKey)
-
     return transposeSections(parsed, interval)
   }, [song.text, song.key, currentKey])
 

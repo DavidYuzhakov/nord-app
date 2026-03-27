@@ -1,7 +1,8 @@
+import { changeChordHtoB } from './normalizeKeyForTonal'
 import type { LineToken, SongSection } from './parseSongSections'
 
 const CHORD_REGEX =
-  /(^|\s)([A-GH](?:#|b)?(?:maj|min|m|dim|aug|sus|add)?\d*(?:\/[A-GH](?:#|b)?)?)(?=$|\s)/g
+  /(^|\s|[([])([A-GH](?:#|b)?(?:maj|min|m|dim|aug|sus|add)?\d*(?:\/[A-GH](?:#|b)?)?)(?=$|\s|[)\]])/g
 
 function tokenizeLine(line: string): LineToken[] {
   const tokens: LineToken[] = []
@@ -20,7 +21,7 @@ function tokenizeLine(line: string): LineToken[] {
 
     tokens.push({
       type: 'chord',
-      value: chord,
+      value: changeChordHtoB(chord),
     })
 
     lastIndex = index + chord.length

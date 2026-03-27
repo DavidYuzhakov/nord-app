@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/select'
 import { Button } from './ui/button'
 
-const MAJOR_KEYS: KeyType[] = ['C', 'D', 'E', 'F', 'G', 'A', 'H']
-const MINOR_KEYS: KeyType[] = ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Hm']
+const MAJOR_KEYS: KeyType[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+const MINOR_KEYS: KeyType[] = ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Bm']
 
 export function Tonality({
   currentKey,
@@ -52,7 +52,7 @@ export function Tonality({
             }
           }
         }}
-        disabled={currentKey[0] === 'E' || currentKey[0] === 'H'}
+        disabled={currentKey[0] === 'E' || currentKey[0] === 'B'}
       >
         #
       </Button>

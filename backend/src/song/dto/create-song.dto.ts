@@ -48,8 +48,8 @@ export class CreateSongDto {
     'Ab',
     'A',
     'A#',
-    'Hb',
-    'H',
+    'Bb',
+    'B',
     'Cm',
     'C#m',
     'Dbm',
@@ -65,8 +65,8 @@ export class CreateSongDto {
     'Abm',
     'Am',
     'A#m',
-    'Hbm',
-    'Hm',
+    'Bbm',
+    'Bm',
   ])
   key: string;
 
