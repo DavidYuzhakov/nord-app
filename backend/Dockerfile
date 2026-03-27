@@ -1,33 +1,32 @@
-FROM node:22-alpine as builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN apk add --no-cache openssl
-
 COPY package*.json ./
+RUN npm ci
 
-RUN npm install
+COPY prisma ./prisma/
+COPY prisma.config.ts ./
 
+# для генерации клиента призмы нужен хоть какой-нибудь урл, поэтому ставим заглушку чтобы не падал докер
+RUN DATABASE_URL="postgresql://noop:noop@localhost:5432/noop" npx prisma generate
+
+# после npx prisma generate для кэширования prisma и package.json, 
 COPY . .
 
-ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
-
-RUN npx prisma generate
 RUN npm run build
 
 # Production
-FROM node:22-alpine
+FROM node:22-alpine AS production
 
 WORKDIR /app
 
-RUN apk add --no-cache openssl
-
 COPY package*.json ./
-RUN npm install --omit=dev
+
+RUN apk add --no-cache openssl && npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/src/generated ./src/generated
 COPY --from=builder /app/prisma.config.ts ./
 
 ENV NODE_ENV=production
