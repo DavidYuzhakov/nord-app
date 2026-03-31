@@ -74,6 +74,7 @@ export default function LiveModePage() {
             <Swiper
               spaceBetween={50}
               slidesPerView={1}
+              autoHeight
               onSlideChange={handleSlideChange}
             >
               {currentProgram.songs.map((song) => (
