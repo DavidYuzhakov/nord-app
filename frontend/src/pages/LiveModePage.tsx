@@ -46,7 +46,7 @@ export default function LiveModePage() {
 
   return (
     <>
-      <div className="-mx-3 relative flex flex-col pb-0 h-screen">
+      <div className="-mx-3 relative pb-0 h-screen">
         {totalSlides > 0 ? (
           <>
             <Header
@@ -72,13 +72,12 @@ export default function LiveModePage() {
             </Header>
 
             <Swiper
-              className="max-w-full flex-1 min-h-0 pb-16"
               spaceBetween={50}
               slidesPerView={1}
               onSlideChange={handleSlideChange}
             >
               {currentProgram.songs.map((song) => (
-                <SwiperSlide className="h-full overflow-auto pb-[74px] pt-3">
+                <SwiperSlide className="pb-[74px] pt-3">
                   <Song song={song.song} />
                 </SwiperSlide>
               ))}

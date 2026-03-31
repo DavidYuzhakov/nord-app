@@ -7,6 +7,7 @@ import { fetchSongs } from '@/store/reducers/songSlice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { useDebounce } from '@/hook/useDebounce'
 import type { Song } from '@/models/Song'
+import { useNavigate } from 'react-router-dom'
 
 interface AddSongProps {
   selectedIds: number[]
@@ -15,8 +16,10 @@ interface AddSongProps {
 
 export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
   const [search, setSearch] = useState('')
-  const debouncedSearch = useDebounce(search, 500)
   const [isOpen, setIsOpen] = useState(false)
+
+  const navigate = useNavigate()
+  const debouncedSearch = useDebounce(search, 500)
   const dispatch = useAppDispatch()
   const { items } = useAppSelector((state) => state.song)
 
@@ -65,9 +68,6 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
           )}
         </div>
         <ul className="relative max-h-80 rounded-md overflow-y-auto px-2 pb-2 mask-[linear-gradient(to_bottom,black_90%,transparent_100%)]">
-          {items.length === 0 && (
-            <p className="text-muted-foreground">Не найдено</p>
-          )}
           {items.map((song) => (
             <li
               className="flex items-center gap-1.5 border-b border-accent py-2"
@@ -87,11 +87,18 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
               />
             </li>
           ))}
+          <button
+            className="flex items-center w-full gap-1 justify-center text-primary font-semibold py-2"
+            type="button"
+            onClick={() => navigate('/song/create')}
+          >
+            <PlusIcon size={17} className="stroke-3" /> Создать хвалу
+          </button>
         </ul>
       </div>
       <div
         onClick={() => setIsOpen(false)}
-        className={`fixed w-full h-full top-0 left-0 bg-black/15 backdrop-blur-xs z-10 ${
+        className={`fixed w-full h-svh top-0 left-0 bg-black/15 backdrop-blur-xs z-10 ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         } duration-200`}
       />

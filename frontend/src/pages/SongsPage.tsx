@@ -55,7 +55,7 @@ export default function SongsPage() {
   }
 
   return (
-    <div className="pt-19 pb-16 space-y-4">
+    <div className="py-16 space-y-4">
       <div className="flex items-center gap-1 fixed top-4 right-3 left-3 max-w-md mx-auto z-60">
         <div className="relative w-full">
           <SearchIcon className="absolute top-1/2 -translate-y-1/2 left-2 z-20 stroke-muted-foreground" />
