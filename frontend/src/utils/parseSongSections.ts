@@ -33,8 +33,9 @@ export interface SongSection {
   lines: SectionLine[]
 }
 
+// 👇 ключевое изменение тут
 const SECTION_HEADER_REGEX =
-  /^(\d+\s+)?([\p{L}]+(?:[ -][\p{L}]+)*)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
+  /^(\d+\s+)?(вступление|куплет|пред[- ]припев|припев|бридж|проигрыш|тег)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
 
 export function parseSongSections(text: string): SongSection[] {
   const lines = text.split('\n')
@@ -47,9 +48,13 @@ export function parseSongSections(text: string): SongSection[] {
     const headerMatch = line.match(SECTION_HEADER_REGEX)
 
     if (headerMatch) {
-      const key = (headerMatch[2] ?? headerMatch[1])
-        .toLowerCase()
-        .replace(/\s+/g, '-')
+      let key = headerMatch[2].toLowerCase()
+
+      // 👇 нормализация "пред припев" → "пред-припев"
+      if (key === 'пред припев') {
+        key = 'пред-припев'
+      }
+
       if (currentSection) {
         sections.push(currentSection)
       }
@@ -71,6 +76,7 @@ export function parseSongSections(text: string): SongSection[] {
         lines: [],
       }
     }
+
     currentSection.lines.push({ raw: line, tokens: [] })
   }
 
