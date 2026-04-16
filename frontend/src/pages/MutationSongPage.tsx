@@ -181,7 +181,7 @@ export default function MutationSongPage() {
                 }}
                 className={`${
                   songKey.includes('m')
-                    ? 'bg-primary text-white border-primary'
+                    ? 'bg-primary dark:bg-primary text-white border-primary'
                     : ''
                 }`}
                 type="button"

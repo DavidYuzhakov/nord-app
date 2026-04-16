@@ -124,7 +124,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
           </span>
         ) : (
           <>
-            <div className="flex-1 flex gap-2">
+            <div className="flex-1 flex gap-2 max-w-max">
               <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
             </div>
             {currentKey !== song.key && (
