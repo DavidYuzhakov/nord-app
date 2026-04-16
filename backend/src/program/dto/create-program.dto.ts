@@ -9,10 +9,10 @@ import {
 export class CreateProgramDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsArray()
   @ArrayNotEmpty()
   @IsInt({ each: true })
-  songsId: number[];
+  songsId!: number[];
 }

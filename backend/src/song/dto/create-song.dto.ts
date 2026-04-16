@@ -13,23 +13,23 @@ import {
 
 export class SongStructureItem {
   @IsString()
-  text: string;
+  text!: string;
 
   @IsInt()
   @Min(1)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  id: string;
+  id!: string;
 
   @IsString()
-  title: string;
+  title!: string;
 }
 
 export class CreateSongDto {
   @IsString()
   @MinLength(1)
-  name: string;
+  name!: string;
 
   @IsString()
   @IsIn([
@@ -68,14 +68,14 @@ export class CreateSongDto {
     'Bbm',
     'Bm',
   ])
-  key: string;
+  key!: string;
 
   @IsInt()
-  bpm: number;
+  bpm!: number;
 
   @IsString()
   @MinLength(1)
-  text: string;
+  text!: string;
 
   @IsUrl()
   @IsOptional()

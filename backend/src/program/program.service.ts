@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
-import { ProgramUpdateInput } from 'src/generated/prisma/models';
+import { ProgramUpdateInput } from '@/generated/prisma/models';
 
 @Injectable()
 export class ProgramService {
@@ -48,7 +48,7 @@ export class ProgramService {
     }
   }
 
-  async findAll() {
+  findAll() {
     return this.prisma.program.findMany({
       orderBy: { createdAt: 'desc' },
       include: this.programInclude,
