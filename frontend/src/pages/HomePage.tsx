@@ -47,7 +47,6 @@ export default function HomePage() {
         </button>
       </div>
       <h3 className="text-xl font-semibold">Готовые программы</h3>
-
       <div className="space-y-3">
         {!loading && programs.length === 0 && (
           <p className="text-center text-muted-foreground">Список пуст</p>

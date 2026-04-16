@@ -77,7 +77,9 @@ export function parseSongSections(text: string): SongSection[] {
       }
     }
 
-    currentSection.lines.push({ raw: line, tokens: [] })
+    if (line.trim().length > 0) {
+      currentSection.lines.push({ raw: line, tokens: [] })
+    }
   }
 
   if (currentSection) {
