@@ -29,7 +29,7 @@ export function getTextBg(type: string): string {
       return 'text-red-400'
     case 'бридж':
       return 'text-orange-400'
-    case 'пред-припев':
+    case 'предприпев':
       return 'text-yellow-500 '
     case 'проигрыш':
       return 'text-violet-400'

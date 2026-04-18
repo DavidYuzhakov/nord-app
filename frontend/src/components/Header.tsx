@@ -15,7 +15,6 @@ export function Header({ children, structure, songId }: HeaderProps) {
     const hasNumber = /^\d/.test(el.text)
     const id = `${songId}-${hasNumber ? el.text[0] + el.title : el.title}`
 
-    console.log(id)
     const target = document.getElementById(id)
     if (!target) return
 

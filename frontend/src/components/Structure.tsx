@@ -26,7 +26,7 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 const sections = [
   { label: 'вступление', value: 'в' },
   { label: 'куплет', value: 'к' },
-  { label: 'пред-припев', value: 'пп' },
+  { label: 'предприпев', value: 'пп' },
   { label: 'припев', value: 'п' },
   { label: 'проигрыш', value: 'прг' },
   { label: 'бридж', value: 'б' },

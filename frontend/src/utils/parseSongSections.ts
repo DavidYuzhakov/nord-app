@@ -1,7 +1,7 @@
 type SectionType =
   | 'вступление'
   | 'куплет'
-  | 'пред-припев'
+  | 'предприпев'
   | 'припев'
   | 'бридж'
   | 'проигрыш'
@@ -11,7 +11,7 @@ type SectionType =
 const validSectionTypes: Set<string> = new Set([
   'вступление',
   'куплет',
-  'пред-припев',
+  'предприпев',
   'припев',
   'бридж',
   'проигрыш',
@@ -35,7 +35,7 @@ export interface SongSection {
 
 // 👇 ключевое изменение тут
 const SECTION_HEADER_REGEX =
-  /^(\d+\s+)?(вступление|куплет|пред[- ]припев|припев|бридж|проигрыш|тег)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
+  /^(\d+\s+)?(вступление|куплет|предприпев|припев|бридж|проигрыш|тег)(?:\s+\d+|\s+x\d+|\s+х\d+)?\s*:/iu
 
 export function parseSongSections(text: string): SongSection[] {
   const lines = text.split('\n')
@@ -48,12 +48,7 @@ export function parseSongSections(text: string): SongSection[] {
     const headerMatch = line.match(SECTION_HEADER_REGEX)
 
     if (headerMatch) {
-      let key = headerMatch[2].toLowerCase()
-
-      // 👇 нормализация "пред припев" → "пред-припев"
-      if (key === 'пред припев') {
-        key = 'пред-припев'
-      }
+      const key = headerMatch[2].toLowerCase()
 
       if (currentSection) {
         sections.push(currentSection)
