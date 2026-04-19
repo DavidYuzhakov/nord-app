@@ -79,7 +79,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
 
     if (!song.structure || song.structure.length === 0) {
       await navigator.clipboard.writeText(
-        Array.from(sectionMap.values()).join('\n'),
+        Array.from(sectionMap.values()).join('\n\n'),
       )
 
       setIsCopied(true)
@@ -96,7 +96,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
       if (text) textArr.push(text)
     }
 
-    await navigator.clipboard.writeText(textArr.join('\n'))
+    await navigator.clipboard.writeText(textArr.join('\n\n'))
     setIsCopied(true)
   }
 
