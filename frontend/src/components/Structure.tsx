@@ -1,5 +1,6 @@
 import {
   DndContext,
+  PointerSensor,
   TouchSensor,
   useDraggable,
   useDroppable,
@@ -50,7 +51,7 @@ function DraggableItem({ item }: { item: { label: string; value: string } }) {
       style={style}
       {...listeners}
       {...attributes}
-      className={`py-1 px-4 text-base select-none ${isDragging ? 'opacity-60' : ''}`}
+      className={`py-1 px-4 text-base select-none cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-60' : ''}`}
     >
       {item.label}
     </Badge>
@@ -183,7 +184,13 @@ export function Structure({
     },
   })
 
-  const sensors = useSensors(touchSensor)
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  })
+
+  const sensors = useSensors(touchSensor, pointerSensor)
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e
