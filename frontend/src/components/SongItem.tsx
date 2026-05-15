@@ -33,7 +33,7 @@ export function SongItem({ item, isEdit, onDelete }: SongItemProps) {
   return (
     <li
       style={style}
-      onClick={() => navigate(`/song/${item.id}`)}
+      onClick={() => (!isEdit ? navigate(`/song/${item.id}`) : {})}
       ref={setNodeRef}
       className={`flex items-center gap-1 justify-between border-b border-border/50 h-10 pb-3 ${
         isDragging ? 'opacity-50' : ''

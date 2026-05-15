@@ -17,7 +17,6 @@ import {
 } from './ui/collapsible'
 import { SongItem } from './SongItem'
 import type { Program } from '@/models/Program'
-
 import { AddSong } from './AddSong'
 import type { Song } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -40,6 +39,13 @@ export function ProgramCard({
   const [selectedSongs, setSelectedSongs] = useState<Song[]>(
     songs.map((s) => s.song),
   )
+  const [prevSongs, setPrevSongs] = useState(songs)
+
+  if (songs !== prevSongs) {
+    setPrevSongs(songs)
+    setSelectedSongs(songs.map((s) => s.song))
+  }
+
   const [isEdit, setIsEdit] = useState(false)
   const [programName, setProgramName] = useState(name)
 
