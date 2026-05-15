@@ -46,7 +46,7 @@ export default function LiveModePage() {
 
   return (
     <>
-      <div className="-mx-3 relative pb-0 h-screen">
+      <div className="-mx-3 relative pb-0">
         {totalSlides > 0 ? (
           <>
             <Header

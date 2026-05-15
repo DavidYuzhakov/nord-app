@@ -9,6 +9,8 @@ import SongDetailPage from './pages/SongDetailPage'
 import MutationSongPage from './pages/MutationSongPage'
 import { useAppSelector } from './store/hooks'
 import { useEffect } from 'react'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 
 function App() {
   const mode = useAppSelector((state) => state.settings.mode)
@@ -31,6 +33,8 @@ function App() {
           </Layout>
         }
       />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/new-program"
         element={

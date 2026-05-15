@@ -76,27 +76,23 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
         return [getIdSection(section), text]
       }),
     )
-
+    let finalText = ''
     if (!song.structure || song.structure.length === 0) {
-      await navigator.clipboard.writeText(
-        Array.from(sectionMap.values()).join('\n\n'),
-      )
+      finalText = Array.from(sectionMap.values()).join('\n\n')
+    } else {
+      const textArr: string[] = []
 
-      setIsCopied(true)
-      return
+      for (const structure of song.structure) {
+        const hasNumber = /^\d/.test(structure.text)
+
+        const id = `${song.id}-${hasNumber ? structure.text[0] + structure.title : structure.title}`
+        const text = sectionMap.get(id)
+        if (text) textArr.push(text)
+      }
+      finalText = textArr.join('\n\n')
     }
 
-    const textArr: string[] = []
-
-    for (const structure of song.structure) {
-      const hasNumber = /^\d/.test(structure.text)
-
-      const id = `${song.id}-${hasNumber ? structure.text[0] + structure.title : structure.title}`
-      const text = sectionMap.get(id)
-      if (text) textArr.push(text)
-    }
-
-    await navigator.clipboard.writeText(textArr.join('\n\n'))
+    await navigator.clipboard.writeText(`${song.name}\n\n${finalText}`)
     setIsCopied(true)
   }
 

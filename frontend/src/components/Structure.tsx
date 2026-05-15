@@ -145,7 +145,7 @@ export function Droppable({
         />
       )}
       <div
-        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(46px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
+        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(55px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(55px,60px))]'} gap-0.5`}
       >
         <SortableContext
           items={items.map((item) => item.id)}
