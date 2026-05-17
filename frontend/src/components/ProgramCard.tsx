@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   DndContext,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -59,13 +59,13 @@ export function ProgramCard({
     },
   })
 
-  const pointerSensor = useSensor(PointerSensor, {
+  const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 5,
     },
   })
 
-  const sensors = useSensors(touchSensor, pointerSensor)
+  const sensors = useSensors(touchSensor, mouseSensor)
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e

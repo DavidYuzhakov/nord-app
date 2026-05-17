@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { createProgramThunk } from '@/store/reducers/programSlice'
 import {
   DndContext,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -34,13 +34,13 @@ export default function NewProgramPage() {
     },
   })
 
-  const pointerSensor = useSensor(PointerSensor, {
+  const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 5,
     },
   })
 
-  const sensors = useSensors(touchSensor, pointerSensor)
+  const sensors = useSensors(touchSensor, mouseSensor)
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e
