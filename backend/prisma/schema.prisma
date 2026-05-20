@@ -28,7 +28,7 @@ model ProgramSong {
   programId Int
   program   Program @relation(fields: [programId], references: [id])
   songId    Int
-  song      Song    @relation(fields: [songId], references: [id])
+  song      Song    @relation(fields: [songId], references: [id], onDelete: Cascade)
   order     Int
 
   @@unique([programId, songId])
