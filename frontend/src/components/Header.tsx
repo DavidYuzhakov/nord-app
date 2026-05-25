@@ -39,7 +39,7 @@ export function Header({ children, structure, songId }: HeaderProps) {
       <div className="flex justify-between items-center gap-1">{children}</div>
       {structure && structure.length > 0 && (
         <div
-          className={`grid ${structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(55px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(55px,60px))]'} gap-0.5`}
+          className={`grid ${structure.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(50px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
         >
           {structure.map((el, i) => (
             <div

@@ -89,37 +89,34 @@ function SortableStructureItem({
       style={style}
       {...listeners}
       {...attributes}
+      onClick={() => {
+        onClick(item)
+      }}
       className={`relative select-none py-1.5 flex items-center justify-center text-white dark:text-background/70 rounded-md ${getStructureBg(
         item.text.replace(/\d/g, '').toLowerCase(),
       )} ${isDragging ? 'opacity-60' : ''}`}
     >
-      <div
-        onClick={() => {
-          onClick(item)
+      <span className="uppercase text-center text-lg font-semibold">
+        {item.text}
+      </span>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onRemove(item.id)
         }}
+        onPointerDown={(e) => {
+          e.stopPropagation()
+        }}
+        className="absolute -top-1.5 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
       >
-        <span className="uppercase text-center text-lg font-semibold">
-          {item.text}
+        <XIcon size={15} />
+      </button>
+      {item.amount > 1 && (
+        <span className="absolute font-semibold top-0.5 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 dark:bg-muted border rounded-full">
+          {item.amount}
         </span>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            onRemove(item.id)
-          }}
-          onPointerDown={(e) => {
-            e.stopPropagation()
-          }}
-          className="absolute -top-1.5 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
-        >
-          <XIcon size={15} />
-        </button>
-        {item.amount > 1 && (
-          <span className="absolute font-semibold top-0.5 right-7 text-xs translate-x-1/2 -translate-y-1/2 text-foreground z-10 text-[12px] bg-white px-1 dark:bg-muted border rounded-full">
-            {item.amount}
-          </span>
-        )}
-      </div>
+      )}
     </div>
   )
 }
@@ -146,7 +143,7 @@ export function Droppable({
         />
       )}
       <div
-        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(55px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(55px,60px))]'} gap-0.5`}
+        className={`grid ${items.length > 5 ? 'grid-cols-[repeat(auto-fit,minmax(50px,1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(50px,60px))]'} gap-0.5`}
       >
         <SortableContext
           items={items.map((item) => item.id)}
