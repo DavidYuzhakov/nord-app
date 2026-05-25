@@ -66,6 +66,7 @@ export function SongItem({ item, isEdit, onDelete }: SongItemProps) {
             <button
               {...attributes}
               {...listeners}
+              type="button"
               className="ml-3 space-y-1 cursor-grab active:cursor-grabbing"
             >
               <span className="block w-4 rounded-full h-0.5 bg-foreground dark:bg-muted-foreground" />
