@@ -104,10 +104,10 @@ export default function LiveModePage() {
                   setCurrentProgram(program)
                   setIsOpen(false)
                 }}
-                className={`w-full ${styles[i] ?? 'bg-primary/25 text-primary'} py-7 truncate text-lg font-medium`}
+                className={`w-full ${styles[i] ?? 'bg-primary/25 text-primary'} py-7 text-lg font-medium`}
                 key={program.id}
               >
-                {program.name}
+                <span className="truncate w-full">{program.name}</span>
               </Button>
             ))}
           </div>
