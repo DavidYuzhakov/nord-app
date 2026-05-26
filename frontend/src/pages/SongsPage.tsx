@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useDebounce } from '@/hook/useDebounce'
 import type { Program } from '@/models/Program'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { updateProgramThunk } from '@/store/reducers/programSlice'
@@ -28,13 +29,16 @@ export default function SongsPage() {
   const dispatch = useAppDispatch()
 
   const [value, setValue] = useState('')
+  const debouncedValue = useDebounce(value, 500)
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(
-      fetchSongs({ search: value.trim().length > 0 ? value : undefined }),
+      fetchSongs({
+        search: debouncedValue.trim().length > 0 ? debouncedValue : undefined,
+      }),
     )
-  }, [value, dispatch])
+  }, [debouncedValue, dispatch])
 
   const addSongToProgram = (
     e: React.MouseEvent,
