@@ -9,7 +9,15 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { ChevronDownIcon, PenIcon, Trash2Icon } from 'lucide-react'
+import {
+  ArchiveIcon,
+  ChevronDownIcon,
+  HeartIcon,
+  HeartOffIcon,
+  PenIcon,
+  RefreshCwIcon,
+  Trash2Icon,
+} from 'lucide-react'
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,15 +33,20 @@ import {
   updateProgramThunk,
 } from '@/store/reducers/programSlice'
 import { Input } from './ui/input'
+import type { TypeProgram } from '@/pages/HomePage'
 
 export function ProgramCard({
   id,
   name,
   songs,
+  isArchived,
+  isFavorite,
   isOpenExternal,
   setOpenExternal,
+  type,
 }: Program & {
   isOpenExternal: boolean
+  type: TypeProgram
   setOpenExternal: (id: number | null) => void
 }) {
   const [selectedSongs, setSelectedSongs] = useState<Song[]>(
@@ -90,6 +103,55 @@ export function ProgramCard({
     }
   }
 
+  const archiveProgramHandler = (isArchiveProp: boolean) => {
+    if (isArchiveProp === true) {
+      if (
+        window.confirm(
+          `Вы действительно хотите архивировать программу "${name}"?`,
+        )
+      )
+        dispatch(
+          updateProgramThunk({
+            id,
+            data: { isArchived: isArchiveProp },
+          }),
+        )
+    } else {
+      dispatch(
+        updateProgramThunk({
+          id,
+          data: { isArchived: isArchiveProp },
+        }),
+      )
+    }
+    setIsEdit(false)
+  }
+
+  const favoriteProgramHandler = () => {
+    if (isFavorite === true) {
+      if (
+        window.confirm(
+          'Вы действительно хотите удалить программу из любимых? Если программа архивирована, то вы ее потеряете',
+        )
+      ) {
+        dispatch(
+          updateProgramThunk({
+            id,
+            data: { isFavorite: !isFavorite },
+          }),
+        )
+      }
+    } else {
+      dispatch(
+        updateProgramThunk({
+          id,
+          data: { isFavorite: !isFavorite },
+        }),
+      )
+    }
+    setIsEdit(false)
+  }
+
   const onToggleSong = (isChecked: boolean, checkedSong: Song) => {
     if (isChecked) {
       setSelectedSongs((prev) => [...prev, checkedSong])
@@ -124,7 +186,7 @@ export function ProgramCard({
       onOpenChange={(open) => {
         setOpenExternal(open ? id : null)
       }}
-      className="rounded-xl bg-secondary"
+      className={`rounded-xl bg-secondary`}
     >
       <CollapsibleTrigger asChild>
         <button
@@ -137,16 +199,34 @@ export function ProgramCard({
             value={programName}
             className={`text-lg md:text-lg font-semibold truncate shadow-none border-t-0 border-x-0 px-0 pt-0 rounded-none duration-200 transition-all focus-visible:border-border disabled:opacity-100 disabled:border-transparent dark:bg-transparent ${
               isOpenExternal ? 'text-foreground' : 'text-muted-foreground'
-            }`}
+            } ${type === 'archived' ? 'line-through' : ''}`}
           />
           <span className="absolute top-[78%] left-3 right-full group-has-focus-visible:right-3 duration-300 h-px bg-primary" />
-          {!isEdit && (
-            <ChevronDownIcon
-              className={`transition-transform duration-200 ${
-                isOpenExternal ? 'rotate-180' : 'stroke-muted-foreground'
-              }`}
-            />
-          )}
+          <div className="flex gap-2">
+            {/* {isFavorite && (
+              <Badge
+                className="border-destructive text-destructive rounded-sm"
+                variant={'outline'}
+              >
+                Любимое
+              </Badge>
+            )}
+            {isArchived && (
+              <Badge
+                className="border-third text-third rounded-sm"
+                variant={'outline'}
+              >
+                Архив
+              </Badge>
+            )} */}
+            {!isEdit && (
+              <ChevronDownIcon
+                className={`transition-transform duration-200 ${
+                  isOpenExternal ? 'rotate-180' : 'stroke-muted-foreground'
+                }`}
+              />
+            )}
+          </div>
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent
@@ -183,43 +263,97 @@ export function ProgramCard({
               </li>
             )}
           </ul>
+          {type === 'ready' ? (
+            <>
+              {!isEdit ? (
+                <button
+                  onClick={() => setIsEdit(true)}
+                  className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-dashed border-foreground/20 dark:border-border w-full text-center text-muted-foreground"
+                >
+                  <PenIcon size={14} />
+                  изменить
+                </button>
+              ) : (
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => archiveProgramHandler(true)}
+                      className="text-center px-2 py-1.5 rounded-md bg-third/15 text-third disabled:opacity-50 dark:font-medium"
+                    >
+                      <ArchiveIcon />
+                    </button>
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={favoriteProgramHandler}
+                      className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+                    >
+                      {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
+                    </button>
+                  </div>
 
-          {!isEdit ? (
-            <button
-              onClick={() => setIsEdit(true)}
-              className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-dashed border-foreground/20 dark:border-border w-full text-center text-muted-foreground"
-            >
-              <PenIcon size={14} />
-              изменить
-            </button>
+                  <div className="space-x-2">
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => setIsEdit(false)}
+                      className="self-end w-fit text-center bg-border text-muted-foreground px-3 py-1.5 rounded-md disabled:opacity-50 dark:font-medium"
+                    >
+                      отменить
+                    </button>
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={saveHandler}
+                      className="w-fit text-center px-3 py-1.5 rounded-md bg-primary/15 dark:bg-primary dark:text-background text-primary disabled:opacity-50 dark:font-medium"
+                    >
+                      сохранить
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : type === 'favorite' ? (
+            <div className="flex items-center gap-2">
+              {isArchived && (
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => archiveProgramHandler(false)}
+                  className="text-center px-2 py-1.5 rounded-md bg-primary/15 text-primary disabled:opacity-50 dark:font-medium"
+                >
+                  <RefreshCwIcon />
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={loading}
+                onClick={favoriteProgramHandler}
+                className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+              >
+                {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
+              </button>
+            </div>
           ) : (
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 disabled={loading}
                 onClick={deleteProgram}
-                className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+                className="text-center px-2 py-1.5 rounded-md bg-muted-foreground/15 text-muted-foreground disabled:opacity-50 dark:font-medium"
               >
                 <Trash2Icon />
               </button>
-              <div className="space-x-2">
-                <button
-                  type="button"
-                  disabled={loading}
-                  onClick={() => setIsEdit(false)}
-                  className="self-end w-fit text-center bg-border text-muted-foreground px-3 py-1.5 rounded-md disabled:opacity-50 dark:font-medium"
-                >
-                  отменить
-                </button>
-                <button
-                  type="button"
-                  disabled={loading}
-                  onClick={saveHandler}
-                  className="w-fit text-center px-3 py-1.5 rounded-md bg-primary/15 dark:bg-primary dark:text-background text-primary disabled:opacity-50 dark:font-medium"
-                >
-                  сохранить
-                </button>
-              </div>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => archiveProgramHandler(false)}
+                className="text-center px-2 py-1.5 rounded-md bg-primary/15 text-primary disabled:opacity-50 dark:font-medium"
+              >
+                <RefreshCwIcon />
+              </button>
             </div>
           )}
         </div>

@@ -90,12 +90,9 @@ export const programSlice = createSlice({
       })
       .addCase(updateProgramThunk.fulfilled, (state, action) => {
         state.loading = false
-        const index = state.items.findIndex(
-          (program) => program.id === action.payload.id,
+        state.items = state.items.map((p) =>
+          p.id === action.payload.id ? action.payload : p,
         )
-        if (index !== -1) {
-          state.items[index] = action.payload
-        }
         state.current = null
       })
       // deleteProgramThunk

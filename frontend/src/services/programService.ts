@@ -5,14 +5,18 @@ export type CreateProgramDto = {
   name: string
   songsId: number[]
 }
-export type UpdateProgramDto = Partial<CreateProgramDto>
+export type UpdateProgramDto = {
+  name?: string
+  songsId?: number[]
+  isArchived?: boolean
+  isFavorite?: boolean
+}
 
 export const programService = {
   getAllPrograms: async () => {
     const { data } = await apiInstance.get<Program[]>('/program')
     return data
   },
-
   getProgram: async (id: number) => {
     const { data } = await apiInstance.get<Program>(`/program/${id}`)
     return data

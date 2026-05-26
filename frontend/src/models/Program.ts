@@ -12,4 +12,6 @@ export interface Program {
   id: number
   name: string
   songs: ProgramSong[]
+  isArchived: boolean
+  isFavorite: boolean
 }

@@ -26,13 +26,15 @@ const styles = [
 
 export default function LiveModePage() {
   const { items, loading } = useAppSelector((state) => state.program)
+  const programs = items.filter((item) => !item.isArchived)
+
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isOpen, setIsOpen] = useState(items.length === 1 ? false : true)
-  const [currentProgram, setCurrentProgram] = useState<Program>(items[0])
+  const [isOpen, setIsOpen] = useState(programs.length === 1 ? false : true)
+  const [currentProgram, setCurrentProgram] = useState<Program>(programs[0])
 
   if (loading) return <Loading />
 
-  if (items.length === 0 || !currentProgram) {
+  if (programs.length === 0 || !currentProgram) {
     return <Navigate to={'/'} />
   }
 
@@ -96,9 +98,9 @@ export default function LiveModePage() {
             </DrawerTitle>
           </DrawerHeader>
           <div
-            className={`${items.length > 0 ? 'grid grid-cols-2' : ''} items-center gap-3 px-2 pb-5`}
+            className={`${programs.length > 0 ? 'grid grid-cols-2' : ''} items-center gap-3 px-2 pb-5`}
           >
-            {items.map((program, i) => (
+            {programs.map((program, i) => (
               <Button
                 onClick={() => {
                   setCurrentProgram(program)
