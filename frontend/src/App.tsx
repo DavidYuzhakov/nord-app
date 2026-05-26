@@ -3,14 +3,16 @@ import HomePage from './pages/HomePage'
 import { Layout } from './Layout'
 import { SectionLayout } from './SectionLayout'
 import NewProgramPage from './pages/NewProgramPage'
-import SongsPage from './pages/SongsPage'
-import LiveModePage from './pages/LiveModePage'
 import SongDetailPage from './pages/SongDetailPage'
-import MutationSongPage from './pages/MutationSongPage'
 import { useAppSelector } from './store/hooks'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import { Loading } from './components/Loading'
+
+const MutationSongPage = lazy(() => import('./pages/MutationSongPage'))
+const LiveModePage = lazy(() => import('./pages/LiveModePage'))
+const SongsPage = lazy(() => import('./pages/SongsPage'))
 
 function App() {
   const mode = useAppSelector((state) => state.settings.mode)
@@ -46,17 +48,21 @@ function App() {
       <Route
         path="/live-mode"
         element={
-          <Layout>
-            <LiveModePage />
-          </Layout>
+          <Suspense fallback={<Loading />}>
+            <Layout>
+              <LiveModePage />
+            </Layout>
+          </Suspense>
         }
       />
       <Route
         path="/songs"
         element={
-          <Layout>
-            <SongsPage />
-          </Layout>
+          <Suspense fallback={<Loading />}>
+            <Layout>
+              <SongsPage />
+            </Layout>
+          </Suspense>
         }
       />
       <Route
@@ -70,9 +76,11 @@ function App() {
       <Route
         path="/song/:id/edit"
         element={
-          <SectionLayout title="Редактирование">
-            <MutationSongPage />
-          </SectionLayout>
+          <Suspense fallback={<Loading />}>
+            <SectionLayout title="Редактирование">
+              <MutationSongPage />
+            </SectionLayout>
+          </Suspense>
         }
       />
       <Route
