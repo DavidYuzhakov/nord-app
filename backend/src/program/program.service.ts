@@ -88,6 +88,9 @@ export class ProgramService {
       };
     }
 
+    if (dto.isArchived !== undefined) data.isArchived = dto.isArchived;
+    if (dto.isFavorite !== undefined) data.isFavorite = dto.isFavorite;
+
     return this.prisma.program.update({
       where: { id },
       data,

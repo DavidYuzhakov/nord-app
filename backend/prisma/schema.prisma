@@ -36,9 +36,11 @@ model ProgramSong {
 }
 
 model Program {
-  id        Int           @id @default(autoincrement())
-  name      String
-  songs     ProgramSong[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id         Int           @id @default(autoincrement())
+  name       String
+  songs      ProgramSong[]
+  isFavorite Boolean       @default(false)
+  isArchived Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
