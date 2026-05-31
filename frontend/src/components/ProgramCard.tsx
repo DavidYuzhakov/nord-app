@@ -104,35 +104,19 @@ export function ProgramCard({
   }
 
   const archiveProgramHandler = (isArchiveProp: boolean) => {
-    if (isArchiveProp === true) {
-      if (
-        window.confirm(
-          `Вы действительно хотите архивировать программу "${name}"?`,
-        )
-      )
-        dispatch(
-          updateProgramThunk({
-            id,
-            data: { isArchived: isArchiveProp },
-          }),
-        )
-    } else {
-      dispatch(
-        updateProgramThunk({
-          id,
-          data: { isArchived: isArchiveProp },
-        }),
-      )
-    }
+    dispatch(
+      updateProgramThunk({
+        id,
+        data: { isArchived: isArchiveProp },
+      }),
+    )
     setIsEdit(false)
   }
 
   const favoriteProgramHandler = () => {
     if (isFavorite === true) {
       if (
-        window.confirm(
-          'Вы действительно хотите удалить программу из любимых? Если программа архивирована, то вы ее потеряете',
-        )
+        window.confirm('Вы действительно хотите удалить программу из любимых?')
       ) {
         dispatch(
           updateProgramThunk({
@@ -353,6 +337,14 @@ export function ProgramCard({
                 className="text-center px-2 py-1.5 rounded-md bg-primary/15 text-primary disabled:opacity-50 dark:font-medium"
               >
                 <RefreshCwIcon />
+              </button>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={favoriteProgramHandler}
+                className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+              >
+                {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
               </button>
             </div>
           )}

@@ -44,7 +44,7 @@ export default function HomePage() {
         </button>
       </div>
       <div className="space-y-8">
-        {['ready', 'favorite'].map((type) => (
+        {['ready', 'favorite', 'archived'].map((type) => (
           <Program key={type} type={type as TypeProgram} />
         ))}
       </div>

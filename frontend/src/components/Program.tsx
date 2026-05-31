@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Skeleton } from './ui/skeleton'
 import { ProgramCard } from './ProgramCard'
 import type { Program } from '@/models/Program'
-import { HeartIcon } from 'lucide-react'
+import { ArchiveIcon, HeartIcon } from 'lucide-react'
 import type { TypeProgram } from '@/pages/HomePage'
 
 export function Program({ type }: { type: TypeProgram }) {
@@ -22,9 +22,13 @@ export function Program({ type }: { type: TypeProgram }) {
       <h3 className="text-xl font-semibold flex items-center gap-1">
         {type === 'ready' ? (
           <>Готовые программы</>
-        ) : (
+        ) : type === 'favorite' ? (
           <>
             Любимые программы <HeartIcon className="stroke-destructive" />
+          </>
+        ) : (
+          <>
+            Архив программ <ArchiveIcon className="stroke-third" />
           </>
         )}
       </h3>
