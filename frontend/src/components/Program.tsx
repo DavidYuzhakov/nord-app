@@ -16,7 +16,15 @@ export function Program({ type }: { type: TypeProgram }) {
       ? items.filter((item) => !item.isArchived)
       : type === 'favorite'
         ? items.filter((item) => item.isFavorite)
-        : items.filter((item) => item.isArchived)
+        : items
+            .filter((item) => item.isArchived)
+            .sort(
+              (a, b) =>
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime(),
+            )
+
+  console.log(programs)
   return (
     <div className="space-y-2.5">
       <h3 className="text-xl font-semibold flex items-center gap-1">

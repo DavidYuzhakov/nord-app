@@ -14,4 +14,5 @@ export interface Program {
   songs: ProgramSong[]
   isArchived: boolean
   isFavorite: boolean
+  updatedAt: string
 }
