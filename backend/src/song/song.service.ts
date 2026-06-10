@@ -25,7 +25,18 @@ export class SongService {
   findAll(dto: GetSongsDto) {
     const { search } = dto;
     return this.prisma.song.findMany({
-      where: search ? { name: { contains: search, mode: 'insensitive' } } : {},
+      where: search
+        ? {
+            OR: [
+              {
+                name: { contains: search, mode: 'insensitive' },
+              },
+              {
+                text: { contains: search, mode: 'insensitive' },
+              },
+            ],
+          }
+        : {},
       orderBy: { name: 'asc' },
     });
   }
