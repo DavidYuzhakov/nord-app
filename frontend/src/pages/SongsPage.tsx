@@ -11,6 +11,7 @@ import { useDebounce } from '@/hook/useDebounce'
 import type { Program } from '@/models/Program'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
+  fetchPrograms,
   insertAddedSong,
   updateProgramThunk,
 } from '@/store/reducers/programSlice'
@@ -42,6 +43,11 @@ export default function SongsPage() {
       }),
     )
   }, [debouncedValue, dispatch])
+
+  useEffect(() => {
+    if (programs.length > 0) return
+    dispatch(fetchPrograms())
+  }, [])
 
   const addSongToProgram = (
     e: React.MouseEvent,
