@@ -39,7 +39,8 @@ export default function SongsPage() {
   useEffect(() => {
     dispatch(
       fetchSongs({
-        search: debouncedValue.trim().length > 0 ? debouncedValue : undefined,
+        search:
+          debouncedValue.trim().length > 0 ? debouncedValue.trim() : undefined,
       }),
     )
   }, [debouncedValue, dispatch])
