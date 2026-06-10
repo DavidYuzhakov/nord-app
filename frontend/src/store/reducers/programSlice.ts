@@ -1,21 +1,28 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from '@reduxjs/toolkit'
 import type { Program } from '@/models/Program'
 import {
   programService,
   type CreateProgramDto,
   type UpdateProgramDto,
 } from '@/services/programService'
+import type { Song } from '@/models/Song'
 
 interface ProgramState {
   items: Program[]
   current: Program | null
   loading: boolean
+  addedSong: Song | null
 }
 
 const initialState: ProgramState = {
   items: [],
   current: null,
   loading: false,
+  addedSong: null,
 }
 
 export const fetchPrograms = createAsyncThunk<Program[]>(
@@ -57,7 +64,14 @@ export const deleteProgramThunk = createAsyncThunk<number, number>(
 export const programSlice = createSlice({
   name: 'program',
   initialState,
-  reducers: {},
+  reducers: {
+    destroyAddedSong: (state) => {
+      state.addedSong = null
+    },
+    insertAddedSong: (state, action: PayloadAction<Song>) => {
+      state.addedSong = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder
       // fetchPrograms
@@ -110,3 +124,5 @@ export const programSlice = createSlice({
       })
   },
 })
+
+export const { destroyAddedSong, insertAddedSong } = programSlice.actions

@@ -10,7 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useDebounce } from '@/hook/useDebounce'
 import type { Program } from '@/models/Program'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { updateProgramThunk } from '@/store/reducers/programSlice'
+import {
+  insertAddedSong,
+  updateProgramThunk,
+} from '@/store/reducers/programSlice'
 import { fetchSongs } from '@/store/reducers/songSlice'
 import {
   GaugeIcon,
@@ -139,17 +142,20 @@ export default function SongsPage() {
                 align="end"
                 className="bg-background/20 backdrop-blur-lg"
               >
-                {programs.map((program) => (
-                  <DropdownMenuItem
-                    className="text-base focus:bg-transparent font-medium border-b border-border/50 rounded-none py-3"
-                    onClick={(e) => addSongToProgram(e, program, song.id)}
-                  >
-                    {program.name}
-                  </DropdownMenuItem>
-                ))}
+                {programs
+                  .filter((program) => !program.isArchived)
+                  .map((program) => (
+                    <DropdownMenuItem
+                      className="text-base focus:bg-transparent font-medium border-b border-border/50 rounded-none py-3"
+                      onClick={(e) => addSongToProgram(e, program, song.id)}
+                    >
+                      {program.name}
+                    </DropdownMenuItem>
+                  ))}
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.stopPropagation()
+                    dispatch(insertAddedSong(song))
                     navigate('/new-program')
                   }}
                   className="text-base focus:text-primary text-primary text-center focus:bg-transparent font-semibold rounded-none py-3"

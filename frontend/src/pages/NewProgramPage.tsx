@@ -5,7 +5,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { Song } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { createProgramThunk } from '@/store/reducers/programSlice'
+import {
+  createProgramThunk,
+  destroyAddedSong,
+} from '@/store/reducers/programSlice'
 import {
   DndContext,
   MouseSensor,
@@ -16,13 +19,13 @@ import {
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function NewProgramPage() {
   const [name, setName] = useState('')
   const [songs, setSongs] = useState<Song[]>([])
-  const loading = useAppSelector((state) => state.program.loading)
+  const { loading, addedSong } = useAppSelector((state) => state.program)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -87,6 +90,12 @@ export default function NewProgramPage() {
       setSongs((prev) => prev.filter((s) => s.id !== checkedSong.id))
     }
   }
+
+  useEffect(() => {
+    if (!addedSong) return
+    setSongs([addedSong])
+    dispatch(destroyAddedSong())
+  }, [addedSong, dispatch])
 
   return (
     <form onSubmit={submitHandler} className="py-4 space-y-3 flex flex-col">
