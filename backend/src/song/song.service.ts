@@ -22,23 +22,45 @@ export class SongService {
     });
   }
 
-  findAll(dto: GetSongsDto) {
+  async findAll(dto: GetSongsDto) {
     const { search } = dto;
-    return this.prisma.song.findMany({
-      where: search
-        ? {
-            OR: [
-              {
-                name: { contains: search, mode: 'insensitive' },
-              },
-              {
-                text: { contains: search, mode: 'insensitive' },
-              },
-            ],
-          }
-        : {},
-      orderBy: { name: 'asc' },
+    if (!search) {
+      return this.prisma.song.findMany({
+        orderBy: { name: 'asc' },
+      });
+    }
+
+    const songsByName = await this.prisma.song.findMany({
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+      orderBy: {
+        name: 'asc',
+      },
     });
+
+    const songsByText = await this.prisma.song.findMany({
+      where: {
+        text: {
+          contains: search,
+          mode: 'insensitive',
+        },
+        NOT: {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
+    return [...songsByName, ...songsByText];
   }
 
   findOne(id: number) {
