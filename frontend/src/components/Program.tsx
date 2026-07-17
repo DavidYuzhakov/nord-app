@@ -24,7 +24,6 @@ export function Program({ type }: { type: TypeProgram }) {
                 new Date(a.updatedAt).getTime(),
             )
 
-  console.log(programs)
   return (
     <div className="space-y-2.5">
       <h3 className="text-xl font-semibold flex items-center gap-1">

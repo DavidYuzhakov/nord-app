@@ -163,7 +163,7 @@ export default function SongsPage() {
                   onClick={(e) => {
                     e.stopPropagation()
                     dispatch(insertAddedSong(song))
-                    navigate('/new-program')
+                    navigate('/program/create')
                   }}
                   className="text-base focus:text-primary text-primary text-center focus:bg-transparent font-semibold rounded-none py-3"
                 >

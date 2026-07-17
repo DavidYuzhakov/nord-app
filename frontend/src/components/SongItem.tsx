@@ -4,13 +4,23 @@ import { CSS } from '@dnd-kit/utilities'
 import { Trash2Icon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-interface SongItemProps {
-  isEdit: boolean
+interface SongItemEditProps {
+  isEdit: true
   onDelete: (id: number) => void
   item: Song
 }
 
-export function SongItem({ item, isEdit, onDelete }: SongItemProps) {
+interface SongItemViewProps {
+  isEdit: false
+  onDelete?: (id: number) => void
+  item: Song
+}
+
+export function SongItem({
+  item,
+  isEdit,
+  onDelete,
+}: SongItemEditProps | SongItemViewProps) {
   const {
     attributes,
     isDragging,

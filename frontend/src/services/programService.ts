@@ -4,10 +4,12 @@ import type { Program } from '@/models/Program'
 export type CreateProgramDto = {
   name: string
   songsId: number[]
+  date: string
 }
 export type UpdateProgramDto = {
   name?: string
   songsId?: number[]
+  date?: string
   isArchived?: boolean
   isFavorite?: boolean
 }

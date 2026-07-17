@@ -15,4 +15,5 @@ export interface Program {
   isArchived: boolean
   isFavorite: boolean
   updatedAt: string
+  date?: string
 }

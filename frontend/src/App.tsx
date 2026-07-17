@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import { Layout } from './Layout'
 import { SectionLayout } from './SectionLayout'
-import NewProgramPage from './pages/NewProgramPage'
+import MutationProgramPage from './pages/MutationProgramPage'
 import SongDetailPage from './pages/SongDetailPage'
 import { useAppSelector } from './store/hooks'
 import { lazy, Suspense, useEffect } from 'react'
@@ -38,10 +38,18 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
-        path="/new-program"
+        path="/program/create"
         element={
           <SectionLayout title="Новая программа">
-            <NewProgramPage />
+            <MutationProgramPage />
+          </SectionLayout>
+        }
+      />
+      <Route
+        path="/program/:id/edit"
+        element={
+          <SectionLayout title="Редактирование">
+            <MutationProgramPage />
           </SectionLayout>
         }
       />

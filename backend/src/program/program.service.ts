@@ -37,6 +37,7 @@ export class ProgramService {
           songs: {
             create: songData,
           },
+          date: new Date(dto.date),
         },
         include: this.programInclude,
       });

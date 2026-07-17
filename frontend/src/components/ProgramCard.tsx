@@ -1,14 +1,3 @@
-import { useEffect, useState } from 'react'
-import {
-  DndContext,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from '@dnd-kit/core'
-import { arrayMove, SortableContext } from '@dnd-kit/sortable'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
   ArchiveIcon,
   ChevronDownIcon,
@@ -25,20 +14,20 @@ import {
 } from './ui/collapsible'
 import { SongItem } from './SongItem'
 import type { Program } from '@/models/Program'
-import { AddSong } from './AddSong'
-import type { Song } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   deleteProgramThunk,
   updateProgramThunk,
 } from '@/store/reducers/programSlice'
-import { Input } from './ui/input'
 import type { TypeProgram } from '@/pages/HomePage'
+import { Badge } from './ui/badge'
+import { useNavigate } from 'react-router-dom'
 
 export function ProgramCard({
   id,
   name,
   songs,
+  date,
   isArchived,
   isFavorite,
   isOpenExternal,
@@ -49,53 +38,9 @@ export function ProgramCard({
   type: TypeProgram
   setOpenExternal: (id: number | null) => void
 }) {
-  const [selectedSongs, setSelectedSongs] = useState<Song[]>(
-    songs.map((s) => s.song),
-  )
-  const [prevSongs, setPrevSongs] = useState(songs)
-
-  if (songs !== prevSongs) {
-    setPrevSongs(songs)
-    setSelectedSongs(songs.map((s) => s.song))
-  }
-
-  const [isEdit, setIsEdit] = useState(false)
-  const [programName, setProgramName] = useState(name)
-
   const dispatch = useAppDispatch()
   const loading = useAppSelector((state) => state.program.loading)
-
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 250,
-      tolerance: 5,
-    },
-  })
-
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 5,
-    },
-  })
-
-  const sensors = useSensors(touchSensor, mouseSensor)
-
-  const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e
-    if (over && active.id !== over.id) {
-      setSelectedSongs((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id)
-        const newIndex = items.findIndex((item) => item.id === over.id)
-        return arrayMove(items, oldIndex, newIndex)
-      })
-    }
-  }
-
-  const deleteHandler = (id: number) => {
-    if (window.confirm('Вы действительно хотите удалить хвалу?')) {
-      setSelectedSongs((prev) => prev.filter((s) => s.id !== id))
-    }
-  }
+  const navigate = useNavigate()
 
   const deleteProgram = () => {
     if (window.confirm('Вы действительно хотите удалить программу?')) {
@@ -110,7 +55,6 @@ export function ProgramCard({
         data: { isArchived: isArchiveProp },
       }),
     )
-    setIsEdit(false)
   }
 
   const favoriteProgramHandler = () => {
@@ -133,35 +77,7 @@ export function ProgramCard({
         }),
       )
     }
-    setIsEdit(false)
   }
-
-  const onToggleSong = (isChecked: boolean, checkedSong: Song) => {
-    if (isChecked) {
-      setSelectedSongs((prev) => [...prev, checkedSong])
-    } else {
-      setSelectedSongs((prev) => prev.filter((s) => s.id !== checkedSong.id))
-    }
-  }
-
-  const saveHandler = async () => {
-    try {
-      await dispatch(
-        updateProgramThunk({
-          id,
-          data: { name: programName, songsId: selectedSongs.map((s) => s.id) },
-        }),
-      )
-      setIsEdit(false)
-    } catch (e) {
-      console.log(e)
-      alert('Не удалось сохранить программу')
-    }
-  }
-
-  useEffect(() => {
-    setIsEdit((prev) => (isOpenExternal ? prev : false))
-  }, [isOpenExternal])
 
   return (
     <Collapsible
@@ -173,44 +89,20 @@ export function ProgramCard({
       className={`rounded-xl bg-secondary`}
     >
       <CollapsibleTrigger asChild>
-        <button
-          disabled={isEdit}
-          className="relative w-full group flex items-center gap-5 justify-between p-3"
-        >
-          <Input
-            disabled={!isEdit}
-            onChange={(e) => setProgramName(e.target.value)}
-            value={programName}
-            className={`text-lg md:text-lg font-semibold truncate shadow-none border-t-0 border-x-0 px-0 pt-0 rounded-none duration-200 transition-all focus-visible:border-border disabled:opacity-100 disabled:border-transparent dark:bg-transparent ${
+        <button className="w-full group flex items-center gap-5 justify-between p-3">
+          <h5
+            className={`text-lg md:text-lg font-semibold truncate rounded-none duration-200 transition-all ${
               isOpenExternal ? 'text-foreground' : 'text-muted-foreground'
             } ${type === 'archived' ? 'line-through' : ''}`}
+          >
+            {name}
+          </h5>
+
+          <ChevronDownIcon
+            className={`transition-transform duration-200 ${
+              isOpenExternal ? 'rotate-180' : 'stroke-muted-foreground'
+            }`}
           />
-          <span className="absolute top-[78%] left-3 right-full group-has-focus-visible:right-3 duration-300 h-px bg-primary" />
-          <div className="flex gap-2">
-            {/* {isFavorite && (
-              <Badge
-                className="border-destructive text-destructive rounded-sm"
-                variant={'outline'}
-              >
-                Любимое
-              </Badge>
-            )}
-            {isArchived && (
-              <Badge
-                className="border-third text-third rounded-sm"
-                variant={'outline'}
-              >
-                Архив
-              </Badge>
-            )} */}
-            {!isEdit && (
-              <ChevronDownIcon
-                className={`transition-transform duration-200 ${
-                  isOpenExternal ? 'rotate-180' : 'stroke-muted-foreground'
-                }`}
-              />
-            )}
-          </div>
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent
@@ -222,86 +114,73 @@ export function ProgramCard({
       >
         <div className="px-3 pb-3 space-y-3">
           <ul className="space-y-3 px-2 mb-7">
-            <DndContext
-              modifiers={[restrictToVerticalAxis]}
-              sensors={sensors}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext items={selectedSongs}>
-                {selectedSongs.map((s) => (
-                  <SongItem
-                    key={s.id}
-                    item={s}
-                    onDelete={deleteHandler}
-                    isEdit={isEdit}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-            {isEdit && (
-              <li className="text-center pt-1 px-3">
-                <AddSong
-                  selectedIds={selectedSongs.map((s) => s.id)}
-                  onToggleSong={onToggleSong}
-                />
-              </li>
-            )}
+            {songs.map((s) => (
+              <SongItem key={s.id} item={s.song} isEdit={false} />
+            ))}
           </ul>
-          {type === 'ready' ? (
-            <>
-              {!isEdit ? (
+          {date && (
+            <Badge variant={'outline'}>
+              {new Date(date).toLocaleDateString('ru-RU')}
+            </Badge>
+          )}
+          <div className="flex justify-between items-center gap-3 w-full">
+            {type === 'ready' ? (
+              <>
                 <button
-                  onClick={() => setIsEdit(true)}
+                  type="button"
+                  disabled={loading}
+                  onClick={favoriteProgramHandler}
+                  className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+                >
+                  {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => archiveProgramHandler(true)}
+                  className="text-center px-2 py-1.5 rounded-md bg-third/15 text-third disabled:opacity-50 dark:font-medium"
+                >
+                  <ArchiveIcon />
+                </button>
+                <button
+                  onClick={() => navigate(`/program/${id}/edit`)}
                   className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-dashed border-foreground/20 dark:border-border w-full text-center text-muted-foreground"
                 >
                   <PenIcon size={14} />
-                  изменить
+                  редактировать
                 </button>
-              ) : (
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => archiveProgramHandler(true)}
-                      className="text-center px-2 py-1.5 rounded-md bg-third/15 text-third disabled:opacity-50 dark:font-medium"
-                    >
-                      <ArchiveIcon />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={favoriteProgramHandler}
-                      className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
-                    >
-                      {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
-                    </button>
-                  </div>
-
-                  <div className="space-x-2">
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => setIsEdit(false)}
-                      className="self-end w-fit text-center bg-border text-muted-foreground px-3 py-1.5 rounded-md disabled:opacity-50 dark:font-medium"
-                    >
-                      отменить
-                    </button>
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={saveHandler}
-                      className="w-fit text-center px-3 py-1.5 rounded-md bg-primary/15 dark:bg-primary dark:text-background text-primary disabled:opacity-50 dark:font-medium"
-                    >
-                      сохранить
-                    </button>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : type === 'favorite' ? (
-            <div className="flex items-center gap-2">
-              {isArchived && (
+              </>
+            ) : type === 'favorite' ? (
+              <div className="flex items-center gap-2">
+                {isArchived && (
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => archiveProgramHandler(false)}
+                    className="text-center px-2 py-1.5 rounded-md bg-primary/15 text-primary disabled:opacity-50 dark:font-medium"
+                  >
+                    <RefreshCwIcon />
+                  </button>
+                )}
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={favoriteProgramHandler}
+                  className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+                >
+                  {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={deleteProgram}
+                  className="text-center px-2 py-1.5 rounded-md bg-muted-foreground/15 text-muted-foreground disabled:opacity-50 dark:font-medium"
+                >
+                  <Trash2Icon />
+                </button>
                 <button
                   type="button"
                   disabled={loading}
@@ -310,44 +189,17 @@ export function ProgramCard({
                 >
                   <RefreshCwIcon />
                 </button>
-              )}
-              <button
-                type="button"
-                disabled={loading}
-                onClick={favoriteProgramHandler}
-                className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
-              >
-                {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled={loading}
-                onClick={deleteProgram}
-                className="text-center px-2 py-1.5 rounded-md bg-muted-foreground/15 text-muted-foreground disabled:opacity-50 dark:font-medium"
-              >
-                <Trash2Icon />
-              </button>
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => archiveProgramHandler(false)}
-                className="text-center px-2 py-1.5 rounded-md bg-primary/15 text-primary disabled:opacity-50 dark:font-medium"
-              >
-                <RefreshCwIcon />
-              </button>
-              <button
-                type="button"
-                disabled={loading}
-                onClick={favoriteProgramHandler}
-                className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
-              >
-                {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
-              </button>
-            </div>
-          )}
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={favoriteProgramHandler}
+                  className="text-center px-2 py-1.5 rounded-md bg-destructive/15 text-destructive disabled:opacity-50 dark:font-medium"
+                >
+                  {isFavorite ? <HeartOffIcon /> : <HeartIcon />}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </CollapsibleContent>
     </Collapsible>

@@ -50,7 +50,7 @@ export default function HomePage() {
       </div>
 
       <Button
-        onClick={() => navigate('/new-program')}
+        onClick={() => navigate('/program/create')}
         className="flex items-center max-w-sm mx-auto fixed bottom-18 left-7 right-7 text-xl font-semibold py-6 px-2 rounded-full shadow-md dark:shadow-[0_0_20px_rgba(28,143,214,0.3)]"
       >
         Новая программа

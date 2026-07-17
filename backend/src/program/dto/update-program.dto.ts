@@ -4,9 +4,14 @@ import {
   IsArray,
   IsInt,
   IsBoolean,
+  IsDateString,
 } from 'class-validator';
 
 export class UpdateProgramDto {
+  @IsOptional()
+  @IsDateString()
+  date?: string;
+
   @IsString()
   @IsOptional()
   name?: string;

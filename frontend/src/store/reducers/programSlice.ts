@@ -90,6 +90,9 @@ export const programSlice = createSlice({
         state.loading = false
         state.current = action.payload
       })
+      .addCase(fetchProgram.rejected, (state) => {
+        state.loading = false
+      })
       // createProgramThunk
       .addCase(createProgramThunk.pending, (state) => {
         state.loading = true

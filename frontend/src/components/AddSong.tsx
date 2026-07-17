@@ -98,7 +98,7 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
       </div>
       <div
         onClick={() => setIsOpen(false)}
-        className={`fixed w-full h-svh top-0 left-0 bg-black/15 backdrop-blur-xs z-10 ${
+        className={`fixed w-full inset-0 bg-black/15 backdrop-blur-xs z-10 ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         } duration-200`}
       />
