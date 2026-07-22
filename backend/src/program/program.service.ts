@@ -75,6 +75,7 @@ export class ProgramService {
 
     const data: ProgramUpdateInput = {};
     if (dto.name) data.name = dto.name;
+    if (dto.date) data.date = dto.date;
 
     if (dto.songsId !== undefined) {
       await this.prisma.programSong.deleteMany({

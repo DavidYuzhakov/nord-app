@@ -13,7 +13,7 @@ import {
   fetchProgram,
   updateProgramThunk,
 } from '@/store/reducers/programSlice'
-import { getShortISO } from '@/utils/date'
+import { getISOString } from '@/utils/date'
 import {
   DndContext,
   MouseSensor,
@@ -102,7 +102,7 @@ export default function MutationProgramPage() {
           updateProgramThunk({
             id: Number(id),
             data: {
-              date: getShortISO(date),
+              date: getISOString(date),
               songsId: songs.map((song) => song.id),
               name: nameProgram,
             },
@@ -117,7 +117,7 @@ export default function MutationProgramPage() {
       try {
         await dispatch(
           createProgramThunk({
-            date: getShortISO(date),
+            date: getISOString(date),
             name: nameProgram,
             songsId: songs.map((song) => song.id),
           }),
