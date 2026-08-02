@@ -207,7 +207,7 @@ export default function MutationSongPage() {
             id="text"
             {...register('text', { required: true })}
             placeholder="Введите текст песни с аккордами"
-            className="resize-none h-100 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty border-none bg-muted"
+            className="resize-none h-100 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty border border-border shadow-none"
           />
         </div>
 
