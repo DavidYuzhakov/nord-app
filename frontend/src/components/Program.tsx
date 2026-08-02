@@ -48,8 +48,8 @@ export function Program({ type }: { type: TypeProgram }) {
             })
             .sort(
               (a, b) =>
-                new Date(b.date ?? b.updatedAt).getTime() -
-                new Date(a.date ?? b.updatedAt).getTime(),
+                new Date(b.date || b.updatedAt).getTime() -
+                new Date(a.date || b.updatedAt).getTime(),
             )
   }, [type, items, date])
 
