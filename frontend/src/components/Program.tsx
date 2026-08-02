@@ -19,7 +19,7 @@ export function Program({ type }: { type: TypeProgram }) {
 
   // Only for archive programs
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
+    from: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
     to: new Date(),
   })
 
