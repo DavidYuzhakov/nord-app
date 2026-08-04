@@ -9,6 +9,14 @@ export default defineConfig({
   server: {
     port: 5174,
     allowedHosts: ['surprisingly-successful-flea.cloudpub.ru'],
+    proxy: {
+      '/api': {
+        target: 'https://api.nord-app.ru',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   resolve: {
     alias: {

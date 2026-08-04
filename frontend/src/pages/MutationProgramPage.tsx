@@ -5,6 +5,11 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import type { Song } from '@/models/Song'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
@@ -24,8 +29,9 @@ import {
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
+import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { InfoIcon } from 'lucide-react'
+import { CalendarIcon, InfoIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -35,7 +41,6 @@ export default function MutationProgramPage() {
 
   const [songs, setSongs] = useState<Song[]>([])
   const [date, setDate] = useState<Date | undefined>()
-  const [month, setMonth] = useState(date) // только для того, чтобы при первом рендере открывался нужный месяц
   const [name, setName] = useState('')
   const placeholder =
     date?.toLocaleDateString('ru-RU', {
@@ -159,7 +164,6 @@ export default function MutationProgramPage() {
       setSongs(program.songs.map((s) => s.song))
       if (program.date) {
         setDate(new Date(program.date))
-        setMonth(new Date(program.date))
       }
     }
 
@@ -181,19 +185,54 @@ export default function MutationProgramPage() {
       onSubmit={submitHandler}
       className="py-4 space-y-2 flex flex-col pb-20"
     >
-      <Label className="text-lg font-semibold gap-0" htmlFor="date">
-        Дата<span className="text-destructive">*</span>
-      </Label>
-      <Calendar
-        id="date"
-        locale={ru}
-        mode="single"
-        month={month}
-        onMonthChange={setMonth}
-        selected={date}
-        onSelect={setDate}
-        className="w-full"
-      />
+      <div className="flex gap-2 m-0">
+        <div className="flex-1 space-y-2">
+          <Label className="text-base font-semibold" htmlFor="name">
+            Название
+          </Label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="px-4 py-6 text-base mb-2 border-none bg-muted"
+            id="name"
+            placeholder={placeholder}
+          />
+        </div>
+        <div className="shrink-0 space-y-2">
+          <Label className="text-base font-semibold gap-0" htmlFor="date">
+            Дата<span className="text-destructive">*</span>
+          </Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                id="date-picker-range"
+                className="justify-start font-normal h-12 rounded-md text-sm bg-muted dark:bg-input/30 border-none shadow-none"
+              >
+                <CalendarIcon />
+                {date ? (
+                  format(date, 'dd.MM.yyyy', { locale: ru })
+                ) : (
+                  <span className="text-muted-foreground">Выберите дату</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full rounded-md p-0" align="end">
+              <Calendar
+                className="p-2 w-full rounded-xl"
+                locale={ru}
+                mode="single"
+                defaultMonth={date}
+                selected={date}
+                onSelect={setDate}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      <p className="text-xs flex gap-1.5 text-muted-foreground mb-6">
+        <InfoIcon size={15} /> Название формируется автоматически на основе даты
+      </p>
       <Label className="text-lg font-semibold gap-0">
         Хвалы<span className="text-destructive">*</span>
       </Label>
@@ -224,20 +263,6 @@ export default function MutationProgramPage() {
           </li>
         </ul>
       </div>
-
-      <Label className="text-lg font-semibold" htmlFor="name">
-        Название
-      </Label>
-      <Input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="px-4 py-6 text-base mb-2 border-none bg-muted"
-        id="name"
-        placeholder={placeholder}
-      />
-      <p className="text-xs flex gap-1 items-center text-muted-foreground mb-6">
-        <InfoIcon size={15} /> Формируется автоматически на основе даты
-      </p>
 
       <Button
         disabled={loading}
