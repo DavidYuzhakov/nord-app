@@ -48,7 +48,7 @@ export default function SongsPage() {
   useEffect(() => {
     if (programs.length > 0) return
     dispatch(fetchPrograms())
-  }, [])
+  }, [dispatch, programs])
 
   const addSongToProgram = (
     e: React.MouseEvent,

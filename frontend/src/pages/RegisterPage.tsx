@@ -20,7 +20,11 @@ export default function RegisterPage() {
         <img
           draggable={false}
           className="max-w-14 select-none pointer-events-none"
-          src="/logo.png"
+          src="/logo.png?v=1"
+          width={56}
+          height={56}
+          decoding="async"
+          alt="Логотип"
         />
         <div className="flex gap-0.5 items-end">
           <span className="font-bold text-[26px]">Nord App</span>

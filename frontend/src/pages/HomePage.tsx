@@ -22,8 +22,15 @@ export default function HomePage() {
   return (
     <div className="pb-[130px]">
       <div className="flex items-center gap-2 py-3 mb-2.5">
-        <img className="size-10 rounded-full" src="/logo.png" alt="Логотип" />
-        <span className="flex-1 text-xl tracking-tighter font-bold flex gap-0.5 items-end">
+        <img
+          className="size-10 rounded-full"
+          src="/logo.png?v=1"
+          alt="Логотип"
+          width={40}
+          height={40}
+          decoding="async"
+        />
+        <span className="flex-1 text-xl tracking-tighter select-none font-bold flex gap-0.5 items-end">
           Nord App
           <div className="size-1.5 rounded-full bg-primary -translate-y-1" />
         </span>

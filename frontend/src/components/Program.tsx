@@ -56,7 +56,7 @@ export function Program({ type }: { type: TypeProgram }) {
   return (
     <div className="space-y-2.5">
       <div className="flex justify-between items-center gap-1 flex-wrap">
-        <h3 className="text-xl font-semibold flex items-center gap-1 text-nowrap ">
+        <h3 className="text-xl font-semibold flex items-center gap-1 text-nowrap select-none">
           {type === 'ready' ? (
             <>Готовые программы</>
           ) : type === 'favorite' ? (

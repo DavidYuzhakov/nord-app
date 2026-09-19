@@ -1,14 +1,11 @@
 import { ChevronLeft } from 'lucide-react'
+import { Suspense } from 'react'
+import { Outlet } from 'react-router-dom'
 import { BottomBar } from './components/BottomBar'
+import { Loading } from './components/Loading'
 import { useGoBack } from './hook/useGoBack'
 
-export function SectionLayout({
-  children,
-  title,
-}: {
-  children: React.ReactNode
-  title: string
-}) {
+export function SectionLayout({ title }: { title: string }) {
   const goBack = useGoBack()
 
   return (
@@ -23,7 +20,9 @@ export function SectionLayout({
         </button>
         <h5 className="flex-1 text-[22px] font-semibold">{title}</h5>
       </div>
-      {children}
+      <Suspense fallback={<Loading />}>
+        <Outlet />
+      </Suspense>
       <BottomBar />
     </div>
   )

@@ -2,11 +2,13 @@ import { HomeIcon, Music4Icon, RadioIcon } from 'lucide-react'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { loadLiveModePage, loadSongsPage } from '@/routeLoaders'
 
 interface INavLink {
   title: string
   to: string
   icon: React.JSX.Element
+  preload?: () => Promise<unknown>
 }
 
 const navLink: INavLink[] = [
@@ -19,12 +21,19 @@ const navLink: INavLink[] = [
     title: 'Live Mode',
     to: '/live-mode',
     icon: <RadioIcon size={23} className="stroke-inherit" />,
+    preload: loadLiveModePage,
   },
   {
     title: 'Хвалы',
     to: '/songs',
     icon: <Music4Icon size={23} className="stroke-inherit" />,
+    preload: loadSongsPage,
   },
+  // {
+  //   title: 'Профиль',
+  //   to: '/profile',
+  //   icon: <User2Icon size={23} className="stroke-inherit" />,
+  // },
 ]
 
 export function BottomBar() {
@@ -46,9 +55,9 @@ export function BottomBar() {
         test
         fixed bottom-3 left-2.5 right-2.5 z-1
         flex gap-2 justify-around items-center
-        rounded-4xl pt-1.5 pb-1
+        rounded-4xl p-0.5
         bg-secondary/60 backdrop-blur-xs
-        border-2 border-background/50
+        border-2 border-background/40
         dark:border-muted/50
         drop-shadow-xs
         shadow-[0_0_1px_rgba(0,0,0,0.07),0_0_2px_rgba(0,0,0,0.07),0_0_7px_rgba(0,0,0,0.04)]
@@ -62,13 +71,13 @@ export function BottomBar() {
         return (
           <li
             onClick={() => handleNavigate(nav.to)}
-            className="relative text-[11px] flex flex-col items-center dupration-200"
+            className={`relative text-[11px] flex-1 flex flex-col items-center transition-all duration-300 p-1 rounded-full ${isActive ? 'bg-primary/15' : 'bg-transparent'}`}
             key={nav.title}
           >
             <div
-              className={`transition-all duration-200 drop-shadow-sm ${
+              className={`drop-shadow-sm transition-all duration-300 ${
                 isActive
-                  ? 'stroke-primary scale-115 drop-shadow-primary/30'
+                  ? 'stroke-primary scale-120 drop-shadow-primary/30'
                   : 'stroke-secondary-foreground drop-shadow-transparent'
               }`}
             >
@@ -77,7 +86,7 @@ export function BottomBar() {
             <span
               className={`${
                 isActive ? 'text-primary' : 'text-secondary-foreground'
-              } font-semibold select-none`}
+              } font-semibold select-none transition-colors duration-300`}
             >
               {nav.title}
             </span>
