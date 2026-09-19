@@ -20,10 +20,11 @@
 
 Run from `backend/`:
 
-- `npm run build` for the Nest TypeScript build.
 - `./node_modules/.bin/eslint "src/**/*.ts" "test/**/*.ts" --ignore-pattern "src/generated/**"` for read-only linting.
 - `npm test -- --runInBand <path>` for focused Jest tests, or omit `<path>` for the full unit suite.
 - `npm run test:e2e -- --runInBand` only when PostgreSQL and the required environment are available and the task affects API integration.
+
+Do not run `npm run build` automatically after coding. Run it only when the user explicitly asks for a build or when the task specifically diagnoses or changes Nest production build behavior.
 
 Do not use `npm run lint` merely to check work: the package script includes `--fix` and can rewrite files. Service tests should provide a mocked `PrismaService`; tests must not rely on a developer's real database unless they are explicitly integration tests.
 

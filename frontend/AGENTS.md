@@ -20,8 +20,9 @@
 Run from `frontend/`:
 
 - `npm run lint` for static analysis.
-- `npm run build` for TypeScript and the production bundle.
 - `npm test -- --run <path>` for focused Vitest tests, or `npm test -- --run` when a test suite exists.
+
+Do not run `npm run build` automatically after coding. Run it only when the user explicitly asks for a build or when the task specifically diagnoses or changes production build behavior.
 
 Place tests beside the code as `*.test.ts` or `*.test.tsx` and prefer Testing Library assertions on behavior over implementation details. The repository currently has no frontend tests; do not describe a no-tests exit as a passing test run.
 

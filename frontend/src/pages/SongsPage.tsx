@@ -122,7 +122,9 @@ export default function SongsPage() {
             key={song.id}
           >
             <div className="truncate space-y-1">
-              <h4 className="font-semibold truncate">{song.name}</h4>
+              <h4 className="font-semibold truncate select-none">
+                {song.name}
+              </h4>
               <div className="flex gap-3">
                 <span className="text-[14px] font-semibold px-2 pr-2.5 py-0.5 rounded-md text-primary bg-primary/10 flex gap-1 items-center">
                   <Music2Icon size={15} />

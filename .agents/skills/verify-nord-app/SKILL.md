@@ -24,8 +24,9 @@ Run from `frontend/`:
 
 ```bash
 npm run lint
-npm run build
 ```
+
+Do not run `npm run build` as a routine post-code check. Run it only when the user explicitly asks for a build or when the task is specifically about production build configuration, build failures, release, or deployment.
 
 Find tests with `rg --files src -g '*.test.*' -g '*.spec.*'`. If tests exist, run focused tests first with `npm test -- --run <path>` and run the full suite when warranted. If none exist, report tests as not run; do not treat Vitest's “No test files found” exit as a pass.
 
@@ -36,9 +37,10 @@ For visible changes, exercise the affected flow in a browser at a narrow mobile 
 Run from `backend/`:
 
 ```bash
-npm run build
 ./node_modules/.bin/eslint "src/**/*.ts" "test/**/*.ts" --ignore-pattern "src/generated/**"
 ```
+
+Do not run `npm run build` as a routine post-code check. Run it only when the user explicitly asks for a build or when the task is specifically about Nest build configuration, build failures, release, or deployment.
 
 Run focused Jest tests with `npm test -- --runInBand <path>`, then the full unit suite when warranted. The existing suite may fail during module resolution because Jest does not map `@/`; verify whether a failure matches that baseline or was introduced by the change.
 

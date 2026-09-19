@@ -37,6 +37,7 @@ Read the nearest nested `AGENTS.md` before changing files below `frontend/` or `
 
 - Use the repository skill `$verify-nord-app` after implementation and before claiming completion.
 - Prefer checks for the touched application first, then broader checks when the change crosses boundaries or affects deployment.
+- Do not run frontend or backend production builds automatically after writing code. Run a build only when the user explicitly requests it or when diagnosing a build, release, or deployment task whose result cannot be verified without it.
 - Report every check as passed, failed, or not run. Separate failures introduced by the change from known baseline failures.
 
 Baseline observed on 2026-09-19:
