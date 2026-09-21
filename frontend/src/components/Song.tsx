@@ -250,7 +250,7 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
               ? dispatch(updateHideChords('off'))
               : dispatch(updateHideChords('on'))
           }
-          className={`ml-auto py-1 px-2.5 rounded duration-200 ${hideChords === 'on' ? 'bg-primary' : 'bg-muted'}`}
+          className={`ml-auto py-1 px-2.5 rounded border duration-200 ${hideChords === 'on' ? 'bg-primary' : 'bg-transparent'}`}
           type="button"
         >
           <TypeIcon

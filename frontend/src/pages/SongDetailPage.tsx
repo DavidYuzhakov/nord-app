@@ -54,7 +54,7 @@ export default function SongDetailPage() {
         <button
           onClick={() => navigate(`/song/${current.id}/edit`)}
           type="button"
-          className="bg-muted p-1.5 rounded-md"
+          className="p-2 rounded-md bg-secondary/20 backdrop-blur-xs drop-shadow-xs border"
         >
           <PencilIcon size={20} className="" />
         </button>

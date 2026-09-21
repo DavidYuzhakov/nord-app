@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import { Song } from '@/components/Song'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
 import {
   Drawer,
@@ -24,7 +24,7 @@ const styles = [
   'text-orange-400 bg-orange-400/25',
 ]
 
-export default function LiveModePage() {
+const LiveModePage = memo(() => {
   const { items, loading } = useAppSelector((state) => state.program)
   const programs = items.filter((item) => !item.isArchived)
 
@@ -117,4 +117,6 @@ export default function LiveModePage() {
       </Drawer>
     </>
   )
-}
+})
+
+export default LiveModePage

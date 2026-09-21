@@ -129,3 +129,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.text-textarea {
+  height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+@supports (field-sizing: content) {
+  .text-textarea {
+    height: auto;
+    min-height: 0;
+    field-sizing: content;
+  }
+}

@@ -71,11 +71,11 @@ export function BottomBar() {
         return (
           <li
             onClick={() => handleNavigate(nav.to)}
-            className={`relative text-[11px] flex-1 flex flex-col items-center transition-all duration-300 p-1 rounded-full ${isActive ? 'bg-primary/15' : 'bg-transparent'}`}
+            className={`relative text-[11px] flex-1 flex flex-col items-center transition-all duration-200 p-1 rounded-full ${isActive ? 'bg-primary/15' : 'bg-transparent'}`}
             key={nav.title}
           >
             <div
-              className={`drop-shadow-sm transition-all duration-300 ${
+              className={`drop-shadow-sm transition-all duration-200 ${
                 isActive
                   ? 'stroke-primary scale-120 drop-shadow-primary/30'
                   : 'stroke-secondary-foreground drop-shadow-transparent'
@@ -86,7 +86,7 @@ export function BottomBar() {
             <span
               className={`${
                 isActive ? 'text-primary' : 'text-secondary-foreground'
-              } font-semibold select-none transition-colors duration-300`}
+              } font-semibold select-none transition-colors duration-200`}
             >
               {nav.title}
             </span>

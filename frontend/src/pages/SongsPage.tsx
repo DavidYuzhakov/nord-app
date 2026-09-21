@@ -24,10 +24,10 @@ import {
   SearchIcon,
   XIcon,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function SongsPage() {
+const SongsPage = memo(() => {
   const { items, loading } = useAppSelector((state) => state.song)
   const programs = useAppSelector((state) => state.program.items)
   const dispatch = useAppDispatch()
@@ -76,7 +76,7 @@ export default function SongsPage() {
           <Input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="py-5 px-10 border-background/50 border-2 rounded-full bg-secondary/60 duration-200 drop-shadow-[0_0_15px_rgba(0,0,0,0.1)] backdrop-blur-xs text-muted-foreground focus-visible:border-background/50 dark:border-muted/50"
+            className="py-5 px-10 border-background/50 border-2 rounded-full bg-secondary/60 duration-200 drop-shadow-[0_0_15px_rgba(0,0,0,0.1)] backdrop-blur-xs text-foreground focus-visible:border-background/50 dark:border-muted/50"
             placeholder="Введите название хвалы..."
           />
           {value.length > 0 && (
@@ -118,7 +118,7 @@ export default function SongsPage() {
         {items.map((song) => (
           <div
             onClick={() => navigate(`/song/${song.id}`)}
-            className="py-3 border-b border-muted/30 px-3 flex items-center justify-between gap-2"
+            className="py-3 border-b border-muted/30 px-3 flex items-center justify-between gap-2 select-none"
             key={song.id}
           >
             <div className="truncate space-y-1">
@@ -178,4 +178,6 @@ export default function SongsPage() {
       </div>
     </div>
   )
-}
+})
+
+export default SongsPage

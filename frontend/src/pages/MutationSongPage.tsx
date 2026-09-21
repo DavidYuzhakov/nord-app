@@ -138,7 +138,7 @@ export default function MutationSongPage() {
           <Input
             {...register('name', { required: true })}
             id="name"
-            className="bg-muted border-none px-4 py-6"
+            className="bg-muted px-4 py-6"
             placeholder="Введите название"
           />
         </div>
@@ -207,7 +207,7 @@ export default function MutationSongPage() {
             id="text"
             {...register('text', { required: true })}
             placeholder="Введите текст песни с аккордами"
-            className="resize-none max-h-100 min-h-0 px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty border border-border shadow-none field-sizing-content"
+            className="text-textarea resize-none px-2 py-3.5 text-[14px] font-medium focus-visible:ring-0 text-pretty border border-border shadow-none"
           />
         </div>
 
@@ -219,7 +219,7 @@ export default function MutationSongPage() {
             <Input
               {...register('danceVideo')}
               id="youtube"
-              className="max-w-75 h-auto bg-muted border-none px-4 py-2"
+              className="max-w-75 h-auto bg-muted px-4 py-2"
               placeholder="Введите ссылку"
             />
           </div>
@@ -230,12 +230,22 @@ export default function MutationSongPage() {
             >
               Аудио
             </Label>
-            <Input
-              id="audio"
-              className="max-w-75 h-auto bg-muted border-none px-4 py-2"
-              {...register('audio')}
-              placeholder="Введите ссылку"
-            />
+            <div className="max-w-75 w-full flex items-center gap-2">
+              <Input
+                id="audio"
+                className="flex-1 w-full h-auto bg-muted px-4 py-2"
+                {...register('audio')}
+                placeholder="Введите ссылку"
+              />
+              {/* <Button
+                className="shadow-none"
+                type="button"
+                variant={'outline'}
+                size={'icon-lg'}
+              >
+                <Paperclip />
+              </Button> */}
+            </div>
           </div>
         </div>
 
