@@ -10,6 +10,11 @@ if (import.meta.env.DEV) {
   import('eruda').then((Eruda) => Eruda.default.init())
 }
 
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault()
+  window.location.reload()
+})
+
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary>
     <Provider store={store}>

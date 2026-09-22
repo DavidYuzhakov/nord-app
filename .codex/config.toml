@@ -1,9 +1,0 @@
-#:schema https://developers.openai.com/codex/config-schema.json
-
-# Keep project work inside the repository and ask before operations that need
-# broader machine or network access. Loaded only when this repository is trusted.
-approval_policy = "on-request"
-sandbox_mode = "workspace-write"
-
-[sandbox_workspace_write]
-network_access = false

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Verify Nord App"
-  short_description: "Проверка изменений frontend и backend"
-  default_prompt: "Use $verify-nord-app to validate the current changes and report any failures."
