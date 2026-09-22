@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component<
           <div className="max-w-md mx-auto text-center">
             <img
               src="/error-state.png"
-              alt="Иллюстрация ошибки"
+              alt="ошибка"
               className="mx-auto mb-6 object-contain"
             />
             <h1 className="font-bold text-xl">Что-то пошло не так :(</h1>

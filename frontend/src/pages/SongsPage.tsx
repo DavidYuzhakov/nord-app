@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useDebounce } from '@/hook/useDebounce'
+import { useDebounce } from '@/hooks/useDebounce'
 import type { Program } from '@/models/Program'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
@@ -24,10 +24,10 @@ import {
   SearchIcon,
   XIcon,
 } from 'lucide-react'
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const SongsPage = memo(() => {
+const SongsPage = () => {
   const { items, loading } = useAppSelector((state) => state.song)
   const programs = useAppSelector((state) => state.program.items)
   const dispatch = useAppDispatch()
@@ -178,6 +178,6 @@ const SongsPage = memo(() => {
       </div>
     </div>
   )
-})
+}
 
 export default SongsPage

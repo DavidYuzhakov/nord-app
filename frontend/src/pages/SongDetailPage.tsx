@@ -2,7 +2,7 @@ import { Header } from '@/components/Header'
 import { Loading } from '@/components/Loading'
 import { Song } from '@/components/Song'
 import { Button } from '@/components/ui/button'
-import { useGoBack } from '@/hook/useGoBack'
+import { useGoBack } from '@/hooks/useGoBack'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { clearCurrent, fetchSong } from '@/store/reducers/songSlice'
 import {

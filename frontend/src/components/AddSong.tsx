@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { Checkbox } from './ui/checkbox'
 import { fetchSongs } from '@/store/reducers/songSlice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useDebounce } from '@/hook/useDebounce'
+import { useDebounce } from '@/hooks/useDebounce'
 import type { Song } from '@/models/Song'
 import { useNavigate } from 'react-router-dom'
 

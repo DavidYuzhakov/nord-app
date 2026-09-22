@@ -1,22 +1,23 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
-import { Layout } from './Layout'
-import { SectionLayout } from './SectionLayout'
+import { Layout } from './layout/Layout'
+import { SectionLayout } from './layout/SectionLayout'
 import { useAppSelector } from './store/hooks'
 import { lazy, Suspense, useEffect } from 'react'
 import { Loading } from './components/Loading'
-import { loadLiveModePage, loadSongsPage } from './routeLoaders'
+import { Button } from './components/ui/button'
 
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const MutationProgramPage = lazy(() => import('./pages/MutationProgramPage'))
 const MutationSongPage = lazy(() => import('./pages/MutationSongPage'))
 const SongDetailPage = lazy(() => import('./pages/SongDetailPage'))
-const LiveModePage = lazy(loadLiveModePage)
-const SongsPage = lazy(loadSongsPage)
+const LiveModePage = lazy(() => import('./pages/LiveModePage'))
+const SongsPage = lazy(() => import('./pages/SongsPage'))
 
 function App() {
   const mode = useAppSelector((state) => state.settings.mode)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (mode === 'night') {
@@ -34,8 +35,29 @@ function App() {
           <Route path="live-mode" element={<LiveModePage />} />
           <Route path="songs" element={<SongsPage />} />
           <Route path="song/:id" element={<SongDetailPage />} />
-          <Route path="*" element={<p>404</p>} />
         </Route>
+        <Route
+          path="*"
+          element={
+            <div className="h-screen px-8 flex items-center justify-center">
+              <div className="max-w-md mx-auto text-center">
+                <img
+                  src="/error-404.png"
+                  alt="ошибка"
+                  className="mx-auto mb-6 object-contain"
+                />
+                <h1 className="font-bold text-xl mb-4">Страница не найдена</h1>
+                <Button
+                  className="active:scale-95 select-none text-white"
+                  onClick={() => navigate('/')}
+                  type="button"
+                >
+                  Вернуться на главную
+                </Button>
+              </div>
+            </div>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<SectionLayout title="Новая программа" />}>

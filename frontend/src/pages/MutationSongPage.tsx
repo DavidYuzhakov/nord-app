@@ -15,7 +15,7 @@ import {
   fetchSong,
   updateSongThunk,
 } from '@/store/reducers/songSlice'
-import { useGoBack } from '@/hook/useGoBack'
+import { useGoBack } from '@/hooks/useGoBack'
 import { Loading } from '@/components/Loading'
 
 interface FormState {

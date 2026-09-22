@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { memo, useEffect } from 'react'
+import { useEffect } from 'react'
 import { MoonStarIcon, SunIcon } from 'lucide-react'
 import { updateMode } from '@/store/reducers/settingsSlice'
 import { Program } from '@/components/Program'
@@ -9,7 +9,7 @@ import { fetchPrograms } from '@/store/reducers/programSlice'
 
 export type TypeProgram = 'ready' | 'favorite' | 'archived'
 
-const HomePage = memo(() => {
+const HomePage = () => {
   const mode = useAppSelector((state) => state.settings.mode)
 
   const navigate = useNavigate()
@@ -64,6 +64,6 @@ const HomePage = memo(() => {
       </Button>
     </div>
   )
-})
+}
 
 export default HomePage

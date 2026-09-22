@@ -2,13 +2,11 @@ import { HomeIcon, Music4Icon, RadioIcon } from 'lucide-react'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { loadLiveModePage, loadSongsPage } from '@/routeLoaders'
 
 interface INavLink {
   title: string
   to: string
   icon: React.JSX.Element
-  preload?: () => Promise<unknown>
 }
 
 const navLink: INavLink[] = [
@@ -21,13 +19,11 @@ const navLink: INavLink[] = [
     title: 'Live Mode',
     to: '/live-mode',
     icon: <RadioIcon size={23} className="stroke-inherit" />,
-    preload: loadLiveModePage,
   },
   {
     title: 'Хвалы',
     to: '/songs',
     icon: <Music4Icon size={23} className="stroke-inherit" />,
-    preload: loadSongsPage,
   },
   // {
   //   title: 'Профиль',
