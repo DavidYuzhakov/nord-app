@@ -31,6 +31,14 @@ export default function SongDetailPage() {
     }
   }, [id, dispatch])
 
+  useEffect(() => {
+    if (!isCopied) return
+
+    const timeoutId = setTimeout(() => setIsCopied(false), 1500)
+
+    return () => clearTimeout(timeoutId)
+  }, [isCopied])
+
   if (loading && !current) return <Loading />
   if (!current)
     return (
@@ -50,7 +58,7 @@ export default function SongDetailPage() {
       if (navigator.share) {
         await navigator.share({ title: current.name, url })
       } else {
-        await navigator.clipboard.writeText(url)
+        await navigator.clipboard.writeText(`${current.name}\n${url}`)
         setIsCopied(true)
       }
     } catch (error) {
@@ -98,7 +106,11 @@ export default function SongDetailPage() {
           </Button>
         )}
         {current.danceVideo && (
-          <Button onClick={() => window.open(current.danceVideo)} type="button" className="w-full text-base bg-third/15 text-third">
+          <Button
+            onClick={() => window.open(current.danceVideo)}
+            type="button"
+            className="w-full text-base bg-third/15 text-third"
+          >
             Юльтон <PersonStanding />
           </Button>
         )}
