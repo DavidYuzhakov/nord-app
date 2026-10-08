@@ -96,7 +96,14 @@ const SongsPage = () => {
       </div>
       <div>
         {!loading && items.length === 0 && (
-          <p className="text-center text-muted-foreground">Список пуст</p>
+          <div className="mx-auto pt-10 text-center">
+            <h5 className="font-medium text-xl -mb-6">Песня не найдена</h5>
+            <img
+              src="./song-not-found.png"
+              alt="песня не найдена"
+              className="max-w-[300px] mx-auto"
+            />
+          </div>
         )}
         {loading &&
           items.length === 0 &&
