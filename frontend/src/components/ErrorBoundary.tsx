@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<
               alt="ошибка"
               className="mx-auto mb-6 object-contain"
             />
-            <h1 className="font-bold text-xl">Что-то пошло не так :(</h1>
+            <h1 className="font-medium text-xl">Что-то пошло не так :(</h1>
             <p className="text-muted-foreground text-sm mt-1 mb-4">
               Не переживайте, обычно помогает простая <br /> перезагрузка
               страницы

@@ -46,7 +46,9 @@ function App() {
                   alt="ошибка"
                   className="mx-auto mb-6 object-contain"
                 />
-                <h1 className="font-bold text-xl mb-4">Страница не найдена</h1>
+                <h1 className="font-medium text-xl mb-4">
+                  Страница не найдена
+                </h1>
                 <Button
                   className="active:scale-95 select-none text-white"
                   onClick={() => navigate('/')}
