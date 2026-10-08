@@ -10,14 +10,18 @@ import {
   Headphones,
   PencilIcon,
   PersonStanding,
+  Share2,
 } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const goBack = useGoBack()
+  const [isCopied, setIsCopied] = useState(false)
+  const [isSharing, setIsSharing] = useState(false)
+  const sharingRef = useRef(false)
   const { current, loading } = useAppSelector((state) => state.song)
   const dispatch = useAppDispatch()
 
@@ -34,6 +38,29 @@ export default function SongDetailPage() {
         Песня не найдена
       </p>
     )
+
+  const shareSong = async () => {
+    if (sharingRef.current) return
+
+    sharingRef.current = true
+    setIsSharing(true)
+    const url = window.location.href
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: current.name, url })
+      } else {
+        await navigator.clipboard.writeText(url)
+        setIsCopied(true)
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      alert('Не удалось поделиться песней. Попробуйте ещё раз')
+    } finally {
+      sharingRef.current = false
+      setIsSharing(false)
+    }
+  }
 
   return (
     <div className="-mx-3 space-y-3 pb-16">
@@ -60,32 +87,30 @@ export default function SongDetailPage() {
         </button>
       </Header>
       <Song isEdit song={current} />
-      <div className="px-3 pb-2 flex gap-2 items-cetner flex-wrap">
+      <div className="px-3 pb-2 grid grid-cols-2 gap-2">
         {current.audio && (
           <Button
             type="button"
-            className="text-base bg-primary/15 text-primary border-none"
+            onClick={() => window.open(current.audio)}
+            className="w-full bg-primary/15 text-primary border-none cursor-pointer"
           >
-            <a
-              className="flex items-center gap-2"
-              href={current.audio}
-              target="_blank"
-            >
-              Слушать аудио <Headphones />
-            </a>
+            Слушать аудио <Headphones />
           </Button>
         )}
         {current.danceVideo && (
-          <Button type="button" className="text-base bg-third/15 text-third">
-            <a
-              className="flex items-center gap-2"
-              href={current.danceVideo}
-              target="_blank"
-            >
-              Юльтон <PersonStanding className="size-5" />
-            </a>
+          <Button onClick={() => window.open(current.danceVideo)} type="button" className="w-full text-base bg-third/15 text-third">
+            Юльтон <PersonStanding />
           </Button>
         )}
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={shareSong}
+          disabled={isSharing}
+          className="text-foreground bg-foreground/5"
+        >
+          {isCopied ? 'Скопировано' : 'Поделиться'} <Share2 />
+        </Button>
       </div>
     </div>
   )
