@@ -1,0 +1,1 @@
+ALTER TABLE "ProgramSong" ADD COLUMN "key" TEXT;

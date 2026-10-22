@@ -20,7 +20,8 @@ export function SongItem({
   item,
   isEdit,
   onDelete,
-}: SongItemEditProps | SongItemViewProps) {
+  programId,
+}: (SongItemEditProps | SongItemViewProps) & { programId?: number }) {
   const {
     attributes,
     isDragging,
@@ -43,7 +44,13 @@ export function SongItem({
   return (
     <li
       style={style}
-      onClick={() => (!isEdit ? navigate(`/song/${item.id}`) : {})}
+      onClick={() => {
+        if (!isEdit) {
+          navigate(
+            `/song/${item.id}${programId ? `?programId=${programId}` : ''}`,
+          )
+        }
+      }}
       ref={setNodeRef}
       className={`flex items-center gap-1 justify-between border-b border-border/50 h-10 pb-3 ${
         isDragging ? 'opacity-50' : ''

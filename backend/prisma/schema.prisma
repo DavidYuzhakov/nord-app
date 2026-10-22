@@ -30,6 +30,7 @@ model ProgramSong {
   songId    Int
   song      Song    @relation(fields: [songId], references: [id], onDelete: Cascade)
   order     Int
+  key       String?
 
   @@unique([programId, songId])
   @@index([programId, order])

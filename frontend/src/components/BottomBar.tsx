@@ -34,7 +34,12 @@ const navLink: INavLink[] = [
 
 export function BottomBar() {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+  const activePath = pathname.startsWith('/song/')
+    ? new URLSearchParams(search).has('programId')
+      ? '/'
+      : '/songs'
+    : pathname
 
   const handleNavigate = useCallback(
     (to: string) => {
@@ -62,8 +67,8 @@ export function BottomBar() {
     >
       {navLink.map((nav) => {
         const isActive =
-          pathname === nav.to ||
-          (pathname.startsWith(`${nav.to}/`) && nav.to !== '/')
+          activePath === nav.to ||
+          (activePath.startsWith(`${nav.to}/`) && nav.to !== '/')
         return (
           <li
             onClick={() => handleNavigate(nav.to)}

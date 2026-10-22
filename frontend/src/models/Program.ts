@@ -1,4 +1,4 @@
-import type { Song } from './Song'
+import type { KeyType, Song } from './Song'
 
 export interface ProgramSong {
   id: number
@@ -6,6 +6,7 @@ export interface ProgramSong {
   song: Song
   songId: number
   programId: number
+  key: KeyType | null
 }
 
 export interface Program {

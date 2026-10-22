@@ -1,4 +1,5 @@
 import type { KeyType, Song as SongModel } from '@/models/Song'
+import type { ProgramSong } from '@/models/Program'
 import { parseSongSections, type SongSection } from '@/utils/parseSongSections'
 import { tokenizeSection } from '@/utils/tokenize'
 import { transposeSections } from '@/utils/transposeSong'
@@ -10,12 +11,22 @@ import { Tonality } from './Tonality'
 import { Button } from './ui/button'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { updateSongThunk } from '@/store/reducers/songSlice'
+import { updateProgramSongThunk } from '@/store/reducers/programSlice'
 import { CopyCheck, GaugeIcon, Music2Icon, TypeIcon } from 'lucide-react'
 import { updateHideChords } from '@/store/reducers/settingsSlice'
 import { getTextBg } from '@/utils/getStructureBg'
 
-export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
-  const [currentKey, setCurrentKey] = useState<KeyType>(song.key as KeyType)
+export function Song({
+  song,
+  isEdit,
+  programSong,
+}: {
+  song: SongModel
+  isEdit?: boolean
+  programSong?: ProgramSong
+}) {
+  const savedKey = programSong?.key ?? song.key
+  const [currentKey, setCurrentKey] = useState<KeyType>(savedKey)
   const [isCopied, setIsCopied] = useState(false)
   const dispatch = useAppDispatch()
   const hideChords = useAppSelector((state) => state.settings.hideChords)
@@ -36,6 +47,17 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   }, [song.text, song.key, currentKey])
 
   const changeKey = () => {
+    if (programSong) {
+      dispatch(
+        updateProgramSongThunk({
+          programId: programSong.programId,
+          songId: song.id,
+          data: { key: currentKey },
+        }),
+      )
+      return
+    }
+
     const newText = stringifySongSections(sections)
     dispatch(
       updateSongThunk({
@@ -97,8 +119,8 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
   }
 
   useEffect(() => {
-    setCurrentKey(song.key as KeyType)
-  }, [song.key])
+    setCurrentKey(savedKey)
+  }, [song.id, savedKey])
 
   useEffect(() => {
     if (!isCopied) return
@@ -116,14 +138,14 @@ export function Song({ song, isEdit }: { song: SongModel; isEdit?: boolean }) {
         </span>
         {!isEdit ? (
           <span className="flex items-center gap-1 justify-center font-semibold px-2 pr-3 py-0.5 rounded-md text-primary bg-primary/10">
-            <Music2Icon size={20} /> {song.key}
+            <Music2Icon size={20} /> {savedKey}
           </span>
         ) : (
           <>
             <div className="flex-1 flex gap-2 max-w-max">
               <Tonality currentKey={currentKey} setCurrentKey={setCurrentKey} />
             </div>
-            {currentKey !== song.key && (
+            {currentKey !== savedKey && (
               <Button className="order-1" onClick={changeKey} type="button">
                 Сохранить
               </Button>

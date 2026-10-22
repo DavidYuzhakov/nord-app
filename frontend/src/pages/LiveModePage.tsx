@@ -81,7 +81,7 @@ const LiveModePage = () => {
             >
               {currentProgram.songs.map((song) => (
                 <SwiperSlide className="pb-[74px] pt-3">
-                  <Song song={song.song} />
+                  <Song song={song.song} programSong={song} />
                 </SwiperSlide>
               ))}
             </Swiper>

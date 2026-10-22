@@ -161,7 +161,9 @@ export default function MutationProgramPage() {
     const load = async () => {
       const program = await dispatch(fetchProgram(Number(id))).unwrap()
       setName(program.name)
-      setSongs(program.songs.map((s) => s.song))
+      setSongs(
+        program.songs.map((s) => ({ ...s.song, key: s.key ?? s.song.key })),
+      )
       if (program.date) {
         setDate(new Date(program.date))
       }

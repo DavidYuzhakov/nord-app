@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
+import { UpdateProgramSongDto } from './dto/update-program-song.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { ProgramUpdateInput } from '@/generated/prisma/models';
@@ -86,6 +87,7 @@ export class ProgramService {
         create: dto.songsId.map((songId, index) => ({
           songId,
           order: index + 1,
+          key: program.songs.find((song) => song.songId === songId)?.key,
         })),
       };
     }
@@ -104,6 +106,31 @@ export class ProgramService {
           orderBy: { order: 'asc' },
         },
       },
+    });
+  }
+
+  async findProgramSong(programId: number, songId: number) {
+    const programSong = await this.prisma.programSong.findUnique({
+      where: { programId_songId: { programId, songId } },
+      include: { song: true },
+    });
+    if (!programSong)
+      throw new NotFoundException('Песня не найдена в программе');
+
+    return programSong;
+  }
+
+  async updateProgramSong(
+    programId: number,
+    songId: number,
+    dto: UpdateProgramSongDto,
+  ) {
+    await this.findProgramSong(programId, songId);
+
+    return this.prisma.programSong.update({
+      where: { programId_songId: { programId, songId } },
+      data: dto,
+      include: { song: true },
     });
   }
 

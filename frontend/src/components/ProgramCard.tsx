@@ -115,7 +115,12 @@ export function ProgramCard({
         <div className="px-3 pb-3 space-y-3">
           <ul className="space-y-3 px-2 mb-7">
             {songs.map((s) => (
-              <SongItem key={s.id} item={s.song} isEdit={false} />
+              <SongItem
+                key={s.id}
+                item={{ ...s.song, key: s.key ?? s.song.key }}
+                programId={id}
+                isEdit={false}
+              />
             ))}
           </ul>
           {date && (

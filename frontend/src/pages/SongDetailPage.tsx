@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useGoBack } from '@/hooks/useGoBack'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { clearCurrent, fetchSong } from '@/store/reducers/songSlice'
+import { fetchProgram } from '@/store/reducers/programSlice'
 import {
   ChevronLeft,
   Headphones,
@@ -13,16 +14,27 @@ import {
   Share2,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function SongDetailPage() {
   const { id } = useParams()
+  const [params] = useSearchParams()
+  const programId = params.has('programId')
+    ? Number(params.get('programId'))
+    : undefined
   const navigate = useNavigate()
   const goBack = useGoBack()
   const [isCopied, setIsCopied] = useState(false)
   const [isSharing, setIsSharing] = useState(false)
   const sharingRef = useRef(false)
   const { current, loading } = useAppSelector((state) => state.song)
+  const { current: program, loading: programLoading } = useAppSelector(
+    (state) => state.program,
+  )
+  const programSong =
+    program?.id === programId
+      ? program?.songs.find((song) => song.songId === Number(id))
+      : undefined
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -32,6 +44,10 @@ export default function SongDetailPage() {
   }, [id, dispatch])
 
   useEffect(() => {
+    if (programId !== undefined) dispatch(fetchProgram(programId))
+  }, [programId, dispatch])
+
+  useEffect(() => {
     if (!isCopied) return
 
     const timeoutId = setTimeout(() => setIsCopied(false), 1500)
@@ -39,8 +55,13 @@ export default function SongDetailPage() {
     return () => clearTimeout(timeoutId)
   }, [isCopied])
 
-  if (loading && !current) return <Loading />
-  if (!current)
+  if ((loading && !current) || (programId !== undefined && programLoading))
+    return <Loading />
+  if (
+    !current ||
+    current.id !== Number(id) ||
+    (programId !== undefined && !programSong)
+  )
     return (
       <p className="text-center text-muted-foreground text-lg py-2">
         Песня не найдена
@@ -94,7 +115,12 @@ export default function SongDetailPage() {
           <PencilIcon size={20} className="" />
         </button>
       </Header>
-      <Song isEdit song={current} />
+      <Song
+        key={`${current.id}-${programId ?? 'global'}`}
+        isEdit={!program?.isArchived}
+        song={current}
+        programSong={programSong}
+      />
       <div className="px-3 pb-2 grid grid-cols-2 gap-2">
         {current.audio && (
           <Button
