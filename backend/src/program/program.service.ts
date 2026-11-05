@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateProgramDto } from './dto/create-program.dto';
@@ -12,6 +13,8 @@ import { ProgramUpdateInput } from '@/generated/prisma/models';
 
 @Injectable()
 export class ProgramService {
+  private readonly logger = new Logger(ProgramService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   private readonly programInclude = {
@@ -32,7 +35,7 @@ export class ProgramService {
     }));
 
     try {
-      return await this.prisma.program.create({
+      const program = await this.prisma.program.create({
         data: {
           name: dto.name,
           songs: {
@@ -42,6 +45,11 @@ export class ProgramService {
         },
         include: this.programInclude,
       });
+
+      this.logger.log(
+        `Программа создана: name=${program.name} id=${program.id}`,
+      );
+      return program;
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new BadRequestException('Такая песня уже есть в программе');
@@ -95,7 +103,7 @@ export class ProgramService {
     if (dto.isArchived !== undefined) data.isArchived = dto.isArchived;
     if (dto.isFavorite !== undefined) data.isFavorite = dto.isFavorite;
 
-    return this.prisma.program.update({
+    const updatedProgram = await this.prisma.program.update({
       where: { id },
       data,
       include: {
@@ -107,6 +115,11 @@ export class ProgramService {
         },
       },
     });
+
+    this.logger.log(
+      `Программа изменена: name=${updatedProgram.name} id=${updatedProgram.id}`,
+    );
+    return updatedProgram;
   }
 
   async findProgramSong(programId: number, songId: number) {
@@ -127,11 +140,16 @@ export class ProgramService {
   ) {
     await this.findProgramSong(programId, songId);
 
-    return this.prisma.programSong.update({
+    const programSong = await this.prisma.programSong.update({
       where: { programId_songId: { programId, songId } },
       data: dto,
       include: { song: true },
     });
+
+    this.logger.log(
+      `Песня в программе изменена: id=${programSong.id}, programId=${programSong.programId}, songId=${programSong.songId}, songName=${programSong.song.name} key=${programSong.key ?? 'не задана'}`,
+    );
+    return programSong;
   }
 
   async remove(id: number) {
@@ -142,6 +160,11 @@ export class ProgramService {
       where: { programId: id },
     });
 
-    return await this.prisma.program.delete({ where: { id } });
+    const deletedProgram = await this.prisma.program.delete({ where: { id } });
+
+    this.logger.log(
+      `Программа удалена: name=${program.name} id=${deletedProgram.id}`,
+    );
+    return deletedProgram;
   }
 }

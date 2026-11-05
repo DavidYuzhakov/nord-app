@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { GetSongsDto } from './dto/get-songs.dto';
@@ -6,10 +6,12 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class SongService {
+  private readonly logger = new Logger(SongService.name);
+
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateSongDto) {
-    return this.prisma.song.create({
+  async create(dto: CreateSongDto) {
+    const song = await this.prisma.song.create({
       data: {
         name: dto.name,
         key: dto.key,
@@ -20,6 +22,9 @@ export class SongService {
         structure: dto.structure,
       },
     });
+
+    this.logger.log(`Песня создана: name=${song.name} id=${song.id}`);
+    return song;
   }
 
   async findAll(dto: GetSongsDto) {
@@ -70,16 +75,22 @@ export class SongService {
   async update(id: number, updateSongDto: UpdateSongDto) {
     await this.ensureExists(id);
 
-    return this.prisma.song.update({
+    const song = await this.prisma.song.update({
       where: { id },
       data: updateSongDto,
     });
+
+    this.logger.log(`Песня изменена: name=${song.name} id=${song.id}`);
+    return song;
   }
 
   async remove(id: number) {
     await this.ensureExists(id);
 
-    return this.prisma.song.delete({ where: { id } });
+    const song = await this.prisma.song.delete({ where: { id } });
+
+    this.logger.log(`Песня удалена: name=${song.name} id=${song.id}`);
+    return song;
   }
 
   private async ensureExists(id: number) {
