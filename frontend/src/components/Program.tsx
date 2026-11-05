@@ -1,29 +1,29 @@
-import { useAppSelector } from '@/store/hooks'
-import { useSearchParams } from 'react-router-dom'
-import { Skeleton } from './ui/skeleton'
-import { ProgramCard } from './ProgramCard'
-import type { Program } from '@/models/Program'
-import { CalendarIcon } from 'lucide-react'
-import type { TypeProgram } from '@/pages/HomePage'
-import { Button } from './ui/button'
-import { useMemo, useState } from 'react'
-import { Calendar } from './ui/calendar'
-import type { DateRange } from 'react-day-picker'
-import { ru } from 'date-fns/locale'
-import { format } from 'date-fns'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { useAppSelector } from '@/store/hooks';
+import { useSearchParams } from 'react-router-dom';
+import { Skeleton } from './ui/skeleton';
+import { ProgramCard } from './ProgramCard';
+import type { Program } from '@/models/Program';
+import { CalendarIcon } from 'lucide-react';
+import type { TypeProgram } from '@/pages/HomePage';
+import { Button } from './ui/button';
+import { useMemo, useState } from 'react';
+import { Calendar } from './ui/calendar';
+import type { DateRange } from 'react-day-picker';
+import { ru } from 'date-fns/locale';
+import { format } from 'date-fns';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 export function Program({ type }: { type: TypeProgram }) {
-  const [params, setParams] = useSearchParams()
-  const openKey = params.get('open')
+  const [params, setParams] = useSearchParams();
+  const openKey = params.get('open');
 
   // Only for archive programs
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
     to: new Date(),
-  })
+  });
 
-  const { loading, items } = useAppSelector((state) => state.program)
+  const { loading, items } = useAppSelector((state) => state.program);
   const programs = useMemo(() => {
     return type === 'ready'
       ? items.filter((item) => !item.isArchived)
@@ -32,26 +32,26 @@ export function Program({ type }: { type: TypeProgram }) {
         : items
             .filter((item) => item.isArchived)
             .filter((item) => {
-              if (!item.date) return true
+              if (!item.date) return true;
 
-              if (!date?.from || !date?.to) return true // все программы
+              if (!date?.from || !date?.to) return true; // все программы
 
-              const programDate = new Date(item.date)
+              const programDate = new Date(item.date);
 
-              const from = new Date(date.from)
-              from.setHours(0, 0, 0, 0)
+              const from = new Date(date.from);
+              from.setHours(0, 0, 0, 0);
 
-              const to = new Date(date.to)
-              to.setHours(23, 59, 59, 999)
+              const to = new Date(date.to);
+              to.setHours(23, 59, 59, 999);
 
-              return programDate >= from && programDate <= to
+              return programDate >= from && programDate <= to;
             })
             .sort(
               (a, b) =>
                 new Date(b.date || b.updatedAt).getTime() -
                 new Date(a.date || b.updatedAt).getTime(),
-            )
-  }, [type, items, date])
+            );
+  }, [type, items, date]);
 
   return (
     <div className="space-y-2.5">
@@ -117,11 +117,11 @@ export function Program({ type }: { type: TypeProgram }) {
             {...program}
             isOpenExternal={openKey === `${type}-${program.id}`}
             setOpenExternal={(id) => {
-              setParams(id ? { open: `${type}-${id}` } : {})
+              setParams(id ? { open: `${type}-${id}` } : {});
             }}
           />
         ))}
       </div>
     </div>
-  )
+  );
 }

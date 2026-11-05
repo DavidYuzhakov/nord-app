@@ -1,26 +1,26 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react'
-import { Button } from './ui/button'
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from './ui/button';
 
 type ErrorBoundaryProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 type ErrorBoundaryState = {
-  hasError: boolean
-}
+  hasError: boolean;
+};
 
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  state: ErrorBoundaryState = { hasError: false }
+  state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true }
+    return { hasError: true };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Непредвиденная ошибка приложения:', error, errorInfo)
+    console.error('Непредвиденная ошибка приложения:', error, errorInfo);
   }
 
   render() {
@@ -47,9 +47,9 @@ export class ErrorBoundary extends Component<
             </Button>
           </div>
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }

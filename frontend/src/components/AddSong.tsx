@@ -1,35 +1,35 @@
-import { PlusIcon, SearchIcon, XIcon } from 'lucide-react'
-import { Label } from './ui/label'
-import { Input } from './ui/input'
-import { useEffect, useState } from 'react'
-import { Checkbox } from './ui/checkbox'
-import { fetchSongs } from '@/store/reducers/songSlice'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useDebounce } from '@/hooks/useDebounce'
-import type { Song } from '@/models/Song'
-import { useNavigate } from 'react-router-dom'
+import { PlusIcon, SearchIcon, XIcon } from 'lucide-react';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
+import { useEffect, useState } from 'react';
+import { Checkbox } from './ui/checkbox';
+import { fetchSongs } from '@/store/reducers/songSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useDebounce } from '@/hooks/useDebounce';
+import type { Song } from '@/models/Song';
+import { useNavigate } from 'react-router-dom';
 
 interface AddSongProps {
-  selectedIds: number[]
-  onToggleSong: (isChecked: boolean, checkedSong: Song) => void
+  selectedIds: number[];
+  onToggleSong: (isChecked: boolean, checkedSong: Song) => void;
 }
 
 export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
-  const [search, setSearch] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
+  const [search, setSearch] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
-  const navigate = useNavigate()
-  const debouncedSearch = useDebounce(search, 500)
-  const dispatch = useAppDispatch()
-  const { items } = useAppSelector((state) => state.song)
+  const navigate = useNavigate();
+  const debouncedSearch = useDebounce(search, 500);
+  const dispatch = useAppDispatch();
+  const { items } = useAppSelector((state) => state.song);
 
   useEffect(() => {
     dispatch(
       fetchSongs({
         search: debouncedSearch.trim().length > 0 ? debouncedSearch : undefined,
       }),
-    )
-  }, [debouncedSearch, dispatch])
+    );
+  }, [debouncedSearch, dispatch]);
 
   return (
     <>
@@ -103,5 +103,5 @@ export function AddSong({ onToggleSong, selectedIds }: AddSongProps) {
         } duration-200`}
       />
     </>
-  )
+  );
 }

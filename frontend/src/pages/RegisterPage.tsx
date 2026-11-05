@@ -1,12 +1,12 @@
-import { EyeIcon, EyeOffIcon, KeySquareIcon, UserIcon } from 'lucide-react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { EyeIcon, EyeOffIcon, KeySquareIcon, UserIcon } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
-  const [isHide, setIsHide] = useState(true)
-  const [loginValue, setLoginValue] = useState('')
-  const [passwordValue, setPasswordValue] = useState('')
-  const navigate = useNavigate()
+  const [isHide, setIsHide] = useState(true);
+  const [loginValue, setLoginValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-dvh relative max-w-[420px] mx-auto">
@@ -37,7 +37,7 @@ export default function RegisterPage() {
         <form
           id="auth-form"
           onSubmit={() => {
-            navigate('/')
+            navigate('/');
           }}
           className="flex flex-col gap-6 mt-8 tracking-wide"
         >
@@ -115,5 +115,5 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }

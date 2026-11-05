@@ -1,31 +1,31 @@
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import { Layout } from './layout/Layout'
-import { SectionLayout } from './layout/SectionLayout'
-import { useAppSelector } from './store/hooks'
-import { lazy, Suspense, useEffect } from 'react'
-import { Loading } from './components/Loading'
-import { Button } from './components/ui/button'
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import { Layout } from './layout/Layout';
+import { SectionLayout } from './layout/SectionLayout';
+import { useAppSelector } from './store/hooks';
+import { lazy, Suspense, useEffect } from 'react';
+import { Loading } from './components/Loading';
+import { Button } from './components/ui/button';
 
-const LoginPage = lazy(() => import('./pages/LoginPage'))
-const RegisterPage = lazy(() => import('./pages/RegisterPage'))
-const MutationProgramPage = lazy(() => import('./pages/MutationProgramPage'))
-const MutationSongPage = lazy(() => import('./pages/MutationSongPage'))
-const SongDetailPage = lazy(() => import('./pages/SongDetailPage'))
-const LiveModePage = lazy(() => import('./pages/LiveModePage'))
-const SongsPage = lazy(() => import('./pages/SongsPage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const MutationProgramPage = lazy(() => import('./pages/MutationProgramPage'));
+const MutationSongPage = lazy(() => import('./pages/MutationSongPage'));
+const SongDetailPage = lazy(() => import('./pages/SongDetailPage'));
+const LiveModePage = lazy(() => import('./pages/LiveModePage'));
+const SongsPage = lazy(() => import('./pages/SongsPage'));
 
 function App() {
-  const mode = useAppSelector((state) => state.settings.mode)
-  const navigate = useNavigate()
+  const mode = useAppSelector((state) => state.settings.mode);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (mode === 'night') {
-      document.body.classList.add('dark')
+      document.body.classList.add('dark');
     } else {
-      document.body.classList.remove('dark')
+      document.body.classList.remove('dark');
     }
-  }, [mode])
+  }, [mode]);
 
   return (
     <Suspense fallback={<Loading />}>
@@ -74,7 +74,7 @@ function App() {
         </Route>
       </Routes>
     </Suspense>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,19 +1,19 @@
-import type { Song } from '@/models/Song'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { Trash2Icon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import type { Song } from '@/models/Song';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { Trash2Icon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface SongItemEditProps {
-  isEdit: true
-  onDelete: (id: number) => void
-  item: Song
+  isEdit: true;
+  onDelete: (id: number) => void;
+  item: Song;
 }
 
 interface SongItemViewProps {
-  isEdit: false
-  onDelete?: (id: number) => void
-  item: Song
+  isEdit: false;
+  onDelete?: (id: number) => void;
+  item: Song;
 }
 
 export function SongItem({
@@ -32,14 +32,14 @@ export function SongItem({
   } = useSortable({
     id: item.id,
     disabled: !isEdit,
-  })
+  });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  }
+  };
 
   return (
     <li
@@ -48,7 +48,7 @@ export function SongItem({
         if (!isEdit) {
           navigate(
             `/song/${item.id}${programId ? `?programId=${programId}` : ''}`,
-          )
+          );
         }
       }}
       ref={setNodeRef}
@@ -76,8 +76,8 @@ export function SongItem({
             <Trash2Icon
               className="stroke-[1.75px] dark:stroke-muted-foreground"
               onClick={(e) => {
-                e.stopPropagation()
-                onDelete(item.id)
+                e.stopPropagation();
+                onDelete(item.id);
               }}
             />
             <button
@@ -93,5 +93,5 @@ export function SongItem({
         )}
       </div>
     </li>
-  )
+  );
 }

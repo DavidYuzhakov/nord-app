@@ -6,22 +6,22 @@ import {
   PenIcon,
   RefreshCwIcon,
   Trash2Icon,
-} from 'lucide-react'
+} from 'lucide-react';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from './ui/collapsible'
-import { SongItem } from './SongItem'
-import type { Program } from '@/models/Program'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+} from './ui/collapsible';
+import { SongItem } from './SongItem';
+import type { Program } from '@/models/Program';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   deleteProgramThunk,
   updateProgramThunk,
-} from '@/store/reducers/programSlice'
-import type { TypeProgram } from '@/pages/HomePage'
-import { Badge } from './ui/badge'
-import { useNavigate } from 'react-router-dom'
+} from '@/store/reducers/programSlice';
+import type { TypeProgram } from '@/pages/HomePage';
+import { Badge } from './ui/badge';
+import { useNavigate } from 'react-router-dom';
 
 export function ProgramCard({
   id,
@@ -34,19 +34,19 @@ export function ProgramCard({
   setOpenExternal,
   type,
 }: Program & {
-  isOpenExternal: boolean
-  type: TypeProgram
-  setOpenExternal: (id: number | null) => void
+  isOpenExternal: boolean;
+  type: TypeProgram;
+  setOpenExternal: (id: number | null) => void;
 }) {
-  const dispatch = useAppDispatch()
-  const loading = useAppSelector((state) => state.program.loading)
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.program.loading);
+  const navigate = useNavigate();
 
   const deleteProgram = () => {
     if (window.confirm('Вы действительно хотите удалить программу?')) {
-      dispatch(deleteProgramThunk(id))
+      dispatch(deleteProgramThunk(id));
     }
-  }
+  };
 
   const archiveProgramHandler = (isArchiveProp: boolean) => {
     dispatch(
@@ -54,8 +54,8 @@ export function ProgramCard({
         id,
         data: { isArchived: isArchiveProp },
       }),
-    )
-  }
+    );
+  };
 
   const favoriteProgramHandler = () => {
     if (isFavorite === true) {
@@ -67,7 +67,7 @@ export function ProgramCard({
             id,
             data: { isFavorite: !isFavorite },
           }),
-        )
+        );
       }
     } else {
       dispatch(
@@ -75,16 +75,16 @@ export function ProgramCard({
           id,
           data: { isFavorite: !isFavorite },
         }),
-      )
+      );
     }
-  }
+  };
 
   return (
     <Collapsible
       key={id}
       open={isOpenExternal}
       onOpenChange={(open) => {
-        setOpenExternal(open ? id : null)
+        setOpenExternal(open ? id : null);
       }}
       className={`rounded-xl bg-secondary`}
     >
@@ -208,5 +208,5 @@ export function ProgramCard({
         </div>
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }

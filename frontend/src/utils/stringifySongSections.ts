@@ -1,23 +1,23 @@
-import type { SongSection } from './parseSongSections'
+import type { SongSection } from './parseSongSections';
 
 export function stringifySongSections(sections: SongSection[]): string {
   return sections
     .map((section) => {
-      const lines: string[] = []
+      const lines: string[] = [];
 
       if (section.title) {
-        lines.push(section.title)
+        lines.push(section.title);
       }
 
       for (const line of section.lines) {
         if (line.tokens && line.tokens.length > 0) {
-          lines.push(line.tokens.map((token) => token.value).join(''))
+          lines.push(line.tokens.map((token) => token.value).join(''));
         } else {
-          lines.push(line.raw)
+          lines.push(line.raw);
         }
       }
 
-      return lines.join('\n')
+      return lines.join('\n');
     })
-    .join('\n')
+    .join('\n');
 }

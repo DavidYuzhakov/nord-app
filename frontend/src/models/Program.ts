@@ -1,20 +1,20 @@
-import type { KeyType, Song } from './Song'
+import type { KeyType, Song } from './Song';
 
 export interface ProgramSong {
-  id: number
-  order: number
-  song: Song
-  songId: number
-  programId: number
-  key: KeyType | null
+  id: number;
+  order: number;
+  song: Song;
+  songId: number;
+  programId: number;
+  key: KeyType | null;
 }
 
 export interface Program {
-  id: number
-  name: string
-  songs: ProgramSong[]
-  isArchived: boolean
-  isFavorite: boolean
-  updatedAt: string
-  date?: string
+  id: number;
+  name: string;
+  songs: ProgramSong[];
+  isArchived: boolean;
+  isFavorite: boolean;
+  updatedAt: string;
+  date?: string;
 }

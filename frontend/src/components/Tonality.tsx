@@ -1,24 +1,26 @@
-import type { KeyType } from '@/models/Song'
+import type { KeyType } from '@/models/Song';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Button } from './ui/button'
+} from '@/components/ui/select';
+import { Button } from './ui/button';
 
-const MAJOR_KEYS: KeyType[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-const MINOR_KEYS: KeyType[] = ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Bm']
+const MAJOR_KEYS: KeyType[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const MINOR_KEYS: KeyType[] = ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Bm'];
 
 export function Tonality({
   currentKey,
   setCurrentKey,
 }: {
-  currentKey: KeyType
-  setCurrentKey: React.Dispatch<React.SetStateAction<KeyType>>
+  currentKey: KeyType;
+  setCurrentKey: React.Dispatch<React.SetStateAction<KeyType>>;
 }) {
-  const keysType: KeyType[] = currentKey.includes('m') ? MINOR_KEYS : MAJOR_KEYS
+  const keysType: KeyType[] = currentKey.includes('m')
+    ? MINOR_KEYS
+    : MAJOR_KEYS;
   return (
     <>
       <Select
@@ -41,14 +43,14 @@ export function Tonality({
         variant={currentKey.includes('#') ? 'default' : 'outline'}
         onClick={() => {
           if (currentKey.includes('#')) {
-            setCurrentKey(currentKey.replace('#', '') as KeyType)
+            setCurrentKey(currentKey.replace('#', '') as KeyType);
           } else {
             if (currentKey[1] === 'b') {
-              setCurrentKey(currentKey.replace('b', '#') as KeyType)
+              setCurrentKey(currentKey.replace('b', '#') as KeyType);
             } else if (currentKey[1] === 'm') {
-              setCurrentKey(currentKey.replace('m', '#m') as KeyType)
+              setCurrentKey(currentKey.replace('m', '#m') as KeyType);
             } else {
-              setCurrentKey(`${currentKey}#` as KeyType)
+              setCurrentKey(`${currentKey}#` as KeyType);
             }
           }
         }}
@@ -61,14 +63,14 @@ export function Tonality({
         variant={currentKey.includes('b') ? 'default' : 'outline'}
         onClick={() => {
           if (currentKey.includes('b')) {
-            setCurrentKey(currentKey.replace('b', '') as KeyType)
+            setCurrentKey(currentKey.replace('b', '') as KeyType);
           } else {
             if (currentKey[1] === '#') {
-              setCurrentKey(currentKey.replace('#', 'b') as KeyType)
+              setCurrentKey(currentKey.replace('#', 'b') as KeyType);
             } else if (currentKey[1] === 'm') {
-              setCurrentKey(currentKey.replace('m', 'bm') as KeyType)
+              setCurrentKey(currentKey.replace('m', 'bm') as KeyType);
             } else {
-              setCurrentKey(`${currentKey}b` as KeyType)
+              setCurrentKey(`${currentKey}b` as KeyType);
             }
           }
         }}
@@ -77,5 +79,5 @@ export function Tonality({
         b
       </Button>
     </>
-  )
+  );
 }

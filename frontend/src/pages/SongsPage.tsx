@@ -1,21 +1,21 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useDebounce } from '@/hooks/useDebounce'
-import type { Program } from '@/models/Program'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useDebounce } from '@/hooks/useDebounce';
+import type { Program } from '@/models/Program';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   fetchPrograms,
   insertAddedSong,
   updateProgramThunk,
-} from '@/store/reducers/programSlice'
-import { fetchSongs } from '@/store/reducers/songSlice'
+} from '@/store/reducers/programSlice';
+import { fetchSongs } from '@/store/reducers/songSlice';
 import {
   GaugeIcon,
   Music2Icon,
@@ -23,18 +23,18 @@ import {
   PlusIcon,
   SearchIcon,
   XIcon,
-} from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SongsPage = () => {
-  const { items, loading } = useAppSelector((state) => state.song)
-  const programs = useAppSelector((state) => state.program.items)
-  const dispatch = useAppDispatch()
+  const { items, loading } = useAppSelector((state) => state.song);
+  const programs = useAppSelector((state) => state.program.items);
+  const dispatch = useAppDispatch();
 
-  const [value, setValue] = useState('')
-  const debouncedValue = useDebounce(value, 500)
-  const navigate = useNavigate()
+  const [value, setValue] = useState('');
+  const debouncedValue = useDebounce(value, 500);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(
@@ -42,21 +42,21 @@ const SongsPage = () => {
         search:
           debouncedValue.trim().length > 0 ? debouncedValue.trim() : undefined,
       }),
-    )
-  }, [debouncedValue, dispatch])
+    );
+  }, [debouncedValue, dispatch]);
 
   useEffect(() => {
-    if (programs.length > 0) return
-    dispatch(fetchPrograms())
-  }, [dispatch, programs])
+    if (programs.length > 0) return;
+    dispatch(fetchPrograms());
+  }, [dispatch, programs]);
 
   const addSongToProgram = (
     e: React.MouseEvent,
     { id, name, songs }: Program,
     songId: number,
   ) => {
-    e.stopPropagation()
-    if (songs.some((s) => s.songId === songId)) return
+    e.stopPropagation();
+    if (songs.some((s) => s.songId === songId)) return;
     dispatch(
       updateProgramThunk({
         id,
@@ -65,8 +65,8 @@ const SongsPage = () => {
           songsId: [...songs.map((s) => s.songId), songId],
         },
       }),
-    )
-  }
+    );
+  };
 
   return (
     <div className="py-16 space-y-4">
@@ -170,9 +170,9 @@ const SongsPage = () => {
                   ))}
                 <DropdownMenuItem
                   onClick={(e) => {
-                    e.stopPropagation()
-                    dispatch(insertAddedSong(song))
-                    navigate('/program/create')
+                    e.stopPropagation();
+                    dispatch(insertAddedSong(song));
+                    navigate('/program/create');
                   }}
                   className="text-base focus:text-primary text-primary text-center focus:bg-transparent font-semibold rounded-none py-3"
                 >
@@ -184,7 +184,7 @@ const SongsPage = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SongsPage
+export default SongsPage;

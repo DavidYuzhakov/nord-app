@@ -1,35 +1,35 @@
-import type { SongStructureItem } from '@/models/Song'
-import { getStructureBg } from '@/utils/getStructureBg'
-import { useRef } from 'react'
+import type { SongStructureItem } from '@/models/Song';
+import { getStructureBg } from '@/utils/getStructureBg';
+import { useRef } from 'react';
 
 interface HeaderProps {
-  children: React.ReactNode
-  structure: SongStructureItem[] | undefined
-  songId: number
+  children: React.ReactNode;
+  structure: SongStructureItem[] | undefined;
+  songId: number;
 }
 
 export function Header({ children, structure, songId }: HeaderProps) {
-  const headerRef = useRef<HTMLDivElement | null>(null)
+  const headerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToSection = (el: SongStructureItem, songId: number) => {
-    const hasNumber = /^\d/.test(el.text)
-    const id = `${songId}-${hasNumber ? el.text[0] + el.title : el.title}`
+    const hasNumber = /^\d/.test(el.text);
+    const id = `${songId}-${hasNumber ? el.text[0] + el.title : el.title}`;
 
-    const target = document.getElementById(id)
-    if (!target) return
+    const target = document.getElementById(id);
+    if (!target) return;
 
-    const headerHeight = headerRef.current?.offsetHeight || 0
+    const headerHeight = headerRef.current?.offsetHeight || 0;
     const y =
       target.getBoundingClientRect().top +
       window.pageYOffset -
       headerHeight -
-      13
+      13;
 
     window.scrollTo({
       top: y,
       behavior: 'smooth',
-    })
-  }
+    });
+  };
 
   return (
     <div
@@ -62,5 +62,5 @@ export function Header({ children, structure, songId }: HeaderProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

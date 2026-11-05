@@ -1,20 +1,20 @@
 export interface Song {
-  id: number
-  name: string
-  key: KeyType
-  bpm: number
-  text: string
-  structure?: SongStructureItem[]
-  danceVideo?: string
-  audio?: string
+  id: number;
+  name: string;
+  key: KeyType;
+  bpm: number;
+  text: string;
+  structure?: SongStructureItem[];
+  danceVideo?: string;
+  audio?: string;
 }
 
 export type SongStructureItem = {
-  id: string
-  title: string
-  text: string
-  amount: number
-}
+  id: string;
+  title: string;
+  text: string;
+  amount: number;
+};
 
 export type KeyType =
   | 'C'
@@ -50,4 +50,4 @@ export type KeyType =
   | 'Am'
   | 'A#m'
   | 'Bbm'
-  | 'Bm'
+  | 'Bm';

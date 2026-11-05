@@ -1,23 +1,23 @@
-import { Button } from '@/components/ui/button'
-import { useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useEffect } from 'react'
-import { MoonStarIcon, SunIcon } from 'lucide-react'
-import { updateMode } from '@/store/reducers/settingsSlice'
-import { Program } from '@/components/Program'
-import { fetchPrograms } from '@/store/reducers/programSlice'
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useEffect } from 'react';
+import { MoonStarIcon, SunIcon } from 'lucide-react';
+import { updateMode } from '@/store/reducers/settingsSlice';
+import { Program } from '@/components/Program';
+import { fetchPrograms } from '@/store/reducers/programSlice';
 
-export type TypeProgram = 'ready' | 'favorite' | 'archived'
+export type TypeProgram = 'ready' | 'favorite' | 'archived';
 
 const HomePage = () => {
-  const mode = useAppSelector((state) => state.settings.mode)
+  const mode = useAppSelector((state) => state.settings.mode);
 
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchPrograms())
-  }, [dispatch])
+    dispatch(fetchPrograms());
+  }, [dispatch]);
 
   return (
     <div className="pb-[130px]">
@@ -63,7 +63,7 @@ const HomePage = () => {
         Новая программа
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

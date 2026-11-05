@@ -1,7 +1,7 @@
-import { Suspense } from 'react'
-import { Outlet } from 'react-router-dom'
-import { BottomBar } from '../components/BottomBar'
-import { Loading } from '../components/Loading'
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+import { BottomBar } from '../components/BottomBar';
+import { Loading } from '../components/Loading';
 
 export function Layout() {
   return (
@@ -11,5 +11,5 @@ export function Layout() {
       </Suspense>
       <BottomBar />
     </div>
-  )
+  );
 }

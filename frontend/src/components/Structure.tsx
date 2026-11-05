@@ -7,22 +7,22 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-} from '@dnd-kit/core'
+} from '@dnd-kit/core';
 import {
   SortableContext,
   useSortable,
   arrayMove,
   rectSortingStrategy,
-} from '@dnd-kit/sortable'
-import { v4 as uuid } from 'uuid'
-import { MinusIcon, PlusIcon, XIcon } from 'lucide-react'
-import { Badge } from './ui/badge'
-import { CSS } from '@dnd-kit/utilities'
-import { useState } from 'react'
-import { getStructureBg } from '@/utils/getStructureBg'
-import { Dialog, DialogContent } from './ui/dialog'
-import type { SongStructureItem } from '@/models/Song'
-import { DialogTitle } from '@radix-ui/react-dialog'
+} from '@dnd-kit/sortable';
+import { v4 as uuid } from 'uuid';
+import { MinusIcon, PlusIcon, XIcon } from 'lucide-react';
+import { Badge } from './ui/badge';
+import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
+import { getStructureBg } from '@/utils/getStructureBg';
+import { Dialog, DialogContent } from './ui/dialog';
+import type { SongStructureItem } from '@/models/Song';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 const sections = [
   { label: 'вступление', value: 'в' },
@@ -32,17 +32,17 @@ const sections = [
   { label: 'проигрыш', value: 'прг' },
   { label: 'бридж', value: 'б' },
   { label: 'тег', value: 'т' },
-]
+];
 
 function DraggableItem({ item }: { item: { label: string; value: string } }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: item.value,
-    })
+    });
 
   const style = {
     transform: CSS.Translate.toString(transform),
-  }
+  };
 
   return (
     <Badge
@@ -55,7 +55,7 @@ function DraggableItem({ item }: { item: { label: string; value: string } }) {
     >
       {item.label}
     </Badge>
-  )
+  );
 }
 
 function SortableStructureItem({
@@ -63,9 +63,9 @@ function SortableStructureItem({
   onRemove,
   onClick,
 }: {
-  item: SongStructureItem
-  onRemove: (id: string) => void
-  onClick: (item: SongStructureItem) => void
+  item: SongStructureItem;
+  onRemove: (id: string) => void;
+  onClick: (item: SongStructureItem) => void;
 }) {
   const {
     attributes,
@@ -76,12 +76,12 @@ function SortableStructureItem({
     isDragging,
   } = useSortable({
     id: item.id,
-  })
+  });
 
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
-  }
+  };
 
   return (
     <div
@@ -90,7 +90,7 @@ function SortableStructureItem({
       {...listeners}
       {...attributes}
       onClick={() => {
-        onClick(item)
+        onClick(item);
       }}
       className={`relative select-none py-1.5 flex items-center justify-center text-white dark:text-background/70 rounded-md ${getStructureBg(
         item.text.replace(/\d/g, '').toLowerCase(),
@@ -102,11 +102,11 @@ function SortableStructureItem({
       <button
         type="button"
         onClick={(e) => {
-          e.stopPropagation()
-          onRemove(item.id)
+          e.stopPropagation();
+          onRemove(item.id);
         }}
         onPointerDown={(e) => {
-          e.stopPropagation()
+          e.stopPropagation();
         }}
         className="absolute -top-1.5 -right-1 bg-destructive shadow-sm rounded-full p-0.5"
       >
@@ -118,7 +118,7 @@ function SortableStructureItem({
         </span>
       )}
     </div>
-  )
+  );
 }
 
 export function Droppable({
@@ -126,11 +126,11 @@ export function Droppable({
   onRemove,
   onItemClick,
 }: {
-  items: SongStructureItem[]
-  onRemove: (id: string) => void
-  onItemClick: (item: SongStructureItem) => void
+  items: SongStructureItem[];
+  onRemove: (id: string) => void;
+  onItemClick: (item: SongStructureItem) => void;
 }) {
-  const { isOver, setNodeRef } = useDroppable({ id: 'droppable' })
+  const { isOver, setNodeRef } = useDroppable({ id: 'droppable' });
 
   return (
     <div
@@ -160,95 +160,95 @@ export function Droppable({
         </SortableContext>
       </div>
     </div>
-  )
+  );
 }
 
 export function Structure({
   droppedItems,
   setDroppedItems,
 }: {
-  droppedItems: SongStructureItem[]
-  setDroppedItems: React.Dispatch<React.SetStateAction<SongStructureItem[]>>
+  droppedItems: SongStructureItem[];
+  setDroppedItems: React.Dispatch<React.SetStateAction<SongStructureItem[]>>;
 }) {
   const [selectedItem, setSelectedItem] = useState<SongStructureItem | null>(
     null,
-  )
+  );
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
       delay: 200,
       tolerance: 7,
     },
-  })
+  });
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 5,
     },
-  })
+  });
 
-  const sensors = useSensors(touchSensor, mouseSensor)
+  const sensors = useSensors(touchSensor, mouseSensor);
 
   const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e
+    const { active, over } = e;
 
-    if (!over) return
+    if (!over) return;
 
     const isFromPalette = sections.some(
       (section) => section.value === active.id,
-    )
-    const isFromStructure = droppedItems.some((item) => item.id === active.id)
+    );
+    const isFromStructure = droppedItems.some((item) => item.id === active.id);
 
     // Сортировка уже добавленных элементов
     if (isFromStructure) {
-      const overIsItem = droppedItems.some((item) => item.id === over.id)
+      const overIsItem = droppedItems.some((item) => item.id === over.id);
 
-      if (!overIsItem) return
+      if (!overIsItem) return;
 
-      const oldIndex = droppedItems.findIndex((item) => item.id === active.id)
-      const newIndex = droppedItems.findIndex((item) => item.id === over.id)
+      const oldIndex = droppedItems.findIndex((item) => item.id === active.id);
+      const newIndex = droppedItems.findIndex((item) => item.id === over.id);
 
-      if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return
+      if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
 
-      setDroppedItems((items) => arrayMove(items, oldIndex, newIndex))
-      return
+      setDroppedItems((items) => arrayMove(items, oldIndex, newIndex));
+      return;
     }
 
     // Перетаскивание из палитры в Droppable
     if (isFromPalette) {
-      const section = sections.find((s) => s.value === active.id)
-      if (!section) return
+      const section = sections.find((s) => s.value === active.id);
+      if (!section) return;
 
       setDroppedItems((prev) => {
-        const nextId = uuid()
+        const nextId = uuid();
         const newItem: SongStructureItem = {
           id: nextId,
           text: section.value,
           title: section.label,
           amount: 1,
-        }
+        };
 
-        return [...prev, newItem]
-      })
+        return [...prev, newItem];
+      });
     }
-  }
+  };
 
   const handleRemove = (id: string) => {
-    setDroppedItems((prev) => prev.filter((item) => item.id !== id))
-  }
+    setDroppedItems((prev) => prev.filter((item) => item.id !== id));
+  };
 
   const handleItemClick = (item: SongStructureItem) => {
-    setSelectedItem(item)
-  }
+    setSelectedItem(item);
+  };
 
   const handleChangeItem = (item: SongStructureItem) => {
     setSelectedItem(() => {
       setDroppedItems((prev) =>
         prev.map((el) => (el.id === item.id ? item : el)),
-      )
-      return item
-    })
-  }
+      );
+      return item;
+    });
+  };
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
@@ -361,5 +361,5 @@ export function Structure({
         </DialogContent>
       </Dialog>
     </DndContext>
-  )
+  );
 }

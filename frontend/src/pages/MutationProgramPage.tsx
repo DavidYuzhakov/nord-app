@@ -1,24 +1,24 @@
-import { AddSong } from '@/components/AddSong'
-import { Loading } from '@/components/Loading'
-import { SongItem } from '@/components/SongItem'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { AddSong } from '@/components/AddSong';
+import { Loading } from '@/components/Loading';
+import { SongItem } from '@/components/SongItem';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import type { Song } from '@/models/Song'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+} from '@/components/ui/popover';
+import type { Song } from '@/models/Song';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   createProgramThunk,
   destroyAddedSong,
   fetchProgram,
   updateProgramThunk,
-} from '@/store/reducers/programSlice'
-import { getISOString } from '@/utils/date'
+} from '@/store/reducers/programSlice';
+import { getISOString } from '@/utils/date';
 import {
   DndContext,
   MouseSensor,
@@ -26,70 +26,70 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-} from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { arrayMove, SortableContext } from '@dnd-kit/sortable'
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale'
-import { CalendarIcon, InfoIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+} from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
+import { CalendarIcon, InfoIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function MutationProgramPage() {
-  const { id } = useParams()
-  const isEdit = Boolean(id)
+  const { id } = useParams();
+  const isEdit = Boolean(id);
 
-  const [songs, setSongs] = useState<Song[]>([])
-  const [date, setDate] = useState<Date | undefined>()
-  const [name, setName] = useState('')
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [date, setDate] = useState<Date | undefined>();
+  const [name, setName] = useState('');
   const placeholder =
     date?.toLocaleDateString('ru-RU', {
       weekday: 'long',
       day: '2-digit',
       month: '2-digit',
-    }) ?? ''
+    }) ?? '';
   const { loading, addedSong, current } = useAppSelector(
     (state) => state.program,
-  )
+  );
 
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
       delay: 250,
       tolerance: 5,
     },
-  })
+  });
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 5,
     },
-  })
+  });
 
-  const sensors = useSensors(touchSensor, mouseSensor)
+  const sensors = useSensors(touchSensor, mouseSensor);
 
   const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e
+    const { active, over } = e;
     if (over && active.id !== over.id) {
       setSongs((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id)
-        const newIndex = items.findIndex((item) => item.id === over.id)
-        return arrayMove(items, oldIndex, newIndex)
-      })
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
     }
-  }
+  };
 
   const submitHandler = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!date) {
-      alert('Выберите дату')
-      return
+      alert('Выберите дату');
+      return;
     }
     if (songs.length === 0) {
-      alert('Добавьте хотя бы 1 хвалу')
-      return
+      alert('Добавьте хотя бы 1 хвалу');
+      return;
     }
 
     const nameProgram =
@@ -99,7 +99,7 @@ export default function MutationProgramPage() {
             weekday: 'long',
             day: '2-digit',
             month: '2-digit',
-          })
+          });
 
     if (isEdit) {
       try {
@@ -112,11 +112,11 @@ export default function MutationProgramPage() {
               name: nameProgram,
             },
           }),
-        ).unwrap()
-        navigate('/')
+        ).unwrap();
+        navigate('/');
       } catch (error) {
-        console.log(error)
-        alert('Не удалось обновить программу')
+        console.log(error);
+        alert('Не удалось обновить программу');
       }
     } else {
       try {
@@ -126,60 +126,60 @@ export default function MutationProgramPage() {
             name: nameProgram,
             songsId: songs.map((song) => song.id),
           }),
-        ).unwrap()
-        navigate('/')
+        ).unwrap();
+        navigate('/');
       } catch (error) {
-        console.log(error)
-        alert('Не удалось создать программу')
+        console.log(error);
+        alert('Не удалось создать программу');
       }
     }
-  }
+  };
 
   const onDelete = (id: number) => {
     if (window.confirm('Вы действительно хотите удалить эту хвалу?')) {
-      setSongs((prev) => prev.filter((s) => s.id !== id))
+      setSongs((prev) => prev.filter((s) => s.id !== id));
     }
-  }
+  };
 
   const onToggleSong = (isChecked: boolean, checkedSong: Song) => {
     if (isChecked) {
-      setSongs((prev) => [...prev, checkedSong])
+      setSongs((prev) => [...prev, checkedSong]);
     } else {
-      setSongs((prev) => prev.filter((s) => s.id !== checkedSong.id))
+      setSongs((prev) => prev.filter((s) => s.id !== checkedSong.id));
     }
-  }
+  };
 
   useEffect(() => {
-    if (!addedSong) return
-    setSongs([addedSong])
-    dispatch(destroyAddedSong())
-  }, [addedSong, dispatch])
+    if (!addedSong) return;
+    setSongs([addedSong]);
+    dispatch(destroyAddedSong());
+  }, [addedSong, dispatch]);
 
   useEffect(() => {
-    if (!isEdit) return
+    if (!isEdit) return;
 
     const load = async () => {
-      const program = await dispatch(fetchProgram(Number(id))).unwrap()
-      setName(program.name)
+      const program = await dispatch(fetchProgram(Number(id))).unwrap();
+      setName(program.name);
       setSongs(
         program.songs.map((s) => ({ ...s.song, key: s.key ?? s.song.key })),
-      )
+      );
       if (program.date) {
-        setDate(new Date(program.date))
+        setDate(new Date(program.date));
       }
-    }
+    };
 
-    load()
-  }, [id, dispatch, isEdit])
+    load();
+  }, [id, dispatch, isEdit]);
 
-  if (isEdit && !current && loading) return <Loading />
+  if (isEdit && !current && loading) return <Loading />;
 
   if (isEdit && !loading && !current) {
     return (
       <p className="text-center text-muted-foreground text-lg py-2">
         Программа не найдена
       </p>
-    )
+    );
   }
 
   return (
@@ -274,5 +274,5 @@ export default function MutationProgramPage() {
         Сохранить
       </Button>
     </form>
-  )
+  );
 }

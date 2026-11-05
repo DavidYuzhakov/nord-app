@@ -1,20 +1,20 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import { Song } from '@/components/Song'
-import { useState } from 'react'
-import type { Swiper as SwiperType } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { Song } from '@/components/Song';
+import { useState } from 'react';
+import type { Swiper as SwiperType } from 'swiper';
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-} from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
-import { useAppSelector } from '@/store/hooks'
-import { Navigate } from 'react-router-dom'
-import type { Program } from '@/models/Program'
-import { Loading } from '@/components/Loading'
-import { Header } from '@/components/Header'
+} from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { useAppSelector } from '@/store/hooks';
+import { Navigate } from 'react-router-dom';
+import type { Program } from '@/models/Program';
+import { Loading } from '@/components/Loading';
+import { Header } from '@/components/Header';
 
 const styles = [
   'text-primary bg-primary/25',
@@ -22,29 +22,29 @@ const styles = [
   'text-green-400 bg-green-400/25',
   'text-gray-400 bg-gray-400/25',
   'text-orange-400 bg-orange-400/25',
-]
+];
 
 const LiveModePage = () => {
-  const { items, loading } = useAppSelector((state) => state.program)
-  const programs = items.filter((item) => !item.isArchived)
+  const { items, loading } = useAppSelector((state) => state.program);
+  const programs = items.filter((item) => !item.isArchived);
 
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isOpen, setIsOpen] = useState(programs.length === 1 ? false : true)
-  const [currentProgram, setCurrentProgram] = useState<Program>(programs[0])
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(programs.length === 1 ? false : true);
+  const [currentProgram, setCurrentProgram] = useState<Program>(programs[0]);
 
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
 
   if (programs.length === 0 || !currentProgram) {
-    return <Navigate to={'/'} />
+    return <Navigate to={'/'} />;
   }
 
-  const totalSlides = currentProgram.songs.length
-  const programStructure = currentProgram.songs[activeIndex].song.structure
+  const totalSlides = currentProgram.songs.length;
+  const programStructure = currentProgram.songs[activeIndex].song.structure;
 
   const handleSlideChange = (swiper: SwiperType) => {
-    setActiveIndex(swiper.activeIndex)
-    window.scrollTo({ top: 0 })
-  }
+    setActiveIndex(swiper.activeIndex);
+    window.scrollTo({ top: 0 });
+  };
 
   return (
     <>
@@ -103,8 +103,8 @@ const LiveModePage = () => {
             {programs.map((program, i) => (
               <Button
                 onClick={() => {
-                  setCurrentProgram(program)
-                  setIsOpen(false)
+                  setCurrentProgram(program);
+                  setIsOpen(false);
                 }}
                 className={`w-full ${styles[i] ?? 'bg-primary/25 text-primary'} py-7 text-lg font-medium`}
                 key={program.id}
@@ -116,7 +116,7 @@ const LiveModePage = () => {
         </DrawerContent>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default LiveModePage
+export default LiveModePage;

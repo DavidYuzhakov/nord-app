@@ -1,12 +1,12 @@
-import { HomeIcon, Music4Icon, RadioIcon } from 'lucide-react'
-import type React from 'react'
-import { useCallback } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { HomeIcon, Music4Icon, RadioIcon } from 'lucide-react';
+import type React from 'react';
+import { useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface INavLink {
-  title: string
-  to: string
-  icon: React.JSX.Element
+  title: string;
+  to: string;
+  icon: React.JSX.Element;
 }
 
 const navLink: INavLink[] = [
@@ -30,23 +30,23 @@ const navLink: INavLink[] = [
   //   to: '/profile',
   //   icon: <User2Icon size={23} className="stroke-inherit" />,
   // },
-]
+];
 
 export function BottomBar() {
-  const navigate = useNavigate()
-  const { pathname, search } = useLocation()
+  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
   const activePath = pathname.startsWith('/song/')
     ? new URLSearchParams(search).has('programId')
       ? '/'
       : '/songs'
-    : pathname
+    : pathname;
 
   const handleNavigate = useCallback(
     (to: string) => {
-      if (pathname !== to) navigate(to)
+      if (pathname !== to) navigate(to);
     },
     [navigate, pathname],
-  )
+  );
 
   return (
     <ul
@@ -68,7 +68,7 @@ export function BottomBar() {
       {navLink.map((nav) => {
         const isActive =
           activePath === nav.to ||
-          (activePath.startsWith(`${nav.to}/`) && nav.to !== '/')
+          (activePath.startsWith(`${nav.to}/`) && nav.to !== '/');
         return (
           <li
             onClick={() => handleNavigate(nav.to)}
@@ -92,8 +92,8 @@ export function BottomBar() {
               {nav.title}
             </span>
           </li>
-        )
+        );
       })}
     </ul>
-  )
+  );
 }

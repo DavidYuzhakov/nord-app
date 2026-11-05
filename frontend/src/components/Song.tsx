@@ -1,50 +1,50 @@
-import type { KeyType, Song as SongModel } from '@/models/Song'
-import type { ProgramSong } from '@/models/Program'
-import { parseSongSections, type SongSection } from '@/utils/parseSongSections'
-import { tokenizeSection } from '@/utils/tokenize'
-import { transposeSections } from '@/utils/transposeSong'
-import { useEffect, useMemo, useState } from 'react'
-import { distance } from 'tonal'
-import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal'
-import { stringifySongSections } from '@/utils/stringifySongSections'
-import { Tonality } from './Tonality'
-import { Button } from './ui/button'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { updateSongThunk } from '@/store/reducers/songSlice'
-import { updateProgramSongThunk } from '@/store/reducers/programSlice'
-import { CopyCheck, GaugeIcon, Music2Icon, TypeIcon } from 'lucide-react'
-import { updateHideChords } from '@/store/reducers/settingsSlice'
-import { getTextBg } from '@/utils/getStructureBg'
+import type { KeyType, Song as SongModel } from '@/models/Song';
+import type { ProgramSong } from '@/models/Program';
+import { parseSongSections, type SongSection } from '@/utils/parseSongSections';
+import { tokenizeSection } from '@/utils/tokenize';
+import { transposeSections } from '@/utils/transposeSong';
+import { useEffect, useMemo, useState } from 'react';
+import { distance } from 'tonal';
+import { normalizeKeyForTonal } from '@/utils/normalizeKeyForTonal';
+import { stringifySongSections } from '@/utils/stringifySongSections';
+import { Tonality } from './Tonality';
+import { Button } from './ui/button';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { updateSongThunk } from '@/store/reducers/songSlice';
+import { updateProgramSongThunk } from '@/store/reducers/programSlice';
+import { CopyCheck, GaugeIcon, Music2Icon, TypeIcon } from 'lucide-react';
+import { updateHideChords } from '@/store/reducers/settingsSlice';
+import { getTextBg } from '@/utils/getStructureBg';
 
 export function Song({
   song,
   isEdit,
   programSong,
 }: {
-  song: SongModel
-  isEdit?: boolean
-  programSong?: ProgramSong
+  song: SongModel;
+  isEdit?: boolean;
+  programSong?: ProgramSong;
 }) {
-  const savedKey = programSong?.key ?? song.key
-  const [currentKey, setCurrentKey] = useState<KeyType>(savedKey)
-  const [isCopied, setIsCopied] = useState(false)
-  const dispatch = useAppDispatch()
-  const hideChords = useAppSelector((state) => state.settings.hideChords)
+  const savedKey = programSong?.key ?? song.key;
+  const [currentKey, setCurrentKey] = useState<KeyType>(savedKey);
+  const [isCopied, setIsCopied] = useState(false);
+  const dispatch = useAppDispatch();
+  const hideChords = useAppSelector((state) => state.settings.hideChords);
 
   const sections = useMemo(() => {
-    const parsed = tokenizeSection(parseSongSections(song.text ?? ''))
+    const parsed = tokenizeSection(parseSongSections(song.text ?? ''));
 
-    const fromKey = normalizeKeyForTonal(song.key)
-    const toKey = normalizeKeyForTonal(currentKey)
+    const fromKey = normalizeKeyForTonal(song.key);
+    const toKey = normalizeKeyForTonal(currentKey);
 
-    if (currentKey === song.key) return parsed
+    if (currentKey === song.key) return parsed;
 
-    const interval = distance(fromKey, toKey)
+    const interval = distance(fromKey, toKey);
     if (!interval || interval === '') {
-      return parsed
+      return parsed;
     }
-    return transposeSections(parsed, interval)
-  }, [song.text, song.key, currentKey])
+    return transposeSections(parsed, interval);
+  }, [song.text, song.key, currentKey]);
 
   const changeKey = () => {
     if (programSong) {
@@ -54,11 +54,11 @@ export function Song({
           songId: song.id,
           data: { key: currentKey },
         }),
-      )
-      return
+      );
+      return;
     }
 
-    const newText = stringifySongSections(sections)
+    const newText = stringifySongSections(sections);
     dispatch(
       updateSongThunk({
         id: song.id,
@@ -67,68 +67,68 @@ export function Song({
           text: newText,
         },
       }),
-    )
-  }
+    );
+  };
 
   const getIdSection = (section: SongSection) => {
-    const numSection = section.title.match(/\d+/g)
-    if (!numSection) return `${song.id}-${section.type}`
+    const numSection = section.title.match(/\d+/g);
+    if (!numSection) return `${song.id}-${section.type}`;
 
-    return `${song.id}-${numSection[0]}${section.type}`
-  }
+    return `${song.id}-${numSection[0]}${section.type}`;
+  };
 
   async function copyTextForProPresenter() {
     const filteredSections = sections.reduce<SongSection[]>((acc, section) => {
-      if (section.type === 'unknown' || section.type === 'проигрыш') return acc
+      if (section.type === 'unknown' || section.type === 'проигрыш') return acc;
 
       const lines = section.lines.filter(
         (line) => !line.tokens.some((t) => t.type === 'chord'),
-      )
+      );
 
-      if (lines.length === 0) return acc
+      if (lines.length === 0) return acc;
 
-      acc.push({ ...section, lines })
+      acc.push({ ...section, lines });
 
-      return acc
-    }, [])
+      return acc;
+    }, []);
 
     const sectionMap = new Map(
       filteredSections.map((section) => {
-        const text = `[${section.title.slice(0, -1)}]\n${section.lines.map((line) => line.raw).join('\n')}`
-        return [getIdSection(section), text]
+        const text = `[${section.title.slice(0, -1)}]\n${section.lines.map((line) => line.raw).join('\n')}`;
+        return [getIdSection(section), text];
       }),
-    )
-    let finalText = ''
+    );
+    let finalText = '';
     if (!song.structure || song.structure.length === 0) {
-      finalText = Array.from(sectionMap.values()).join('\n\n')
+      finalText = Array.from(sectionMap.values()).join('\n\n');
     } else {
-      const textArr: string[] = []
+      const textArr: string[] = [];
 
       for (const structure of song.structure) {
-        const hasNumber = /^\d/.test(structure.text)
+        const hasNumber = /^\d/.test(structure.text);
 
-        const id = `${song.id}-${hasNumber ? structure.text[0] + structure.title : structure.title}`
-        const text = sectionMap.get(id)
-        if (text) textArr.push(text)
+        const id = `${song.id}-${hasNumber ? structure.text[0] + structure.title : structure.title}`;
+        const text = sectionMap.get(id);
+        if (text) textArr.push(text);
       }
-      finalText = textArr.join('\n\n')
+      finalText = textArr.join('\n\n');
     }
 
-    await navigator.clipboard.writeText(`${song.name}\n\n${finalText}`)
-    setIsCopied(true)
+    await navigator.clipboard.writeText(`${song.name}\n\n${finalText}`);
+    setIsCopied(true);
   }
 
   useEffect(() => {
-    setCurrentKey(savedKey)
-  }, [song.id, savedKey])
+    setCurrentKey(savedKey);
+  }, [song.id, savedKey]);
 
   useEffect(() => {
-    if (!isCopied) return
+    if (!isCopied) return;
 
-    const timeoutId = setTimeout(() => setIsCopied(false), 1500)
+    const timeoutId = setTimeout(() => setIsCopied(false), 1500);
 
-    return () => clearTimeout(timeoutId)
-  }, [isCopied])
+    return () => clearTimeout(timeoutId);
+  }, [isCopied]);
 
   return (
     <div className="px-3 space-y-6">
@@ -326,5 +326,5 @@ export function Song({
         </div>
       ))}
     </div>
-  )
+  );
 }

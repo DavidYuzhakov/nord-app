@@ -1,62 +1,62 @@
-import { Header } from '@/components/Header'
-import { Loading } from '@/components/Loading'
-import { Song } from '@/components/Song'
-import { Button } from '@/components/ui/button'
-import { useGoBack } from '@/hooks/useGoBack'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { clearCurrent, fetchSong } from '@/store/reducers/songSlice'
-import { fetchProgram } from '@/store/reducers/programSlice'
+import { Header } from '@/components/Header';
+import { Loading } from '@/components/Loading';
+import { Song } from '@/components/Song';
+import { Button } from '@/components/ui/button';
+import { useGoBack } from '@/hooks/useGoBack';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { clearCurrent, fetchSong } from '@/store/reducers/songSlice';
+import { fetchProgram } from '@/store/reducers/programSlice';
 import {
   ChevronLeft,
   Headphones,
   PencilIcon,
   PersonStanding,
   Share2,
-} from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export default function SongDetailPage() {
-  const { id } = useParams()
-  const [params] = useSearchParams()
+  const { id } = useParams();
+  const [params] = useSearchParams();
   const programId = params.has('programId')
     ? Number(params.get('programId'))
-    : undefined
-  const navigate = useNavigate()
-  const goBack = useGoBack()
-  const [isCopied, setIsCopied] = useState(false)
-  const [isSharing, setIsSharing] = useState(false)
-  const sharingRef = useRef(false)
-  const { current, loading } = useAppSelector((state) => state.song)
+    : undefined;
+  const navigate = useNavigate();
+  const goBack = useGoBack();
+  const [isCopied, setIsCopied] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  const sharingRef = useRef(false);
+  const { current, loading } = useAppSelector((state) => state.song);
   const { current: program, loading: programLoading } = useAppSelector(
     (state) => state.program,
-  )
+  );
   const programSong =
     program?.id === programId
       ? program?.songs.find((song) => song.songId === Number(id))
-      : undefined
-  const dispatch = useAppDispatch()
+      : undefined;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchSong(Number(id)))
+      dispatch(fetchSong(Number(id)));
     }
-  }, [id, dispatch])
+  }, [id, dispatch]);
 
   useEffect(() => {
-    if (programId !== undefined) dispatch(fetchProgram(programId))
-  }, [programId, dispatch])
+    if (programId !== undefined) dispatch(fetchProgram(programId));
+  }, [programId, dispatch]);
 
   useEffect(() => {
-    if (!isCopied) return
+    if (!isCopied) return;
 
-    const timeoutId = setTimeout(() => setIsCopied(false), 1500)
+    const timeoutId = setTimeout(() => setIsCopied(false), 1500);
 
-    return () => clearTimeout(timeoutId)
-  }, [isCopied])
+    return () => clearTimeout(timeoutId);
+  }, [isCopied]);
 
   if ((loading && !current) || (programId !== undefined && programLoading))
-    return <Loading />
+    return <Loading />;
   if (
     !current ||
     current.id !== Number(id) ||
@@ -66,30 +66,30 @@ export default function SongDetailPage() {
       <p className="text-center text-muted-foreground text-lg py-2">
         Песня не найдена
       </p>
-    )
+    );
 
   const shareSong = async () => {
-    if (sharingRef.current) return
+    if (sharingRef.current) return;
 
-    sharingRef.current = true
-    setIsSharing(true)
-    const url = window.location.href
+    sharingRef.current = true;
+    setIsSharing(true);
+    const url = window.location.href;
 
     try {
       if (navigator.share) {
-        await navigator.share({ title: current.name, url })
+        await navigator.share({ title: current.name, url });
       } else {
-        await navigator.clipboard.writeText(`${current.name}\n${url}`)
-        setIsCopied(true)
+        await navigator.clipboard.writeText(`${current.name}\n${url}`);
+        setIsCopied(true);
       }
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') return
-      alert('Не удалось поделиться песней. Попробуйте ещё раз')
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      alert('Не удалось поделиться песней. Попробуйте ещё раз');
     } finally {
-      sharingRef.current = false
-      setIsSharing(false)
+      sharingRef.current = false;
+      setIsSharing(false);
     }
-  }
+  };
 
   return (
     <div className="-mx-3 space-y-3 pb-16">
@@ -97,8 +97,8 @@ export default function SongDetailPage() {
         <div className="flex items-center gap-1 truncate">
           <button
             onClick={() => {
-              goBack()
-              dispatch(clearCurrent())
+              goBack();
+              dispatch(clearCurrent());
             }}
             className="shrink-0 p-0 flex items-center justify-center rounded-full size-10 bg-secondary/20 backdrop-blur-xs drop-shadow-xs border"
             type="button"
@@ -151,5 +151,5 @@ export default function SongDetailPage() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

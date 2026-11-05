@@ -1,56 +1,56 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import type { KeyType, SongStructureItem } from '@/models/Song'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Textarea } from '@/components/ui/textarea'
-import { Tonality } from '@/components/Tonality'
-import { useForm, type SubmitHandler } from 'react-hook-form'
-import { Structure } from '@/components/Structure'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import type { KeyType, SongStructureItem } from '@/models/Song';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Textarea } from '@/components/ui/textarea';
+import { Tonality } from '@/components/Tonality';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { Structure } from '@/components/Structure';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   createSongThunk,
   deleteSongThunk,
   fetchSong,
   updateSongThunk,
-} from '@/store/reducers/songSlice'
-import { useGoBack } from '@/hooks/useGoBack'
-import { Loading } from '@/components/Loading'
+} from '@/store/reducers/songSlice';
+import { useGoBack } from '@/hooks/useGoBack';
+import { Loading } from '@/components/Loading';
 
 interface FormState {
-  name: string
-  bpm: number
-  text: string
-  audio: string
-  danceVideo: string
+  name: string;
+  bpm: number;
+  text: string;
+  audio: string;
+  danceVideo: string;
 }
 
 export default function MutationSongPage() {
-  const { id } = useParams()
-  const goBack = useGoBack()
-  const isEdit = Boolean(id)
-  const dispatch = useAppDispatch()
-  const { current, loading } = useAppSelector((state) => state.song)
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const goBack = useGoBack();
+  const isEdit = Boolean(id);
+  const dispatch = useAppDispatch();
+  const { current, loading } = useAppSelector((state) => state.song);
+  const navigate = useNavigate();
 
   const [droppedItems, setDroppedItems] = useState<SongStructureItem[]>(
     current?.structure || [],
-  )
-  const [songKey, setSongKey] = useState(current?.key || 'C')
+  );
+  const [songKey, setSongKey] = useState(current?.key || 'C');
   const { register, reset, handleSubmit } = useForm<FormState>({
     defaultValues: {
       name: current?.name ?? '',
       bpm: current?.bpm ?? 0,
       text: current?.text ?? '',
     },
-  })
+  });
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
 
     const load = async () => {
-      const song = await dispatch(fetchSong(Number(id))).unwrap()
+      const song = await dispatch(fetchSong(Number(id))).unwrap();
 
       reset({
         name: song.name,
@@ -58,23 +58,23 @@ export default function MutationSongPage() {
         text: song.text,
         audio: song.audio ?? '',
         danceVideo: song.danceVideo ?? '',
-      })
+      });
 
-      setSongKey(song.key)
-      setDroppedItems(song.structure ?? [])
-    }
+      setSongKey(song.key);
+      setDroppedItems(song.structure ?? []);
+    };
 
-    load()
-  }, [id, dispatch, reset])
+    load();
+  }, [id, dispatch, reset]);
 
-  if (isEdit && !current && loading) return <Loading />
+  if (isEdit && !current && loading) return <Loading />;
 
   if (isEdit && !loading && !current)
     return (
       <p className="text-center text-muted-foreground text-lg py-2">
         Песня не найдена
       </p>
-    )
+    );
 
   const onSubmit: SubmitHandler<FormState> = async (data) => {
     if (!isEdit) {
@@ -89,11 +89,11 @@ export default function MutationSongPage() {
               data.danceVideo.trim().length > 0 ? data.danceVideo : undefined,
             audio: data.audio.trim().length > 0 ? data.audio : undefined,
           }),
-        ).unwrap()
-        navigate('/songs')
+        ).unwrap();
+        navigate('/songs');
       } catch (error) {
-        console.log(error)
-        alert('Не удалось создать хвалу. Попробуйте позже')
+        console.log(error);
+        alert('Не удалось создать хвалу. Попробуйте позже');
       }
     } else {
       try {
@@ -110,23 +110,23 @@ export default function MutationSongPage() {
               audio: data.audio.trim().length > 0 ? data.audio : undefined,
             },
           }),
-        ).unwrap()
-        goBack()
+        ).unwrap();
+        goBack();
       } catch (error) {
-        console.log(error)
-        alert('Не удалось обновить хвалу. Попробуйте позже')
+        console.log(error);
+        alert('Не удалось обновить хвалу. Попробуйте позже');
       }
     }
-  }
+  };
 
   const handleDelete = () => {
     if (window.confirm('Вы действительно хотите удалить хвалу?')) {
       if (id) {
-        dispatch(deleteSongThunk(Number(id)))
+        dispatch(deleteSongThunk(Number(id)));
       }
-      navigate('/songs')
+      navigate('/songs');
     }
-  }
+  };
 
   return (
     <div className="space-y-4 pb-22 pt-2 overflow-hidden">
@@ -174,9 +174,9 @@ export default function MutationSongPage() {
               <Button
                 onClick={() => {
                   if (songKey.includes('m')) {
-                    setSongKey(songKey.replace('m', '') as KeyType)
+                    setSongKey(songKey.replace('m', '') as KeyType);
                   } else {
-                    setSongKey(`${songKey}m` as KeyType)
+                    setSongKey(`${songKey}m` as KeyType);
                   }
                 }}
                 className={`${
@@ -271,5 +271,5 @@ export default function MutationSongPage() {
         </div>
       </form>
     </div>
-  )
+  );
 }

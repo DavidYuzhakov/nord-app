@@ -1,12 +1,12 @@
-import { ChevronLeft } from 'lucide-react'
-import { Suspense } from 'react'
-import { Outlet } from 'react-router-dom'
-import { BottomBar } from '@/components/BottomBar'
-import { Loading } from '@/components/Loading'
-import { useGoBack } from '@/hooks/useGoBack'
+import { ChevronLeft } from 'lucide-react';
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+import { BottomBar } from '@/components/BottomBar';
+import { Loading } from '@/components/Loading';
+import { useGoBack } from '@/hooks/useGoBack';
 
 export function SectionLayout({ title }: { title: string }) {
-  const goBack = useGoBack()
+  const goBack = useGoBack();
 
   return (
     <div className="px-3 max-w-md mx-auto">
@@ -25,5 +25,5 @@ export function SectionLayout({ title }: { title: string }) {
       </Suspense>
       <BottomBar />
     </div>
-  )
+  );
 }
